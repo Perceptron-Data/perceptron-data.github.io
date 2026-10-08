@@ -44,6 +44,10 @@ h2 { font-size: 22px; margin: 0 0 14px; }
 .ticks li { padding-left: 28px; position: relative; margin: 6px 0; }
 .ticks li::before { content: "✓"; position: absolute; left: 0; color: var(--ok); font-weight: 700; }
 pre { background: var(--code); padding: 16px; border-radius: 12px; overflow-x: auto; font-size: 14px; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; }
 details { border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin: 8px 0; background: var(--card); }
 summary { cursor: pointer; font-weight: 600; }
 .crumbs { margin-top: 20px; font-size: 14px; color: var(--muted); }

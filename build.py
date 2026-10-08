@@ -204,7 +204,8 @@ def build_actor(slug: str, a: dict, item: dict, p: dict, lang: str, all_items: d
 {f'<section><h2>{t["features"]}</h2><ul class="ticks">{feats}</ul></section>' if feats else ''}
 {f'<section><h2>{t["uses"]}</h2><ul>{uses}</ul></section>' if uses else ''}
 {f'<section><h2>{t["example"]}</h2><pre><code>{esc(example)}</code></pre></section>' if a.get('example') else ''}
-<section><h2>{t['price']}</h2><p>{price_html(p, unit, lang)}</p><p class="muted">{t['cheaper']}</p></section>
+<section><h2>{t['price']}</h2><p>{price_html(p, unit, lang)}</p><p class="muted">{esc(c.get('price_note') or t['cheaper'])}</p></section>
+{quality_html(slug, lang)}
 {f'<section><h2>{t["faq"]}</h2>{faq}</section>' if faq else ''}
 {f'<section><h2>{t["related"]}</h2><ul>{rel}</ul></section>' if rel else ''}
 <p><a class="button" href="{actor_url(slug)}">{t['run']}</a></p>"""
@@ -225,6 +226,34 @@ def build_actor(slug: str, a: dict, item: dict, p: dict, lang: str, all_items: d
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": ans}} for q, ans in c["faq"]]})
     og = f"/assets/og/{slug}.png" if (ROOT / "assets" / "og" / f"{slug}.png").exists() else "/assets/og/default.png"
     return page(lang, path, alt, title, desc, body, ld, og)
+
+
+QUALITY = ROOT / "data" / "quality.json"     # written by the watchdog after its Sunday check
+
+
+def quality_html(slug: str, lang: str) -> str:
+    """Latest weekly re-run of the actor's published examples — shown as it is, failures included."""
+    try:
+        q = json.loads(QUALITY.read_text()).get(slug)
+    except (OSError, ValueError):
+        return ""
+    if not q or not q.get("examples"):
+        return ""
+    de = lang == "de"
+    mark = {"ok": "✅", "note": "⚠️", "fail": "❌"}
+    rows = "".join(
+        f'<tr><td><a href="https://apify.com/{APIFY_USER}/{slug}/examples/{esc(e["slug"])}">{esc(e["title"])}</a></td>'
+        f'<td>{mark.get(e["result"], "–")}</td><td>{e.get("seconds") or 0:.0f} s</td><td>{esc(e.get("sources") or "–")}</td>'
+        f'<td>{esc(e.get("strongest") or "–")}</td></tr>' for e in q["examples"])
+    head = ("Wöchentliche Qualitätsprüfung", "Beispiel", "Ergebnis", "Dauer", "Quellen", "Stärkste Evidenz") if de else \
+           ("Weekly quality check", "Example", "Result", "Time", "Sources", "Strongest evidence")
+    text = (f"Jeden Sonntag führt unser Wachposten alle {q['checked']} veröffentlichten Beispiele mit dem Live-Actor neu aus "
+            f"und prüft die Ergebnisse. Letzte Prüfung am {q['date']}: {q['passed']} von {q['checked']} bestanden."
+            if de else
+            f"Every Sunday our watchdog re-runs all {q['checked']} published examples on the live actor and checks the "
+            f"results. Last check on {q['date']}: {q['passed']} of {q['checked']} passed.")
+    return (f'<section><h2>{head[0]}</h2><p>{esc(text)}</p><div class="table"><table><thead><tr>'
+            + "".join(f"<th>{h}</th>" for h in head[1:]) + f"</tr></thead><tbody>{rows}</tbody></table></div></section>")
 
 
 def build_index(lang: str, items: dict, prices: dict) -> str:
