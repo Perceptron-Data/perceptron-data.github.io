@@ -1,19 +1,19 @@
 {
  "research-agent": {
   "checked": 10,
-  "date": "2026-10-08",
+  "date": "2026-10-12",
   "examples": [
    {
     "result": "ok",
-    "seconds": 25,
+    "seconds": 59,
     "slug": "eu-ai-act-obligations-official-text",
-    "sources": 6,
+    "sources": 5,
     "strongest": "official",
     "title": "EU AI Act obligations – cited from the official text"
    },
    {
     "result": "ok",
-    "seconds": 27,
+    "seconds": 30,
     "slug": "gdpr-article-official-text-lookup",
     "sources": 5,
     "strongest": "official",
@@ -21,23 +21,23 @@
    },
    {
     "result": "ok",
-    "seconds": 43,
+    "seconds": 34,
     "slug": "german-law-bgb-paragraph-official",
     "sources": 7,
     "strongest": "official",
     "title": "German law § lookup (BGB, HGB, GG) – official text"
    },
    {
-    "result": "ok",
-    "seconds": 37,
+    "result": "note",
+    "seconds": 87,
     "slug": "fact-check-prices-across-sites",
-    "sources": 6,
-    "strongest": "news",
+    "sources": 0,
+    "strongest": null,
     "title": "Fact-check prices and figures across independent sites"
    },
    {
     "result": "ok",
-    "seconds": 4,
+    "seconds": 3,
     "slug": "scientific-evidence-open-access-papers",
     "sources": 6,
     "strongest": "academic",
@@ -45,42 +45,42 @@
    },
    {
     "result": "ok",
-    "seconds": 9,
+    "seconds": 45,
     "slug": "developer-answers-stack-overflow-github",
-    "sources": 6,
+    "sources": 4,
     "strongest": "community",
     "title": "Developer answers from Stack Overflow, GitHub and HN"
    },
    {
     "result": "ok",
-    "seconds": 28,
+    "seconds": 32,
     "slug": "news-this-week-cited-llm-context",
-    "sources": 5,
+    "sources": 7,
     "strongest": "official",
     "title": "This week's news as cited context for LLMs"
    },
    {
     "result": "ok",
-    "seconds": 29,
+    "seconds": 100,
     "slug": "rag-chunks-for-vector-database",
-    "sources": 7,
+    "sources": 6,
     "strongest": "academic",
     "title": "RAG chunks for Pinecone or Qdrant with stable IDs"
    },
    {
     "result": "ok",
-    "seconds": 10,
+    "seconds": 5,
     "slug": "web-search-api-for-ai-agents",
-    "sources": 6,
+    "sources": 7,
     "strongest": "reference",
     "title": "Web search API for AI agents – cited context in one call"
    },
    {
     "result": "ok",
-    "seconds": 53,
+    "seconds": 49,
     "slug": "deep-research-regulation-second-round",
-    "sources": 10,
-    "strongest": "news",
+    "sources": 9,
+    "strongest": "official",
     "title": "Deep research: second search round with learned terms"
    }
   ],
