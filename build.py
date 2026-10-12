@@ -18,7 +18,7 @@ import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 
-from content import ACTORS, GROUPS
+from content import ACTORS, SECTIONS
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "_site"
@@ -27,30 +27,51 @@ APIFY_USER = "perceptr0n"
 STORE_API = f"https://api.apify.com/v2/store?username={APIFY_USER}&limit=100"
 GITHUB_ORG = "https://github.com/Perceptron-Data"
 APIFY_PROFILE = f"https://apify.com/{APIFY_USER}"
-GROUP_ORDER = ["ai", "sales", "research", "public", "free"]
 TODAY = datetime.now(tz=UTC).strftime("%Y-%m-%d")
 
 T = {
     "en": {"lang": "en", "home": "Home", "actors": "Actors", "run": "Run on Apify", "details": "Details",
            "features": "What you get", "uses": "Use cases", "example": "Example input", "faq": "FAQ",
            "price": "Price", "free": "Free", "per": "per 1,000", "cheaper": "Billed by Apify per result plus a small start fee per run — cheaper on paid Apify plans.",
-           "meta": "Apify actors for AI, sales and research: PDF to Markdown, Google Ads Transparency checks, DACH company data, jobs and EU tenders. No login; paid per result plus a small start fee per run.",
+           "title": "Perceptron Data – company checks from public sources",
+           "meta": "Check, don't guess: company checks and data from public sources on Apify – who advertises on Google and Bing, who is behind a website. Built in Germany.",
            "related": "Related actors", "legal": "Legal notice", "privacy": "Privacy", "other": "Deutsch",
-           "tagline": "Data APIs for AI, sales and research",
-           "hero": "Clean, structured data from public sources – ready for AI pipelines, CRMs and spreadsheets. Every actor runs on Apify: no login or API key needed; paid actors charge per result plus a small start fee per run.",
+           "claim": "Check, don't guess.", "descriptor": "Company checks and data from public sources.",
+           "origin": "Built in Germany. Focused on DACH and the EU.",
+           "subline": "Paste a list of companies or domains and get one row per company with a traceable answer. Today there are two checks: whether a company advertises on Google or Microsoft Bing, and who is legally behind a website, with the EU VAT ID checked against VIES.",
+           "cta_primary": "Try the Advertiser Check", "cta_secondary": "All actors on Apify",
+           "how_title": "How it works",
+           "how_steps": ["Paste your list of company domains or names – or set filters for the other actors.",
+                         "Start the run on Apify – no login or API key for the data sources needed.",
+                         "Get one row per company or record. Export to Excel, CSV or JSON, schedule it, or call it via API and MCP."],
+           "how_note": "Pricing: paid per company checked or per record, plus a small start fee per run; on most actors, paid Apify plans pay less. A company that does not advertise or has no imprint is an answer and is charged.",
+           "checks_note": "Every Sunday a watchdog runs the actors with inputs whose correct answers are known and publishes the result, failures included:",
            "updated": "Prices and catalogue updated daily from the Apify Store. Last update:",
-           "disclaimer": "Independent developer. Not affiliated with Apify or the data sources named.",
-           "allactors": "All actors", "start": "from", "checks": "Weekly checks"},
+           "disclaimer": "Independent provider, not affiliated with Apify or the data sources named.",
+           "builtin": "Built in Germany",
+           "allactors": "All actors", "start": "from", "checks": "Weekly checks",
+           "startfee": "+ {fee} start fee per run", "startfee_unknown": "+ a small start fee per run"},
     "de": {"lang": "de", "home": "Start", "actors": "Actors", "run": "Auf Apify starten", "details": "Details",
            "features": "Das bekommen Sie", "uses": "Anwendungsfälle", "example": "Beispiel-Eingabe", "faq": "Häufige Fragen",
            "price": "Preis", "free": "Kostenlos", "per": "pro 1.000", "cheaper": "Abrechnung über Apify pro Ergebnis plus eine kleine Startgebühr je Lauf — günstiger in bezahlten Apify-Tarifen.",
-           "meta": "Apify-Actors für KI, Vertrieb und Marktforschung: PDF in Markdown, Google-Werbung prüfen, Impressum-Firmendaten, Stellen und EU-Ausschreibungen.",
+           "title": "Perceptron Data – Firmen-Checks aus öffentlichen Quellen",
+           "meta": "Prüfen statt raten: Firmen-Checks und Daten aus öffentlichen Quellen auf Apify – wer bei Google und Bing wirbt, wer hinter einer Website steht. Aus Deutschland.",
            "related": "Ähnliche Actors", "legal": "Impressum", "privacy": "Datenschutz", "other": "English",
-           "tagline": "Daten-APIs für KI, Vertrieb und Marktforschung",
-           "hero": "Saubere, strukturierte Daten aus öffentlichen Quellen – fertig für KI-Pipelines, CRM und Tabellen. Jeder Actor läuft auf Apify: ohne Login und API-Schlüssel; bezahlte Actors rechnen pro Ergebnis plus einer kleinen Startgebühr je Lauf ab.",
+           "claim": "Prüfen statt raten.", "descriptor": "Firmen-Checks und Daten aus öffentlichen Quellen.",
+           "origin": "Aus Deutschland. Schwerpunkt DACH und EU.",
+           "subline": "Firmen- oder Domainliste einfügen und je Firma eine Zeile mit nachvollziehbarer Antwort erhalten. Heute gibt es zwei Checks: ob eine Firma bei Google oder Microsoft Bing wirbt, und wer rechtlich hinter einer Website steht – mit gegen VIES geprüfter EU-USt-IdNr.",
+           "cta_primary": "Werbe-Check ausprobieren", "cta_secondary": "Alle Actors auf Apify",
+           "how_title": "So funktioniert es",
+           "how_steps": ["Liste mit Domains oder Firmennamen einfügen – oder bei den übrigen Actors Filter setzen.",
+                         "Den Lauf auf Apify starten – ohne Login oder API-Schlüssel bei den Datenquellen.",
+                         "Eine Zeile je Firma oder Datensatz erhalten. Als Excel, CSV oder JSON exportieren, per Zeitplan wiederholen oder über API und MCP abrufen."],
+           "how_note": "Preis: je geprüfter Firma oder je Datensatz plus einer kleinen Startgebühr je Lauf; bei den meisten Actors zahlen bezahlte Apify-Tarife weniger. Wirbt eine Firma nicht oder hat sie kein Impressum, ist das eine Antwort und wird berechnet.",
+           "checks_note": "Jeden Sonntag führt ein Wachposten die Actors mit Eingaben aus, deren richtige Antworten bekannt sind, und veröffentlicht das Ergebnis, Fehlschläge eingeschlossen:",
            "updated": "Preise und Katalog täglich aus dem Apify Store aktualisiert. Stand:",
-           "disclaimer": "Unabhängiger Entwickler. Nicht verbunden mit Apify oder den genannten Datenquellen.",
-           "allactors": "Alle Actors", "start": "ab", "checks": "Prüfnachweis"},
+           "disclaimer": "Unabhängiger Anbieter, nicht verbunden mit Apify oder den genannten Datenquellen.",
+           "builtin": "Aus Deutschland",
+           "allactors": "Alle Actors", "start": "ab", "checks": "Prüfnachweis",
+           "startfee": "+ {fee} Startgebühr je Lauf", "startfee_unknown": "+ eine kleine Startgebühr je Lauf"},
 }
 
 
@@ -72,14 +93,28 @@ def fetch_store() -> list[dict]:
     sys.exit(f"Apify Store API failed ({last}) — not publishing an empty catalogue.")
 
 
-def price_info(item: dict) -> dict:
-    """Main per-result price on the Free plan and on the cheapest tier."""
+def default_memory(name: str) -> int | None:
+    """Default run memory of an actor (public actor endpoint) — the start fee is charged per GB."""
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(f"https://api.apify.com/v2/acts/{APIFY_USER}~{name}", timeout=30) as response:
+                return (json.load(response)["data"].get("defaultRunOptions") or {}).get("memoryMbytes")
+        except Exception:  # network hiccup: retry, then show the fee without an amount
+            time.sleep(3 * (attempt + 1))
+    return None
+
+
+def price_info(item: dict, event: str | None = None) -> dict:
+    """Per-result price on the Free plan and on the cheapest tier: the Store's primary event, or the event the
+    page text names (the advertiser check bills per company checked, while the Store's primary event is per ad)."""
     info = item.get("currentPricingInfo") or {}
     events = (info.get("pricingPerEvent") or {}).get("actorChargeEvents") or {}
     if info.get("pricingModel") != "PAY_PER_EVENT" or not events:
         return {"free": True}
+    start = (events.get("apify-actor-start") or {}).get("eventPriceUsd")
     candidates = [(k, v) for k, v in events.items() if k != "apify-actor-start"]
-    main = next(((k, v) for k, v in candidates if v.get("isPrimaryEvent")), candidates[0] if candidates else None)
+    main = next(((k, v) for k, v in candidates if k == event), None) or \
+        next(((k, v) for k, v in candidates if v.get("isPrimaryEvent")), candidates[0] if candidates else None)
     if not main:
         return {"free": True}
     _, ev = main
@@ -90,11 +125,14 @@ def price_info(item: dict) -> dict:
         # "from" = the Business plan anyone can book, not the enterprise tiers
         # that need an individual contract.
         high, low = tiers.get("FREE"), tiers.get("GOLD", min(tiers.values()))
-    return {"free": False, "per1000": high * 1000, "from1000": low * 1000}
+    # Apify charges the start event once per GB of run memory (at least once): the default memory decides.
+    gb = max(1, round((item.get("defaultMemoryMbytes") or 1024) / 1024))
+    return {"free": False, "per1000": high * 1000, "from1000": low * 1000,
+            "start": None if start is None else start * gb}
 
 
 def money(value: float, lang: str) -> str:
-    text = f"{value:,.2f}"
+    text = f"{value:,.2f}" if value >= 0.01 or value == 0 else f"{value:.5f}".rstrip("0")
     if lang == "de":
         return text.replace(",", "X").replace(".", ",").replace("X", ".") + " $"
     return "$" + text
@@ -107,7 +145,7 @@ def esc(text) -> str:
 
 
 def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
-         jsonld: list[dict], og_image: str = "/assets/og/default.png") -> str:
+         jsonld: list[dict], og_image: str = "/assets/og/default.png", robots: str | None = None) -> str:
     t = T[lang]
     en_path, de_path = (path, alt_path) if lang == "en" else (alt_path, path)
     ld = "\n".join(f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False)}</script>' for d in jsonld)
@@ -118,6 +156,7 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
+{f'<meta name="robots" content="{esc(robots)}">' if robots else ''}
 <link rel="canonical" href="{BASE}{path}">
 <link rel="alternate" hreflang="en" href="{BASE}{en_path}">
 <link rel="alternate" hreflang="de" href="{BASE}{de_path}">
@@ -145,8 +184,9 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
 {body}
 </main>
 <footer><div class="wrap">
-  <p>{t['updated']} {TODAY}. {t['disclaimer']}</p>
-  <p><a href="{APIFY_PROFILE}">Apify</a> · <a href="{GITHUB_ORG}">GitHub</a> · <a href="/impressum/">{t['legal']}</a> · <a href="/datenschutz/">{t['privacy']}</a></p>
+  <p>Perceptron Data · {T[lang]['claim']} · {t['builtin']} · {t['disclaimer']}</p>
+  <p>{t['updated']} {TODAY}.</p>
+  <p><a href="{APIFY_PROFILE}">Apify</a> · <a href="{GITHUB_ORG}">GitHub</a> · <a href="/impressum/">{t['legal']}</a> · <a href="/datenschutz/">{t['privacy']}</a> · <a href="{alt_path}" hreflang="{'de' if lang == 'en' else 'en'}" lang="{'de' if lang == 'en' else 'en'}">{t['other']}</a></p>
 </div></footer>
 </body>
 </html>
@@ -160,7 +200,9 @@ def price_html(p: dict, unit: str, lang: str) -> str:
     main = f'{money(p["per1000"], lang)} {t["per"]} {esc(unit)}'
     if p["from1000"] < p["per1000"]:
         main += f' <span class="muted">({t["start"]} {money(p["from1000"], lang)})</span>'
-    return f'<span class="price">{main}</span>'
+    # Brand rule: a price per result is never shown without the start fee.
+    fee = t["startfee"].format(fee=money(p["start"], lang)) if p.get("start") else t["startfee_unknown"]
+    return f'<span class="price">{main}</span> <span class="muted">{fee}</span>'
 
 
 def card(slug: str, a: dict, item: dict, p: dict, lang: str) -> str:
@@ -170,8 +212,8 @@ def card(slug: str, a: dict, item: dict, p: dict, lang: str) -> str:
     title = c.get("h1") or item["title"]
     return f"""<article class="card">
   <img src="/assets/icons/{esc(a.get('icon', 'logo-256.png'))}" alt="" width="56" height="56" loading="lazy">
-  <div><h3><a href="{href}">{esc(item['title'])}</a></h3>
-  <p>{esc(c.get('desc') or item.get('description', ''))}</p>
+  <div><h3><a href="{href}">{esc(title)}</a></h3>
+  <p>{esc(c.get('card') or c.get('desc') or item.get('description', ''))}</p>
   <p class="meta">{price_html(p, a.get('unit', {}).get(lang, 'results'), lang)} · <a href="{esc(item['url'] if 'url' in item else APIFY_PROFILE + '/' + slug)}">{t['run']} →</a></p></div>
 </article>"""
 
@@ -188,14 +230,15 @@ def build_actor(slug: str, a: dict, item: dict, p: dict, lang: str, all_items: d
     alt = f"/de/actors/{slug}/" if lang == "en" else f"/actors/{slug}/"
     h1 = c.get("h1") or item["title"]
     desc = c.get("desc") or item.get("description", "")[:155]
-    title = (c.get("title") or item["title"]) + " | Perceptron Data"
+    # Brand texts carry their full title (EN "<name> – Perceptron Data", DE keyword-first); others get the suffix.
+    title = c.get("title") or f"{item['title']} – Perceptron Data"
     feats = "".join(f"<li>{esc(x)}</li>" for x in c.get("features", []))
     uses = "".join(f"<li>{esc(x)}</li>" for x in c.get("uses", []))
     faq = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(ans)}</p></details>" for q, ans in c.get("faq", []))
     example = json.dumps(a.get("example", {}), indent=2, ensure_ascii=False)
     related = [s for s, o in ACTORS.items() if o["group"] == a["group"] and s != slug and s in all_items][:3]
-    rel = "".join(f'<li><a href="{"/actors/" if lang == "en" else "/de/actors/"}{s}/">{esc(all_items[s]["title"])}</a></li>' for s in related)
-    body = f"""<nav class="crumbs"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › {esc(item['title'])}</nav>
+    rel = "".join(f'<li><a href="{"/actors/" if lang == "en" else "/de/actors/"}{s}/">{esc(display_name(s, all_items[s], lang))}</a></li>' for s in related)
+    body = f"""<nav class="crumbs"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › {esc(h1)}</nav>
 <section class="hero actor">
   <img src="/assets/icons/{esc(a.get('icon', 'logo-256.png'))}" alt="" width="96" height="96">
   <div><h1>{esc(h1)}</h1><p class="lead">{esc(c.get('intro') or item.get('description', ''))}</p>
@@ -214,18 +257,23 @@ def build_actor(slug: str, a: dict, item: dict, p: dict, lang: str, all_items: d
     if not p["free"]:
         offer["priceSpecification"] = {"@type": "UnitPriceSpecification", "price": round(p["per1000"], 2), "priceCurrency": "USD",
                                        "referenceQuantity": {"@type": "QuantitativeValue", "value": 1000, "unitText": unit}}
-    ld = [{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": item["title"], "description": desc,
+    ld = [{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": h1, "description": desc,
            "applicationCategory": "DeveloperApplication", "operatingSystem": "Web (Apify platform)", "url": f"{BASE}{path}",
            "image": f"{BASE}/assets/icons/{a.get('icon', 'logo-256.png')}", "offers": offer,
            "publisher": {"@type": "Organization", "name": "Perceptron Data", "url": BASE}},
           {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
               {"@type": "ListItem", "position": 1, "name": t["home"], "item": BASE + ("/" if lang == "en" else "/de/")},
-              {"@type": "ListItem", "position": 2, "name": item["title"], "item": f"{BASE}{path}"}]}]
+              {"@type": "ListItem", "position": 2, "name": h1, "item": f"{BASE}{path}"}]}]
     if c.get("faq"):
         ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": ans}} for q, ans in c["faq"]]})
     og = f"/assets/og/{slug}.png" if (ROOT / "assets" / "og" / f"{slug}.png").exists() else "/assets/og/default.png"
-    return page(lang, path, alt, title, desc, body, ld, og)
+    return page(lang, path, alt, title, desc, body, ld, og, robots=c.get("robots"))
+
+
+def display_name(slug: str, item: dict, lang: str) -> str:
+    """Canonical product name (brand texts), else the Store title."""
+    return ((ACTORS.get(slug) or {}).get(lang) or {}).get("h1") or item["title"]
 
 
 QUALITY = ROOT / "data" / "quality.json"     # written by the watchdog after its Sunday check
@@ -366,7 +414,7 @@ def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | Non
     t = T[lang]
     path, alt = quality_path(slug, lang), quality_path(slug, "de" if lang == "en" else "en")
     actor_path = f"/actors/{slug}/" if lang == "en" else f"/de/actors/{slug}/"
-    title = item["title"]
+    title = display_name(slug, item, lang)
     sections = []
     if q:
         examples = q.get("examples") or []
@@ -446,8 +494,8 @@ def build_quality_index(lang: str, items: dict) -> str:
         else:
             last = "–"
         rate = f'{fmt_rate(sample.get("rate") or 0, lang)} ({sample.get("matched")} / {sample.get("compared")})' if sample else "–"
-        rows.append(f'<tr><td><a href="{quality_path(slug, lang)}">{esc(items[slug]["title"])}</a></td><td>{esc(last)}</td><td>{esc(rate)}</td></tr>')
-    others = [items[s]["title"] for s in items if s not in quality and s not in samples]
+        rows.append(f'<tr><td><a href="{quality_path(slug, lang)}">{esc(display_name(slug, items[slug], lang))}</a></td><td>{esc(last)}</td><td>{esc(rate)}</td></tr>')
+    others = [display_name(s, items[s], lang) for s in items if s not in quality and s not in samples]
     body = f"""<section class="hero"><h1>{esc(L['h1'])}</h1><p class="lead">{esc(L['lead'])}</p></section>
 <section><div class="table"><table><thead><tr><th>{L['actor']}</th><th>{L['last_col']}</th><th>{L['sample']}</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table></div></section>
@@ -460,25 +508,35 @@ def build_index(lang: str, items: dict, prices: dict) -> str:
     t = T[lang]
     path, alt = ("/", "/de/") if lang == "en" else ("/de/", "/")
     sections = []
-    for g in GROUP_ORDER:
-        slugs = [s for s, a in ACTORS.items() if a["group"] == g and s in items]
-        if slugs:
-            cards = "\n".join(card(s, ACTORS[s], items[s], prices[s], lang) for s in slugs)
-            sections.append(f'<section><h2>{GROUPS[g][lang]}</h2><div class="grid">{cards}</div></section>')
-    extra = [s for s in items if s not in ACTORS]  # published on Apify but no texts yet
+    for sec in SECTIONS:
+        slugs = [s for s in sec["actors"] if s in items]
+        tag = f"h{sec['level']}"
+        cards = f'<div class="grid">{"".join(card(s, ACTORS[s], items[s], prices[s], lang) for s in slugs)}</div>' if slugs else ""
+        if slugs or sec["level"] == 2:
+            sections.append(f'<section id="{sec["key"]}" class="family l{sec["level"]}"><{tag}>{esc(sec[lang]["heading"])}</{tag}>'
+                            f'<p class="muted">{esc(sec[lang]["intro"])}</p>{cards}</section>')
+    listed = {s for sec in SECTIONS for s in sec["actors"]}
+    extra = [s for s in items if s not in listed]  # published on Apify but no texts yet
     if extra:
-        cards = "\n".join(card(s, {"icon": "logo-256.png", "group": "research", "unit": {}}, items[s], prices[s], lang) for s in extra)
+        cards = "\n".join(card(s, {"icon": "logo-256.png", "group": "", "unit": {}}, items[s], prices[s], lang) for s in extra)
         sections.append(f'<section><h2>{t["allactors"]}</h2><div class="grid">{cards}</div></section>')
-    body = f"""<section class="hero home"><h1>{t['tagline']}</h1><p class="lead">{t['hero']}</p>
-<p><a class="button" href="{APIFY_PROFILE}">{t['allactors']} — Apify</a></p></section>
+    steps = "".join(f"<li>{esc(x)}</li>" for x in t["how_steps"])
+    quality = "/quality/" if lang == "en" else "/de/quality/"
+    body = f"""<section class="hero home"><h1>{esc(t['claim'])}</h1>
+<p class="descriptor">{esc(t['descriptor'])}</p>
+<p class="lead">{esc(t['subline'])}</p>
+<p class="muted">{esc(t['origin'])}</p>
+<p><a class="button" href="{actor_url('google-ads-transparency-scraper')}">{esc(t['cta_primary'])}</a> <a href="{APIFY_PROFILE}">{esc(t['cta_secondary'])} →</a></p></section>
+<section id="how"><h2>{esc(t['how_title'])}</h2><ol>{steps}</ol><p class="muted">{esc(t['how_note'])}</p>
+<p class="muted">{esc(t['checks_note'])} <a href="{quality}">{esc(t['checks'])} →</a></p></section>
 <div id="actors">{''.join(sections)}</div>"""
     ld = [{"@context": "https://schema.org", "@type": "Organization", "name": "Perceptron Data", "url": BASE,
+           "slogan": t["claim"], "description": t["descriptor"],
            "logo": f"{BASE}/assets/logo-256.png", "sameAs": [APIFY_PROFILE, GITHUB_ORG]},
           {"@context": "https://schema.org", "@type": "ItemList", "itemListElement": [
-              {"@type": "ListItem", "position": i + 1, "url": f"{BASE}{'/actors/' if lang == 'en' else '/de/actors/'}{s}/", "name": items[s]["title"]}
-              for i, s in enumerate(items)]}]
-    title = f"Perceptron Data — {t['tagline']}"
-    return page(lang, path, alt, title, t["meta"], body, ld)
+              {"@type": "ListItem", "position": i + 1, "url": f"{BASE}{'/actors/' if lang == 'en' else '/de/actors/'}{s}/",
+               "name": display_name(s, items[s], lang)} for i, s in enumerate(items)]}]
+    return page(lang, path, alt, t["title"], t["meta"], body, ld)
 
 
 def build_legal() -> tuple[str, str]:
@@ -511,8 +569,8 @@ def simple_page(path: str, title: str, inner: str) -> str:
 
 def main() -> None:
     store = fetch_store()
-    items = {a["name"]: {**a, "url": actor_url(a["name"])} for a in store}
-    prices = {s: price_info(a) for s, a in items.items()}
+    items = {a["name"]: {**a, "url": actor_url(a["name"]), "defaultMemoryMbytes": default_memory(a["name"])} for a in store}
+    prices = {s: price_info(a, (ACTORS.get(s) or {}).get("price_event")) for s, a in items.items()}
     imp, priv = build_legal()
 
     if OUT.exists():
@@ -527,6 +585,8 @@ def main() -> None:
         target.write_text(text, encoding="utf-8")
 
     urls = []
+    noindex = {f"{'' if lang == 'en' else '/de'}/actors/{s}/" for s in items for lang in ("en", "de")
+               if "noindex" in (((ACTORS.get(s) or {}).get(lang) or {}).get("robots") or "")}
     for lang in ("en", "de"):
         prefix = "" if lang == "en" else "/de"
         write(f"{prefix}/", build_index(lang, items, prices))
@@ -551,6 +611,8 @@ def main() -> None:
     # sitemap with hreflang pairs
     entries = []
     for path, alt in urls:
+        if path in noindex:          # English product pages that only repeat the Store page (SEO-UMSETZUNG §2.1)
+            continue
         en, de = (path, alt) if not path.startswith("/de/") else (alt, path)
         entries.append(f"""  <url><loc>{BASE}{path}</loc><lastmod>{TODAY}</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="{BASE}{en}"/>
@@ -560,20 +622,21 @@ def main() -> None:
     write("/robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
 
     # llms.txt: a plain summary for AI assistants and LLM-based search
-    lines = ["# Perceptron Data", "", "> Data APIs on Apify for AI, sales and market research: document conversion, "
-             "Google Ads Transparency checks, DACH company data, jobs, EU tenders and German registers. "
-             "No login needed; paid actors charge per result plus a small start fee per run.", ""]
-    for g in GROUP_ORDER:
-        slugs = [s for s, a in ACTORS.items() if a["group"] == g and s in items]
+    lines = ["# Perceptron Data", "", f"> {T['en']['claim']} {T['en']['descriptor']} {T['en']['origin']}", "",
+             "Self-service actors on Apify. Paid actors charge per result plus a small start fee per run. "
+             f"Weekly checks against known answers: {BASE}/quality/", ""]
+    for sec in SECTIONS:
+        slugs = [s for s in sec["actors"] if s in items]
         if slugs:
-            lines.append(f"## {GROUPS[g]['en']}")
+            lines.append(f"{'#' * sec['level']} {sec['en']['heading']}")
             for s in slugs:
-                lines.append(f"- [{items[s]['title']}]({actor_url(s)}): {ACTORS[s]['en']['desc']}")
+                lines.append(f"- [{display_name(s, items[s], 'en')}]({actor_url(s)}): {ACTORS[s]['en']['desc']}")
             lines.append("")
     write("/llms.txt", "\n".join(lines))
 
     # machine-readable catalogue
-    catalogue = [{"name": s, "title": items[s]["title"], "url": actor_url(s), "page": f"{BASE}/actors/{s}/",
+    catalogue = [{"name": s, "title": items[s]["title"], "productName": display_name(s, items[s], "en"), "url": actor_url(s),
+                  "page": f"{BASE}/actors/{s}/",
                   "description": ACTORS.get(s, {}).get("en", {}).get("desc") or items[s].get("description"),
                   "pricePer1000Usd": None if prices[s]["free"] else round(prices[s]["per1000"], 4),
                   "unit": ACTORS.get(s, {}).get("unit", {}).get("en"),

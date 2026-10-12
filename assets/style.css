@@ -24,6 +24,11 @@ a:hover { text-decoration-thickness: 2px; }
 .hero.actor { display: grid; grid-template-columns: 96px 1fr; gap: 24px; align-items: start; }
 .hero.actor img { border-radius: 22px; }
 .lead { font-size: 18px; color: var(--muted); max-width: 760px; }
+.descriptor { font-size: 21px; font-weight: 600; margin: 0 0 10px; }
+.family.l2 { margin-top: 40px; }
+.family.l3 { margin: 24px 0; }
+.family h3 { font-size: 18px; margin: 0 0 6px; }
+#how ol { padding-left: 22px; max-width: 760px; }
 .button { display: inline-block; background: var(--accent); color: #111827; font-weight: 700;
   padding: 10px 18px; border-radius: 10px; text-decoration: none; margin-right: 12px; }
 .button:hover { filter: brightness(0.95); }
