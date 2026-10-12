@@ -1,89 +1,1239 @@
 {
+ "anuga-ism-koelnmesse-exhibitor-scraper": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "mindestens 10 Zeilen",
+      "fairName = Anuga",
+      "fairEdition im Format ^20\\d\\d$",
+      "kein exhibitorId doppelt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 10 rows",
+      "fairName = Anuga",
+      "fairEdition matches ^20\\d\\d$",
+      "no duplicate exhibitorId",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "anuga-list-current-edition",
+    "title": "Anuga: 10 exhibitors from the current exhibitor list, each delivered once, with fair name and edition year",
+    "title_de": "Anuga: 10 Aussteller aus dem aktuellen Ausstellerverzeichnis, jeder genau einmal, mit Messename und Ausgabejahr"
+   },
+   {
+    "checks": {
+     "de": [
+      "companyName gefüllt",
+      "hallStand im Format ^Hall \\S+ \\| \\S",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "companyName present",
+      "hallStand matches ^Hall \\S+ \\| \\S",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "hall-and-stand",
+    "title": "Every exhibitor comes with company name, hall and stand",
+    "title_de": "Jeder Aussteller mit Firmenname, Halle und Stand"
+   },
+   {
+    "checks": {
+     "de": [
+      "country gefüllt",
+      "countryCode im Format ^[A-Z]{2}$",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "country present",
+      "countryCode matches ^[A-Z]{2}$",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "country-iso-code",
+    "title": "Every exhibitor has its country, also as a two-letter ISO code",
+    "title_de": "Jeder Aussteller mit Land, auch als zweistelliger ISO-Code"
+   },
+   {
+    "checks": {
+     "de": [
+      "profileUrl im Format ^https://www\\.anuga\\.com/exhibitor/[^/]+/$",
+      "detailsFetched ist eines von true, false",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "profileUrl matches ^https://www\\.anuga\\.com/exhibitor/[^/]+/$",
+      "detailsFetched is one of true, false",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "profile-link",
+    "title": "Every row links to the exhibitor's profile page on anuga.com and says whether the profile was read",
+    "title_de": "Jede Zeile verlinkt das Ausstellerprofil auf anuga.com und sagt, ob das Profil gelesen wurde"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit detailsFetched = true",
+      "street gefüllt",
+      "city gefüllt",
+      "website im Format ^https?://",
+      "email in mindestens 70% der Zeilen",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "row with detailsFetched = true",
+      "street present",
+      "city present",
+      "website matches ^https?://",
+      "email in at least 70% of rows",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "contact-from-profile",
+    "title": "Where the exhibitor profile was read: street, city and website for every exhibitor, an e-mail address for at least 70 %",
+    "title_de": "Wo das Ausstellerprofil gelesen wurde: Straße, Ort und Website bei jedem Aussteller, E-Mail-Adresse bei mindestens 70 %"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "appstore-google-play-intelligence": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "Zeile mit store = apple, appId = 310633997",
+      "status = found",
+      "source = itunes-lookup-api",
+      "bundleId = net.whatsapp.WhatsApp",
+      "title enthält „WhatsApp“",
+      "rating zwischen 1 und 5",
+      "ratingCount ≥ 100000",
+      "ratingCountScope = country",
+      "storeUrl im Format ^https://apps\\.apple\\.com/",
+      "checkedAt gefüllt"
+     ],
+     "en": [
+      "row with store = apple, appId = 310633997",
+      "status = found",
+      "source = itunes-lookup-api",
+      "bundleId = net.whatsapp.WhatsApp",
+      "title contains “WhatsApp”",
+      "rating between 1 and 5",
+      "ratingCount ≥ 100000",
+      "ratingCountScope = country",
+      "storeUrl matches ^https://apps\\.apple\\.com/",
+      "checkedAt present"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "whatsapp-app-store",
+    "title": "WhatsApp on the App Store (Germany): found by its id, bundle id net.whatsapp.WhatsApp, rating between 1 and 5 from at least 100,000 ratings",
+    "title_de": "WhatsApp im App Store (Deutschland): über die ID gefunden, Bundle-ID net.whatsapp.WhatsApp, Bewertung zwischen 1 und 5 aus mindestens 100.000 Bewertungen"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit store = google_play, appId = com.whatsapp",
+      "status = found",
+      "source = google-play-page",
+      "title enthält „WhatsApp“",
+      "rating zwischen 1 und 5",
+      "ratingCount ≥ 1000000",
+      "ratingCountScope = worldwide",
+      "minInstalls ≥ 1000000000",
+      "storeUrl im Format ^https://play\\.google\\.com/"
+     ],
+     "en": [
+      "row with store = google_play, appId = com.whatsapp",
+      "status = found",
+      "source = google-play-page",
+      "title contains “WhatsApp”",
+      "rating between 1 and 5",
+      "ratingCount ≥ 1000000",
+      "ratingCountScope = worldwide",
+      "minInstalls ≥ 1000000000",
+      "storeUrl matches ^https://play\\.google\\.com/"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "whatsapp-google-play",
+    "title": "WhatsApp on Google Play: found by its package name, rating between 1 and 5, at least one billion installs",
+    "title_de": "WhatsApp bei Google Play: über den Paketnamen gefunden, Bewertung zwischen 1 und 5, mindestens eine Milliarde Installationen"
+   },
+   {
+    "checks": {
+     "de": [
+      "mindestens 2 Zeilen",
+      "status = found",
+      "input ist eines von 310633997, com.whatsapp",
+      "kein appId doppelt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 2 rows",
+      "status = found",
+      "input is one of 310633997, com.whatsapp",
+      "no duplicate appId",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "not-found-no-row",
+    "title": "Two app ids that do not exist and a repeated App Store link become no row and no charge — only found apps are rows",
+    "title_de": "Zwei App-IDs, die es nicht gibt, und ein wiederholter App-Store-Link ergeben keine Zeile und keine Kosten — nur gefundene Apps sind Zeilen"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "arbeitsagentur-jobs-scraper": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "mindestens 20 Zeilen",
+      "title gefüllt",
+      "company gefüllt",
+      "offerType = ARBEIT",
+      "refnr im Format ^\\d{4,6}-\\S+-S$",
+      "jobUrl im Format ^https://www\\.arbeitsagentur\\.de/jobsuche/jobdetail/\\d{4,6}-\\S+-S$",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 20 rows",
+      "title present",
+      "company present",
+      "offerType = ARBEIT",
+      "refnr matches ^\\d{4,6}-\\S+-S$",
+      "jobUrl matches ^https://www\\.arbeitsagentur\\.de/jobsuche/jobdetail/\\d{4,6}-\\S+-S$",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "electricians-berlin-20-jobs",
+    "title": "A search for electricians (Elektriker) within 25 km of Berlin returns the 20 jobs asked for, each with title, employer, reference number and its job page on arbeitsagentur.de",
+    "title_de": "Eine Suche nach Elektrikern im Umkreis von 25 km um Berlin liefert die 20 bestellten Stellen, jede mit Titel, Arbeitgeber, Referenznummer und ihrer Stellenseite auf arbeitsagentur.de"
+   },
+   {
+    "checks": {
+     "de": [
+      "locations.region ist eines von BERLIN, BRANDENBURG",
+      "distanceKm zwischen 0 und 25",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "locations.region is one of BERLIN, BRANDENBURG",
+      "distanceKm between 0 and 25",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "jobs-within-radius",
+    "title": "Every job lies in Berlin or Brandenburg and at most 25 km from Berlin — the radius searched",
+    "title_de": "Jede Stelle liegt in Berlin oder Brandenburg und höchstens 25 km von Berlin entfernt — im gesuchten Umkreis"
+   },
+   {
+    "checks": {
+     "de": [
+      "detailStatus = ok",
+      "description in mindestens 90% der Zeilen",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "detailStatus = ok",
+      "description in at least 90% of rows",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "full-descriptions",
+    "title": "With full descriptions switched on, every job was fetched in detail (detailStatus ok) and at least 90 % carry the description text",
+    "title_de": "Mit eingeschalteten Stellenbeschreibungen wurde jede Stelle im Detail abgerufen (detailStatus ok), mindestens 90 % tragen den Beschreibungstext"
+   },
+   {
+    "checks": {
+     "de": [
+      "mindestens 20 Zeilen",
+      "kein refnr doppelt"
+     ],
+     "en": [
+      "at least 20 rows",
+      "no duplicate refnr"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "no-duplicate-jobs",
+    "title": "No job is delivered or charged twice: 20 rows, 20 different reference numbers",
+    "title_de": "Keine Stelle wird doppelt geliefert oder berechnet: 20 Zeilen, 20 verschiedene Referenznummern"
+   },
+   {
+    "checks": {
+     "de": [
+      "source enthält „Bundesagentur für Arbeit“",
+      "query.keyword = Elektriker",
+      "query.location = Berlin",
+      "query.radiusKm = 25",
+      "retrievedAt im Format ^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "source contains “Bundesagentur für Arbeit”",
+      "query.keyword = Elektriker",
+      "query.location = Berlin",
+      "query.radiusKm = 25",
+      "retrievedAt matches ^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "proof-on-every-row",
+    "title": "Every row names its source (the Jobsuche interface of the Bundesagentur für Arbeit), the search it answers and when it was retrieved",
+    "title_de": "Jede Zeile nennt ihre Quelle (Jobsuche-Schnittstelle der Bundesagentur für Arbeit), die Suche, aus der sie stammt, und den Abrufzeitpunkt"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "free-website-contact-imprint-scraper": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = bosch.de",
+      "status = found",
+      "companyName = Robert Bosch GmbH",
+      "legalForm = GmbH",
+      "postalCode = 70839",
+      "registerNumber = HRB 14000",
+      "registerCourt = Stuttgart",
+      "vatId = DE811128135",
+      "vatStatus = valid",
+      "vatValid ist wahr"
+     ],
+     "en": [
+      "row with input = bosch.de",
+      "status = found",
+      "companyName = Robert Bosch GmbH",
+      "legalForm = GmbH",
+      "postalCode = 70839",
+      "registerNumber = HRB 14000",
+      "registerCourt = Stuttgart",
+      "vatId = DE811128135",
+      "vatStatus = valid",
+      "vatValid is true"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "bosch-register-and-vat",
+    "title": "bosch.de: Robert Bosch GmbH, register number HRB 14000 (Stuttgart), VAT ID DE811128135 valid in VIES",
+    "title_de": "bosch.de: Robert Bosch GmbH, Handelsregister HRB 14000 (Stuttgart), USt-IdNr. DE811128135 in VIES gültig"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = tuwien.at",
+      "status = found",
+      "country = AT",
+      "postalCode = 1040",
+      "city = Wien",
+      "vatId = ATU37675002",
+      "vatStatus = valid",
+      "vatValid ist wahr",
+      "vatRegisteredName = Technische Universität Wien",
+      "vatNameMatch ist wahr"
+     ],
+     "en": [
+      "row with input = tuwien.at",
+      "status = found",
+      "country = AT",
+      "postalCode = 1040",
+      "city = Wien",
+      "vatId = ATU37675002",
+      "vatStatus = valid",
+      "vatValid is true",
+      "vatRegisteredName = Technische Universität Wien",
+      "vatNameMatch is true"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "tu-wien-austrian-vat",
+    "title": "tuwien.at (Austria): VAT ID ATU37675002 is valid in VIES and VIES returns the registered name Technische Universität Wien",
+    "title_de": "tuwien.at (Österreich): USt-IdNr. ATU37675002 ist in VIES gültig, VIES nennt den eingetragenen Namen Technische Universität Wien"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = sbb.ch",
+      "status = found",
+      "companyName enthält „Schweizerische Bundesbahnen“",
+      "legalForm = AG",
+      "country = CH",
+      "postalCode im Format ^30\\d\\d$",
+      "city enthält „Bern“"
+     ],
+     "en": [
+      "row with input = sbb.ch",
+      "status = found",
+      "companyName contains “Schweizerische Bundesbahnen”",
+      "legalForm = AG",
+      "country = CH",
+      "postalCode matches ^30\\d\\d$",
+      "city contains “Bern”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "sbb-swiss-company",
+    "title": "sbb.ch (Switzerland): the legal notice names Schweizerische Bundesbahnen AG in Bern",
+    "title_de": "sbb.ch (Schweiz): Das Impressum nennt die Schweizerische Bundesbahnen AG in Bern"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = example.com",
+      "status = not_found",
+      "reason = no_imprint",
+      "companyName leer",
+      "vatId leer",
+      "street leer",
+      "impressumFound ist falsch"
+     ],
+     "en": [
+      "row with input = example.com",
+      "status = not_found",
+      "reason = no_imprint",
+      "companyName empty",
+      "vatId empty",
+      "street empty",
+      "impressumFound is false"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "no-legal-notice-not-a-company",
+    "title": "example.com has no legal notice: reported as not found, without any invented company data",
+    "title_de": "example.com hat kein Impressum: als nicht gefunden gemeldet, ohne erfundene Firmendaten"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "google-ads-transparency-scraper": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = zalando.de",
+      "googleStatus = checked_advertising",
+      "googleIsAdvertising ist wahr",
+      "googleMainAdvertiser enthält „Zalando“",
+      "googleMainAdvertiserMatchesDomain ist wahr",
+      "googleAdCountMin ≥ 1000",
+      "googleTransparencyUrl im Format ^https://adstransparency\\.google\\.com/"
+     ],
+     "en": [
+      "row with input = zalando.de",
+      "googleStatus = checked_advertising",
+      "googleIsAdvertising is true",
+      "googleMainAdvertiser contains “Zalando”",
+      "googleMainAdvertiserMatchesDomain is true",
+      "googleAdCountMin ≥ 1000",
+      "googleTransparencyUrl matches ^https://adstransparency\\.google\\.com/"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "zalando-google-advertiser",
+    "title": "zalando.de advertises on Google: found in the Ads Transparency Center, main advertiser Zalando, at least 1,000 ads",
+    "title_de": "zalando.de wirbt bei Google: im Ads Transparency Center gefunden, Hauptwerbetreibender Zalando, mindestens 1.000 Anzeigen"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = check24.de",
+      "status = checked_advertising",
+      "platformsChecked mit mindestens 2 Einträgen",
+      "googleIsAdvertising ist wahr",
+      "microsoftStatus = checked_advertising",
+      "microsoftIsAdvertising ist wahr",
+      "microsoftMainAdvertiser enthält „CHECK24“",
+      "microsoftSourceUrl im Format ^https://adlibrary\\.api\\.bingads\\.microsoft\\.com/"
+     ],
+     "en": [
+      "row with input = check24.de",
+      "status = checked_advertising",
+      "platformsChecked has at least 2 entries",
+      "googleIsAdvertising is true",
+      "microsoftStatus = checked_advertising",
+      "microsoftIsAdvertising is true",
+      "microsoftMainAdvertiser contains “CHECK24”",
+      "microsoftSourceUrl matches ^https://adlibrary\\.api\\.bingads\\.microsoft\\.com/"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "check24-google-and-bing",
+    "title": "check24.de advertises on Google and on Microsoft (Bing): both platforms answered, the main Bing advertiser is CHECK24",
+    "title_de": "check24.de wirbt bei Google und bei Microsoft (Bing): beide Plattformen haben geantwortet, Haupt-Werbekonto bei Bing ist CHECK24"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = https://www.zalando.de/",
+      "status = duplicate",
+      "duplicateOf = zalando.de",
+      "isAdvertising leer",
+      "note enthält „Not charged“"
+     ],
+     "en": [
+      "row with input = https://www.zalando.de/",
+      "status = duplicate",
+      "duplicateOf = zalando.de",
+      "isAdvertising empty",
+      "note contains “Not charged”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "duplicate-not-charged",
+    "title": "The same company entered twice (https://www.zalando.de/) gets one row marked as duplicate and is not checked or charged again",
+    "title_de": "Dieselbe Firma zweimal eingegeben (https://www.zalando.de/) wird als Duplikat markiert und nicht erneut geprüft oder berechnet"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = kein-unternehmen-perceptron-pruefung.de",
+      "status = invalid_input",
+      "reason enthält „does not exist“",
+      "isAdvertising leer",
+      "note enthält „Not charged“"
+     ],
+     "en": [
+      "row with input = kein-unternehmen-perceptron-pruefung.de",
+      "status = invalid_input",
+      "reason contains “does not exist”",
+      "isAdvertising empty",
+      "note contains “Not charged”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "nonexistent-domain-not-charged",
+    "title": "A domain that does not exist is reported as invalid input, with the reason, and is not charged",
+    "title_de": "Eine Domain, die es nicht gibt, wird als ungültige Eingabe mit Begründung gemeldet und nicht berechnet"
+   },
+   {
+    "checks": {
+     "de": [
+      "mindestens 4 Zeilen",
+      "schemaVersion = 1",
+      "status ist eines von checked_advertising, checked_not_advertising, partial, unavailable, not_checked, invalid_input, duplicate",
+      "checkedAt im Format ^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+      "kein input doppelt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 4 rows",
+      "schemaVersion = 1",
+      "status is one of checked_advertising, checked_not_advertising, partial, unavailable, not_checked, invalid_input, duplicate",
+      "checkedAt matches ^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+      "no duplicate input",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "one-row-per-input",
+    "title": "Every input gets exactly one row with a status and the time of the check",
+    "title_de": "Jede Eingabe bekommt genau eine Zeile mit Status und Prüfzeitpunkt"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "imprint-impressum-website-contact-scraper": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = siemens.com",
+      "status = found",
+      "reason = imprint",
+      "companyName enthält „Siemens“",
+      "legalForm = AG",
+      "postalCode = 80333",
+      "city = München",
+      "country = DE",
+      "registerNumber im Format ^HRB \\d+$",
+      "vatId = DE129274202",
+      "vatStatus = valid",
+      "vatValid ist wahr",
+      "impressumUrl im Format ^https://(www\\.)?siemens\\.com/"
+     ],
+     "en": [
+      "row with input = siemens.com",
+      "status = found",
+      "reason = imprint",
+      "companyName contains “Siemens”",
+      "legalForm = AG",
+      "postalCode = 80333",
+      "city = München",
+      "country = DE",
+      "registerNumber matches ^HRB \\d+$",
+      "vatId = DE129274202",
+      "vatStatus = valid",
+      "vatValid is true",
+      "impressumUrl matches ^https://(www\\.)?siemens\\.com/"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "siemens-ag-vat-valid",
+    "title": "siemens.com: the legal notice names Siemens AG in München with VAT ID DE129274202, confirmed valid in the EU VIES register",
+    "title_de": "siemens.com: Das Impressum nennt die Siemens AG in München mit USt-IdNr. DE129274202, im EU-Register VIES als gültig bestätigt"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = liebherr.com",
+      "status = found",
+      "companyName enthält „Liebherr“",
+      "legalForm = GmbH",
+      "postalCode = 88400",
+      "registerType = HRB",
+      "registerNumber = HRB 640080",
+      "vatId = DE811154028",
+      "vatStatus = valid",
+      "vatValid ist wahr"
+     ],
+     "en": [
+      "row with input = liebherr.com",
+      "status = found",
+      "companyName contains “Liebherr”",
+      "legalForm = GmbH",
+      "postalCode = 88400",
+      "registerType = HRB",
+      "registerNumber = HRB 640080",
+      "vatId = DE811154028",
+      "vatStatus = valid",
+      "vatValid is true"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "liebherr-register-and-vat",
+    "title": "liebherr.com: Liebherr-International Deutschland GmbH, register number HRB 640080, VAT ID DE811154028 valid in VIES",
+    "title_de": "liebherr.com: Liebherr-International Deutschland GmbH, Handelsregister HRB 640080, USt-IdNr. DE811154028 in VIES gültig"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = tuwien.at",
+      "status = found",
+      "country = AT",
+      "postalCode = 1040",
+      "city = Wien",
+      "vatId = ATU37675002",
+      "vatStatus = valid",
+      "vatValid ist wahr",
+      "vatRegisteredName = Technische Universität Wien",
+      "vatNameMatch ist wahr"
+     ],
+     "en": [
+      "row with input = tuwien.at",
+      "status = found",
+      "country = AT",
+      "postalCode = 1040",
+      "city = Wien",
+      "vatId = ATU37675002",
+      "vatStatus = valid",
+      "vatValid is true",
+      "vatRegisteredName = Technische Universität Wien",
+      "vatNameMatch is true"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "tu-wien-austrian-vat",
+    "title": "tuwien.at (Austria): VAT ID ATU37675002 is valid in VIES and VIES returns the registered name Technische Universität Wien",
+    "title_de": "tuwien.at (Österreich): USt-IdNr. ATU37675002 ist in VIES gültig, VIES nennt den eingetragenen Namen Technische Universität Wien"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = sbb.ch",
+      "status = found",
+      "companyName enthält „Schweizerische Bundesbahnen“",
+      "legalForm = AG",
+      "country = CH",
+      "postalCode im Format ^30\\d\\d$",
+      "city enthält „Bern“"
+     ],
+     "en": [
+      "row with input = sbb.ch",
+      "status = found",
+      "companyName contains “Schweizerische Bundesbahnen”",
+      "legalForm = AG",
+      "country = CH",
+      "postalCode matches ^30\\d\\d$",
+      "city contains “Bern”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "sbb-swiss-company",
+    "title": "sbb.ch (Switzerland): the legal notice names Schweizerische Bundesbahnen AG in Bern",
+    "title_de": "sbb.ch (Schweiz): Das Impressum nennt die Schweizerische Bundesbahnen AG in Bern"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit input = example.com",
+      "status = not_found",
+      "reason = no_imprint",
+      "companyName leer",
+      "vatId leer",
+      "street leer",
+      "impressumFound ist falsch"
+     ],
+     "en": [
+      "row with input = example.com",
+      "status = not_found",
+      "reason = no_imprint",
+      "companyName empty",
+      "vatId empty",
+      "street empty",
+      "impressumFound is false"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "no-legal-notice-not-a-company",
+    "title": "example.com has no legal notice: reported as not found, without any invented company data",
+    "title_de": "example.com hat kein Impressum: als nicht gefunden gemeldet, ohne erfundene Firmendaten"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "kununu-employer-data-scraper": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "Zeile mit inputSlug = siemens",
+      "status = found",
+      "companyName = Siemens AG",
+      "countryCode = de",
+      "profileUrl = https://www.kununu.com/de/siemens",
+      "score zwischen 1 und 5",
+      "totalReviews ≥ 1000",
+      "recommendationRate zwischen 0 und 100",
+      "locationMain.city = München",
+      "checkedAt im Format ^20\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+     ],
+     "en": [
+      "row with inputSlug = siemens",
+      "status = found",
+      "companyName = Siemens AG",
+      "countryCode = de",
+      "profileUrl = https://www.kununu.com/de/siemens",
+      "score between 1 and 5",
+      "totalReviews ≥ 1000",
+      "recommendationRate between 0 and 100",
+      "locationMain.city = München",
+      "checkedAt matches ^20\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "siemens-profile",
+    "title": "Siemens AG: score between 1 and 5, at least 1,000 reviews, main location Munich, read from kununu.com/de/siemens",
+    "title_de": "Siemens AG: Score zwischen 1 und 5, mindestens 1.000 Bewertungen, Hauptstandort München, gelesen auf kununu.com/de/siemens"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit inputSlug = siemens",
+      "salaryRanges mit mindestens 1 Einträgen",
+      "salaryRangesDelivered ≥ 1",
+      "salaryRangesAvailable ≥ 20",
+      "sourceUrls enthält „/siemens/gehalt“"
+     ],
+     "en": [
+      "row with inputSlug = siemens",
+      "salaryRanges has at least 1 entries",
+      "salaryRangesDelivered ≥ 1",
+      "salaryRangesAvailable ≥ 20",
+      "sourceUrls contains “/siemens/gehalt”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "siemens-salaries",
+    "title": "Siemens salaries: salary ranges read from the salary page, together with the number kununu holds",
+    "title_de": "Siemens-Gehälter: Gehaltsspannen von der Gehaltsseite, zusammen mit der Zahl, die kununu führt"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit inputSlug = bosch",
+      "status = found",
+      "companyName enthält „Bosch“",
+      "slug im Format ^bosch",
+      "profileUrl im Format ^https://www\\.kununu\\.com/de/bosch",
+      "score zwischen 1 und 5",
+      "totalReviews ≥ 1000"
+     ],
+     "en": [
+      "row with inputSlug = bosch",
+      "status = found",
+      "companyName contains “Bosch”",
+      "slug matches ^bosch",
+      "profileUrl matches ^https://www\\.kununu\\.com/de/bosch",
+      "score between 1 and 5",
+      "totalReviews ≥ 1000"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "bosch-profile",
+    "title": "Bosch: the profile kununu shows for “bosch” (also when kununu forwards to another address), score between 1 and 5, at least 1,000 reviews",
+    "title_de": "Bosch: das Profil, das kununu für „bosch“ zeigt (auch wenn kununu auf eine andere Adresse weiterleitet), Score zwischen 1 und 5, mindestens 1.000 Bewertungen"
+   },
+   {
+    "checks": {
+     "de": [
+      "mindestens 2 Zeilen",
+      "status = found",
+      "inputSlug ist eines von siemens, bosch",
+      "kein profileUuid doppelt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 2 rows",
+      "status = found",
+      "inputSlug is one of siemens, bosch",
+      "no duplicate profileUuid",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "unknown-company-not-delivered",
+    "title": "A company kununu does not know is neither delivered nor charged: only the 2 real companies come back, each once",
+    "title_de": "Eine Firma, die kununu nicht kennt, wird weder geliefert noch berechnet: nur die 2 echten Firmen kommen zurück, jede einmal"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "messe-muenchen-exhibitor-list-scraper": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "mindestens 10 Zeilen",
+      "fairName = bauma",
+      "fairEdition im Format ^bauma 20\\d\\d$",
+      "fairId ≥ 1",
+      "language = en",
+      "kein exhibitorId doppelt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 10 rows",
+      "fairName = bauma",
+      "fairEdition matches ^bauma 20\\d\\d$",
+      "fairId ≥ 1",
+      "language = en",
+      "no duplicate exhibitorId",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "bauma-list-edition",
+    "title": "bauma: the first 10 exhibitors in alphabetical order, each delivered once, with fair name and edition",
+    "title_de": "bauma: die ersten 10 Aussteller in alphabetischer Reihenfolge, jeder genau einmal, mit Messename und Ausgabe"
+   },
+   {
+    "checks": {
+     "de": [
+      "profileStatus = ok",
+      "profileUrl im Format ^https://exhibitors\\.bauma\\.de/en/.+/exhibitorDetail/ID/\\d+/",
+      "checkedAt im Format ^20\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "profileStatus = ok",
+      "profileUrl matches ^https://exhibitors\\.bauma\\.de/en/.+/exhibitorDetail/ID/\\d+/",
+      "checkedAt matches ^20\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "read-from-profile-page",
+    "title": "Every row was read from the exhibitor's own profile page: status ok, link to the page and time of the check",
+    "title_de": "Jede Zeile stammt aus dem eigenen Profil des Ausstellers: Status ok, Link zur Seite und Prüfzeit"
+   },
+   {
+    "checks": {
+     "de": [
+      "hallStand im Format ^[A-Z0-9]+\\.\\S+$",
+      "country gefüllt",
+      "city gefüllt",
+      "postalCode in mindestens 80% der Zeilen",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "hallStand matches ^[A-Z0-9]+\\.\\S+$",
+      "country present",
+      "city present",
+      "postalCode in at least 80% of rows",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "stand-and-address",
+    "title": "Every exhibitor has hall and stand, country and city; a postal code for at least 80 %",
+    "title_de": "Jeder Aussteller mit Halle und Stand, Land und Ort; Postleitzahl bei mindestens 80 %"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit exhibitorId = 1381261",
+      "companyName = 123erfasst.de GmbH",
+      "fairEdition = bauma 2025",
+      "hallStand = A2.114",
+      "postalCode = 49393",
+      "addressCountry = Germany",
+      "website enthält „123erfasst.de“"
+     ],
+     "en": [
+      "row with exhibitorId = 1381261",
+      "companyName = 123erfasst.de GmbH",
+      "fairEdition = bauma 2025",
+      "hallStand = A2.114",
+      "postalCode = 49393",
+      "addressCountry = Germany",
+      "website contains “123erfasst.de”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "known-exhibitor-123erfasst",
+    "title": "Known exhibitor: 123erfasst.de GmbH at bauma 2025, stand A2.114, postal code 49393, country in English (Germany)",
+    "title_de": "Bekannter Aussteller: 123erfasst.de GmbH auf der bauma 2025, Stand A2.114, Postleitzahl 49393, Land auf Englisch (Germany)"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
+ "pdf-to-markdown-converter": {
+  "checked": 0,
+  "date": null,
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "Zeile mit url = https://arxiv.org/pdf/1706.03762v7",
+      "status = ok",
+      "format = pdf",
+      "pageCount = 15",
+      "pagesConverted = 15",
+      "chargedPages = 15",
+      "ocrPages = 0",
+      "markdown im Format (^|\\n)## Attention Is All You Need",
+      "text enthält „Scaled Dot-Product Attention“"
+     ],
+     "en": [
+      "row with url = https://arxiv.org/pdf/1706.03762v7",
+      "status = ok",
+      "format = pdf",
+      "pageCount = 15",
+      "pagesConverted = 15",
+      "chargedPages = 15",
+      "ocrPages = 0",
+      "markdown matches (^|\\n)## Attention Is All You Need",
+      "text contains “Scaled Dot-Product Attention”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "pdf-paper-all-pages",
+    "title": "A 15-page research paper (arXiv 1706.03762v7) is converted in full: status ok, 15 of 15 pages charged as text pages, the paper title as a Markdown heading and the section text",
+    "title_de": "Ein 15-seitiger Fachartikel (arXiv 1706.03762v7) wird vollständig umgewandelt: Status ok, 15 von 15 Seiten als Textseiten abgerechnet, der Titel als Markdown-Überschrift und der Abschnittstext"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit url = https://arxiv.org/pdf/1706.03762v7",
+      "tables.page = 8",
+      "tables.rows im Format Transformer ?\\(big\\)', '28\\.4', '41\\.8'",
+      "markdown im Format \\| *Transformer ?\\(big\\) *\\| *28\\.4 *\\| *41\\.8 *\\|"
+     ],
+     "en": [
+      "row with url = https://arxiv.org/pdf/1706.03762v7",
+      "tables.page = 8",
+      "tables.rows matches Transformer ?\\(big\\)', '28\\.4', '41\\.8'",
+      "markdown matches \\| *Transformer ?\\(big\\) *\\| *28\\.4 *\\| *41\\.8 *\\|"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "pdf-paper-results-table",
+    "title": "Table 2 of the same paper comes out as a table row: “Transformer (big)” with BLEU 28.4 (English–German) and 41.8 (English–French)",
+    "title_de": "Tabelle 2 desselben Artikels kommt als Tabellenzeile heraus: „Transformer (big)“ mit BLEU 28,4 (Englisch–Deutsch) und 41,8 (Englisch–Französisch)"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit url = https://raw.githubusercontent.com/panda…",
+      "status = ok",
+      "format = xlsx",
+      "tables.rows im Format \\['IntCol', 'FloatCol', 'BoolCol', 'StrCol', 'Str2Col', 'DateCol'\\]",
+      "markdown im Format \\| *-3 *\\| *1\\.83 *\\| *TRUE *\\| *3 *\\| *c *\\| *1905-01-01 *\\|",
+      "text enthält „5e-10“"
+     ],
+     "en": [
+      "row with url = https://raw.githubusercontent.com/panda…",
+      "status = ok",
+      "format = xlsx",
+      "tables.rows matches \\['IntCol', 'FloatCol', 'BoolCol', 'StrCol', 'Str2Col', 'DateCol'\\]",
+      "markdown matches \\| *-3 *\\| *1\\.83 *\\| *TRUE *\\| *3 *\\| *c *\\| *1905-01-01 *\\|",
+      "text contains “5e-10”"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "excel-typed-cells",
+    "title": "An Excel file (pandas test file, fixed version) becomes a table with the exact cell values — whole numbers, decimals, TRUE/FALSE and dates",
+    "title_de": "Eine Excel-Datei (pandas-Testdatei, feste Fassung) wird zur Tabelle mit den genauen Zellwerten — ganze Zahlen, Dezimalzahlen, TRUE/FALSE und Datumsangaben"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit url = https://raw.githubusercontent.com/panda…",
+      "status = failed",
+      "charged ist falsch",
+      "error enthält „404“",
+      "markdown leer"
+     ],
+     "en": [
+      "row with url = https://raw.githubusercontent.com/panda…",
+      "status = failed",
+      "charged is false",
+      "error contains “404”",
+      "markdown empty"
+     ]
+    },
+    "link": null,
+    "result": null,
+    "slug": "missing-file-not-charged",
+    "title": "A missing file (HTTP 404) is reported as failed with the reason and not charged — no empty document is delivered",
+    "title_de": "Eine fehlende Datei (HTTP 404) wird als fehlgeschlagen mit Grund gemeldet und nicht berechnet — kein leeres Dokument"
+   }
+  ],
+  "history": [],
+  "passed": 0,
+  "planned": "2026-10-25"
+ },
  "research-agent": {
   "checked": 10,
   "date": "2026-10-12",
   "examples": [
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/eu-ai-act-obligations-official-text",
+    "reasons": null,
     "result": "ok",
     "seconds": 59,
     "slug": "eu-ai-act-obligations-official-text",
     "sources": 5,
     "strongest": "official",
-    "title": "EU AI Act obligations – cited from the official text"
+    "title": "EU AI Act obligations – cited from the official text",
+    "title_de": "Pflichten nach der EU-KI-Verordnung – zitiert aus dem amtlichen Text"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/gdpr-article-official-text-lookup",
+    "reasons": null,
     "result": "ok",
     "seconds": 30,
     "slug": "gdpr-article-official-text-lookup",
     "sources": 5,
     "strongest": "official",
-    "title": "GDPR article lookup – official text with sources"
+    "title": "GDPR article lookup – official text with sources",
+    "title_de": "DSGVO-Artikel nachschlagen – amtlicher Text mit Quellen"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/german-law-bgb-paragraph-official",
+    "reasons": null,
     "result": "ok",
     "seconds": 34,
     "slug": "german-law-bgb-paragraph-official",
     "sources": 7,
     "strongest": "official",
-    "title": "German law § lookup (BGB, HGB, GG) – official text"
+    "title": "German law § lookup (BGB, HGB, GG) – official text",
+    "title_de": "Paragraf im deutschen Recht (BGB, HGB, GG) – amtlicher Text"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/fact-check-prices-across-sites",
+    "reasons": {
+     "de": [
+      "Google antwortete nicht (partial, nicht berechnet) — meist vorübergehend"
+     ],
+     "en": [
+      "Google did not answer (status partial, not charged) — usually temporary"
+     ]
+    },
     "result": "note",
     "seconds": 87,
     "slug": "fact-check-prices-across-sites",
-    "sources": 0,
+    "sources": null,
     "strongest": null,
-    "title": "Fact-check prices and figures across independent sites"
+    "title": "Fact-check prices and figures across independent sites",
+    "title_de": "Preise und Zahlen über unabhängige Seiten abgleichen"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/scientific-evidence-open-access-papers",
+    "reasons": null,
     "result": "ok",
     "seconds": 3,
     "slug": "scientific-evidence-open-access-papers",
     "sources": 6,
     "strongest": "academic",
-    "title": "Scientific evidence from open-access papers"
+    "title": "Scientific evidence from open-access papers",
+    "title_de": "Wissenschaftliche Belege aus frei zugänglichen Fachartikeln"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/developer-answers-stack-overflow-github",
+    "reasons": null,
     "result": "ok",
     "seconds": 45,
     "slug": "developer-answers-stack-overflow-github",
     "sources": 4,
     "strongest": "community",
-    "title": "Developer answers from Stack Overflow, GitHub and HN"
+    "title": "Developer answers from Stack Overflow, GitHub and HN",
+    "title_de": "Entwicklerantworten aus Stack Overflow, GitHub und Hacker News"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/news-this-week-cited-llm-context",
+    "reasons": null,
     "result": "ok",
     "seconds": 32,
     "slug": "news-this-week-cited-llm-context",
     "sources": 7,
     "strongest": "official",
-    "title": "This week's news as cited context for LLMs"
+    "title": "This week's news as cited context for LLMs",
+    "title_de": "Nachrichten dieser Woche als belegter Kontext für Sprachmodelle"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/rag-chunks-for-vector-database",
+    "reasons": null,
     "result": "ok",
     "seconds": 100,
     "slug": "rag-chunks-for-vector-database",
     "sources": 6,
     "strongest": "academic",
-    "title": "RAG chunks for Pinecone or Qdrant with stable IDs"
+    "title": "RAG chunks for Pinecone or Qdrant with stable IDs",
+    "title_de": "RAG-Textabschnitte für Pinecone oder Qdrant mit stabilen IDs"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/web-search-api-for-ai-agents",
+    "reasons": null,
     "result": "ok",
     "seconds": 5,
     "slug": "web-search-api-for-ai-agents",
     "sources": 7,
     "strongest": "reference",
-    "title": "Web search API for AI agents – cited context in one call"
+    "title": "Web search API for AI agents – cited context in one call",
+    "title_de": "Websuche-API für KI-Agenten – belegter Kontext in einem Aufruf"
    },
    {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/deep-research-regulation-second-round",
+    "reasons": null,
     "result": "ok",
     "seconds": 49,
     "slug": "deep-research-regulation-second-round",
     "sources": 9,
     "strongest": "official",
-    "title": "Deep research: second search round with learned terms"
+    "title": "Deep research: second search round with learned terms",
+    "title_de": "Tiefe Recherche: zweite Suchrunde mit gelernten Begriffen"
    }
   ],
-  "passed": 10
+  "history": [
+   {
+    "checked": 10,
+    "date": "2026-10-12",
+    "passed": 10
+   },
+   {
+    "checked": 10,
+    "date": "2026-10-08",
+    "passed": 10
+   }
+  ],
+  "passed": 10,
+  "since": "2026-10-08"
  }
 }

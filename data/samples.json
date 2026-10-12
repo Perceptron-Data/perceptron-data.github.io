@@ -1,0 +1,1190 @@
+{
+ "imprint-impressum-website-contact-scraper": {
+  "date": "2026-10-12",
+  "rows": 20,
+  "fieldsCompared": [
+   "status",
+   "companyName",
+   "street",
+   "postalCode",
+   "city",
+   "registerNumber",
+   "vatId",
+   "phone",
+   "email",
+   "vatValid"
+  ],
+  "compared": 164,
+  "matched": 136,
+  "rate": 0.829,
+  "method": {
+   "en": "20 result rows from a local run of the current code on 12 Oct 2026 (large, medium and small companies from Germany, Austria and Switzerland; small ones found via the actor's own OpenStreetMap search). Each field was compared by hand with the legal-notice page the row cites, the VAT verdict with an independent query to the EU VIES service. A field counts when we deliver a value or the source shows one we missed; rows the actor reports as blocked, unreachable or without a legal notice were checked in a browser-like request.",
+   "de": "20 Ergebniszeilen aus einem lokalen Lauf des aktuellen Codes am 12.10.2026 (große, mittlere und kleine Firmen aus Deutschland, Österreich und der Schweiz; kleine über die eigene OpenStreetMap-Suche des Actors gefunden). Jedes Feld wurde von Hand mit der Impressumsseite verglichen, die die Zeile nennt, das USt-Urteil mit einer unabhängigen Abfrage beim EU-Dienst VIES. Ein Feld zählt, wenn wir einen Wert liefern oder die Quelle einen zeigt, den wir verpasst haben; als gesperrt, nicht erreichbar oder ohne Impressum gemeldete Zeilen wurden mit einem eigenen Abruf geprüft."
+  },
+  "misses": [
+   {
+    "row": "liebherr.com",
+    "field": "email",
+    "kind": "missing",
+    "ours": null,
+    "source": "e-mail shown in the browser (Cloudflare-protected in the HTML)",
+    "cause": {
+     "en": "The address is hidden by the site's Cloudflare e-mail protection; the actor does not decode it.",
+     "de": "Die Adresse ist durch Cloudflares E-Mail-Schutz verschlüsselt; der Actor entschlüsselt sie nicht."
+    }
+   },
+   {
+    "row": "verbund.com",
+    "field": "companyName",
+    "kind": "wrong",
+    "ours": "VERBUND Energy4Business Germany GmbH",
+    "source": "VERBUND AG",
+    "cause": {
+     "en": "The legal notice lists about 15 group companies; the row mixes the publisher's VAT ID and phone with name, register number and e-mail of subsidiaries further down the page.",
+     "de": "Das Impressum listet rund 15 Konzernfirmen; die Zeile mischt USt-IdNr. und Telefon des Herausgebers mit Name, Registernummer und E-Mail von Tochterfirmen weiter unten."
+    }
+   },
+   {
+    "row": "verbund.com",
+    "field": "street",
+    "kind": "missing",
+    "ours": null,
+    "source": "Am Hof 6a",
+    "cause": {
+     "en": "Not delivered: the publisher's address (first block of the legal notice) was not taken because the row was assembled from several group companies.",
+     "de": "Nicht geliefert: Die Anschrift des Herausgebers (erster Block des Impressums) fehlt, weil die Zeile aus mehreren Konzernfirmen zusammengesetzt wurde."
+    }
+   },
+   {
+    "row": "verbund.com",
+    "field": "postalCode",
+    "kind": "missing",
+    "ours": null,
+    "source": "1010",
+    "cause": {
+     "en": "Not delivered: the publisher's address (first block of the legal notice) was not taken because the row was assembled from several group companies.",
+     "de": "Nicht geliefert: Die Anschrift des Herausgebers (erster Block des Impressums) fehlt, weil die Zeile aus mehreren Konzernfirmen zusammengesetzt wurde."
+    }
+   },
+   {
+    "row": "verbund.com",
+    "field": "city",
+    "kind": "missing",
+    "ours": null,
+    "source": "Wien",
+    "cause": {
+     "en": "Not delivered: the publisher's address (first block of the legal notice) was not taken because the row was assembled from several group companies.",
+     "de": "Nicht geliefert: Die Anschrift des Herausgebers (erster Block des Impressums) fehlt, weil die Zeile aus mehreren Konzernfirmen zusammengesetzt wurde."
+    }
+   },
+   {
+    "row": "verbund.com",
+    "field": "registerNumber",
+    "kind": "wrong",
+    "ours": "HRB 4025",
+    "source": "FN 76023z",
+    "cause": {
+     "en": "The legal notice lists about 15 group companies; the row mixes the publisher's VAT ID and phone with name, register number and e-mail of subsidiaries further down the page.",
+     "de": "Das Impressum listet rund 15 Konzernfirmen; die Zeile mischt USt-IdNr. und Telefon des Herausgebers mit Name, Registernummer und E-Mail von Tochterfirmen weiter unten."
+    }
+   },
+   {
+    "row": "verbund.com",
+    "field": "email",
+    "kind": "wrong",
+    "ours": "hydropower@verbund.com",
+    "source": "service@verbund.at",
+    "cause": {
+     "en": "The legal notice lists about 15 group companies; the row mixes the publisher's VAT ID and phone with name, register number and e-mail of subsidiaries further down the page.",
+     "de": "Das Impressum listet rund 15 Konzernfirmen; die Zeile mischt USt-IdNr. und Telefon des Herausgebers mit Name, Registernummer und E-Mail von Tochterfirmen weiter unten."
+    }
+   },
+   {
+    "row": "wuerth.de",
+    "field": "status",
+    "kind": "wrong",
+    "ours": "not_found (no legal notice)",
+    "source": "bot challenge page (blocked)",
+    "cause": {
+     "en": "The site answered with a bot challenge page; the actor reported 'no legal notice' instead of 'blocked'.",
+     "de": "Die Website antwortete mit einer Bot-Abfrage; der Actor meldete „kein Impressum“ statt „gesperrt“."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "status",
+    "kind": "wrong",
+    "ours": "not_found (no legal notice)",
+    "source": "legal notice at /group/de/impressum/",
+    "cause": {
+     "en": "The site links its legal notice with HTML-encoded characters (&#x2f;); the actor does not decode them, misses the link and reports 'no legal notice'.",
+     "de": "Die Website verlinkt ihr Impressum mit HTML-kodierten Zeichen (&#x2f;); der Actor dekodiert sie nicht, übersieht den Link und meldet „kein Impressum“."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "companyName",
+    "kind": "missing",
+    "ours": null,
+    "source": "voestalpine AG",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "street",
+    "kind": "missing",
+    "ours": null,
+    "source": "voestalpine-Straße 1",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "postalCode",
+    "kind": "missing",
+    "ours": null,
+    "source": "4020",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "city",
+    "kind": "missing",
+    "ours": null,
+    "source": "Linz",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "registerNumber",
+    "kind": "missing",
+    "ours": null,
+    "source": "FN 66209 t",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "vatId",
+    "kind": "missing",
+    "ours": null,
+    "source": "ATU 36919607",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "phone",
+    "kind": "missing",
+    "ours": null,
+    "source": "+43/50304/15-0",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "voestalpine.com",
+    "field": "email",
+    "kind": "missing",
+    "ours": null,
+    "source": "info@voestalpine.com",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "keller-pueschel.de",
+    "field": "companyName",
+    "kind": "wrong",
+    "ours": "Markenzeichen von Twitter, Inc.",
+    "source": "the tax firm's name at the top of the legal notice",
+    "cause": {
+     "en": "A trademark sentence ('… Markenzeichen von Twitter, Inc.') was read as the company name; the firm name stands at the top of the legal notice.",
+     "de": "Ein Markenhinweis („… Markenzeichen von Twitter, Inc.“) wurde als Firmenname gelesen; der Firmenname steht oben im Impressum."
+    }
+   },
+   {
+    "row": "keller-pueschel.de",
+    "field": "street",
+    "kind": "missing",
+    "ours": null,
+    "source": "business address in the legal notice",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "keller-pueschel.de",
+    "field": "postalCode",
+    "kind": "missing",
+    "ours": null,
+    "source": "74369",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "keller-pueschel.de",
+    "field": "city",
+    "kind": "missing",
+    "ours": null,
+    "source": "Löchgau",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "zwickau.deutsche-lohnsteuerhilfe-ev.de",
+    "field": "status",
+    "kind": "wrong",
+    "ours": "not_found (no legal notice)",
+    "source": "legal notice linked on dlh-online.de",
+    "cause": {
+     "en": "The legal notice is on the parent organisation's domain (dlh-online.de); the actor only follows links on the same site and reported 'no legal notice'.",
+     "de": "Das Impressum liegt auf der Domain der Dachorganisation (dlh-online.de); der Actor folgt nur Links derselben Website und meldete „kein Impressum“."
+    }
+   },
+   {
+    "row": "zwickau.deutsche-lohnsteuerhilfe-ev.de",
+    "field": "street",
+    "kind": "missing",
+    "ours": null,
+    "source": "Mathildenstr. 30",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "zwickau.deutsche-lohnsteuerhilfe-ev.de",
+    "field": "postalCode",
+    "kind": "missing",
+    "ours": null,
+    "source": "90489",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "zwickau.deutsche-lohnsteuerhilfe-ev.de",
+    "field": "city",
+    "kind": "missing",
+    "ours": null,
+    "source": "Nürnberg",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "zwickau.deutsche-lohnsteuerhilfe-ev.de",
+    "field": "registerNumber",
+    "kind": "missing",
+    "ours": null,
+    "source": "VR 2783",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "zwickau.deutsche-lohnsteuerhilfe-ev.de",
+    "field": "phone",
+    "kind": "missing",
+    "ours": null,
+    "source": "(0911) 242 939 40",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   },
+   {
+    "row": "zwickau.deutsche-lohnsteuerhilfe-ev.de",
+    "field": "email",
+    "kind": "missing",
+    "ours": null,
+    "source": "post[at]dlh-online.de",
+    "cause": {
+     "en": "Not delivered because the legal notice was not found (see status).",
+     "de": "Nicht geliefert, weil das Impressum nicht gefunden wurde (siehe Status)."
+    }
+   }
+  ],
+  "delivered": 143,
+  "deliveredCorrect": 136,
+  "deliveredRate": 0.951,
+  "missing": 21,
+  "wrong": 7,
+  "breakdown": {
+   "label": {
+    "en": "Field",
+    "de": "Feld"
+   },
+   "items": [
+    {
+     "name": "status",
+     "compared": 20,
+     "matched": 17,
+     "wrong": 3
+    },
+    {
+     "name": "companyName",
+     "compared": 17,
+     "matched": 14,
+     "wrong": 2,
+     "missing": 1
+    },
+    {
+     "name": "street",
+     "compared": 17,
+     "matched": 13,
+     "missing": 4
+    },
+    {
+     "name": "postalCode",
+     "compared": 17,
+     "matched": 13,
+     "missing": 4
+    },
+    {
+     "name": "city",
+     "compared": 17,
+     "matched": 13,
+     "missing": 4
+    },
+    {
+     "name": "registerNumber",
+     "compared": 15,
+     "matched": 12,
+     "wrong": 1,
+     "missing": 2
+    },
+    {
+     "name": "vatId",
+     "compared": 15,
+     "matched": 14,
+     "missing": 1
+    },
+    {
+     "name": "phone",
+     "compared": 17,
+     "matched": 15,
+     "missing": 2
+    },
+    {
+     "name": "email",
+     "compared": 16,
+     "matched": 12,
+     "missing": 3,
+     "wrong": 1
+    },
+    {
+     "name": "vatValid",
+     "compared": 13,
+     "matched": 13
+    }
+   ]
+  }
+ },
+ "free-website-contact-imprint-scraper": {
+  "date": "2026-10-12",
+  "rows": 20,
+  "fieldsCompared": [
+   "status",
+   "companyName",
+   "street",
+   "postalCode",
+   "city",
+   "registerNumber",
+   "vatId",
+   "phone",
+   "email",
+   "vatValid"
+  ],
+  "compared": 127,
+  "matched": 111,
+  "rate": 0.874,
+  "method": {
+   "en": "20 result rows from a local run of the current code on 12 Oct 2026 (large, medium and small companies from Germany, Austria and Switzerland; small ones found via the actor's own OpenStreetMap search). Each field was compared by hand with the legal-notice page the row cites, the VAT verdict with an independent query to the EU VIES service. A field counts when we deliver a value or the source shows one we missed; rows the actor reports as blocked, unreachable or without a legal notice were checked in a browser-like request.",
+   "de": "20 Ergebniszeilen aus einem lokalen Lauf des aktuellen Codes am 12.10.2026 (große, mittlere und kleine Firmen aus Deutschland, Österreich und der Schweiz; kleine über die eigene OpenStreetMap-Suche des Actors gefunden). Jedes Feld wurde von Hand mit der Impressumsseite verglichen, die die Zeile nennt, das USt-Urteil mit einer unabhängigen Abfrage beim EU-Dienst VIES. Ein Feld zählt, wenn wir einen Wert liefern oder die Quelle einen zeigt, den wir verpasst haben; als gesperrt, nicht erreichbar oder ohne Impressum gemeldete Zeilen wurden mit einem eigenen Abruf geprüft."
+  },
+  "misses": [
+   {
+    "row": "bosch.de",
+    "field": "phone",
+    "kind": "missing",
+    "ours": null,
+    "source": "+49 711 400 40990",
+    "cause": {
+     "en": "Not delivered: the legal notice shows a phone number that was not recognised.",
+     "de": "Nicht geliefert: Das Impressum nennt eine Telefonnummer, die nicht erkannt wurde."
+    }
+   },
+   {
+    "row": "andritz.com",
+    "field": "phone",
+    "kind": "missing",
+    "ours": null,
+    "source": "+43 316 6902 0",
+    "cause": {
+     "en": "Not delivered: the legal notice shows a phone number that was not recognised.",
+     "de": "Nicht geliefert: Das Impressum nennt eine Telefonnummer, die nicht erkannt wurde."
+    }
+   },
+   {
+    "row": "rohde-schwarz.com",
+    "field": "email",
+    "kind": "missing",
+    "ours": null,
+    "source": "info (at) rohde-schwarz.com",
+    "cause": {
+     "en": "Not delivered: the address is written as 'info (at) …' / 'office @ …' with spaces, which the actor does not read as an e-mail.",
+     "de": "Nicht geliefert: Die Adresse steht als „info (at) …“ bzw. „office @ …“ mit Leerzeichen, was der Actor nicht als E-Mail liest."
+    }
+   },
+   {
+    "row": "vaillant.de",
+    "field": "phone",
+    "kind": "missing",
+    "ours": null,
+    "source": "02191 - 57 67 920 (Infoline)",
+    "cause": {
+     "en": "Not delivered: the legal notice shows a phone number that was not recognised.",
+     "de": "Nicht geliefert: Das Impressum nennt eine Telefonnummer, die nicht erkannt wurde."
+    }
+   },
+   {
+    "row": "feldbaumer.at",
+    "field": "registerNumber",
+    "kind": "missing",
+    "ours": null,
+    "source": "FIRMENBUCH-NUMMER 620414Z",
+    "cause": {
+     "en": "Not delivered: the register number is labelled 'FIRMENBUCH-NUMMER' without the usual 'FN' prefix.",
+     "de": "Nicht geliefert: Die Registernummer steht als „FIRMENBUCH-NUMMER“ ohne das übliche Kürzel „FN“."
+    }
+   },
+   {
+    "row": "tischlerei-griessner.at",
+    "field": "companyName",
+    "kind": "wrong",
+    "ours": "(owner's personal name — withheld here)",
+    "source": "trading name of the sole proprietorship",
+    "cause": {
+     "en": "For a sole proprietorship VIES returns the owner's personal name; the actor's person-name filter did not recognise it and output it although person names are switched off. The trading name is in the legal notice.",
+     "de": "Bei einem Einzelunternehmen liefert VIES den Namen der Inhaberin; der Personennamen-Filter erkannte ihn nicht und gab ihn trotz ausgeschalteter Personennamen aus. Der Geschäftsname steht im Impressum."
+    }
+   },
+   {
+    "row": "tischlerei-griessner.at",
+    "field": "street",
+    "kind": "missing",
+    "ours": null,
+    "source": "business address in the legal notice",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "tischlerei-griessner.at",
+    "field": "postalCode",
+    "kind": "missing",
+    "ours": null,
+    "source": "8820",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "tischlerei-griessner.at",
+    "field": "city",
+    "kind": "missing",
+    "ours": null,
+    "source": "Neumarkt",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "hobelundspaene.at",
+    "field": "companyName",
+    "kind": "wrong",
+    "ours": "Hobel und Späne AS",
+    "source": "Hobel und Späne AS GmbH",
+    "cause": {
+     "en": "The name was cut before the legal form ('… AS GmbH' became '… AS', legal form read as 'AS').",
+     "de": "Der Name wurde vor der Rechtsform abgeschnitten („… AS GmbH“ wurde „… AS“, Rechtsform als „AS“ gelesen)."
+    }
+   },
+   {
+    "row": "hobelundspaene.at",
+    "field": "street",
+    "kind": "missing",
+    "ours": null,
+    "source": "Brückenkopfgasse 7",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "hobelundspaene.at",
+    "field": "postalCode",
+    "kind": "missing",
+    "ours": null,
+    "source": "8020",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "hobelundspaene.at",
+    "field": "city",
+    "kind": "missing",
+    "ours": null,
+    "source": "Graz",
+    "cause": {
+     "en": "Not delivered: the address is in the legal notice but was not recognised.",
+     "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
+    }
+   },
+   {
+    "row": "hiebler.at",
+    "field": "email",
+    "kind": "missing",
+    "ours": null,
+    "source": "office @ hiebler.at",
+    "cause": {
+     "en": "Not delivered: the address is written as 'info (at) …' / 'office @ …' with spaces, which the actor does not read as an e-mail.",
+     "de": "Nicht geliefert: Die Adresse steht als „info (at) …“ bzw. „office @ …“ mit Leerzeichen, was der Actor nicht als E-Mail liest."
+    }
+   },
+   {
+    "row": "tischlerei-schadler.at",
+    "field": "phone",
+    "kind": "wrong",
+    "ours": "+43 6225 20810",
+    "source": "(legal notice empty: template placeholders)",
+    "cause": {
+     "en": "The legal notice page is an empty template ({{phone}}, {{mail}}); the phone and e-mail taken from it belong to the web agency named in the footer.",
+     "de": "Die Impressumsseite ist eine leere Vorlage ({{phone}}, {{mail}}); Telefon und E-Mail stammen von der im Seitenfuß genannten Webagentur."
+    }
+   },
+   {
+    "row": "tischlerei-schadler.at",
+    "field": "email",
+    "kind": "wrong",
+    "ours": "office@firmenabc.at",
+    "source": "(legal notice empty: template placeholders)",
+    "cause": {
+     "en": "The legal notice page is an empty template ({{phone}}, {{mail}}); the phone and e-mail taken from it belong to the web agency named in the footer.",
+     "de": "Die Impressumsseite ist eine leere Vorlage ({{phone}}, {{mail}}); Telefon und E-Mail stammen von der im Seitenfuß genannten Webagentur."
+    }
+   }
+  ],
+  "delivered": 115,
+  "deliveredCorrect": 111,
+  "deliveredRate": 0.965,
+  "missing": 12,
+  "wrong": 4,
+  "breakdown": {
+   "label": {
+    "en": "Field",
+    "de": "Feld"
+   },
+   "items": [
+    {
+     "name": "status",
+     "compared": 20,
+     "matched": 20
+    },
+    {
+     "name": "companyName",
+     "compared": 13,
+     "matched": 11,
+     "wrong": 2
+    },
+    {
+     "name": "street",
+     "compared": 12,
+     "matched": 10,
+     "missing": 2
+    },
+    {
+     "name": "postalCode",
+     "compared": 12,
+     "matched": 10,
+     "missing": 2
+    },
+    {
+     "name": "city",
+     "compared": 12,
+     "matched": 10,
+     "missing": 2
+    },
+    {
+     "name": "registerNumber",
+     "compared": 11,
+     "matched": 10,
+     "missing": 1
+    },
+    {
+     "name": "vatId",
+     "compared": 12,
+     "matched": 12
+    },
+    {
+     "name": "phone",
+     "compared": 12,
+     "matched": 8,
+     "missing": 3,
+     "wrong": 1
+    },
+    {
+     "name": "email",
+     "compared": 12,
+     "matched": 9,
+     "missing": 2,
+     "wrong": 1
+    },
+    {
+     "name": "vatValid",
+     "compared": 11,
+     "matched": 11
+    }
+   ]
+  }
+ },
+ "pdf-to-markdown-converter": {
+  "date": "2026-10-12",
+  "rows": 20,
+  "fieldsCompared": [
+   "table cells: every column of the chosen rows"
+  ],
+  "compared": 105,
+  "matched": 73,
+  "rate": 0.695,
+  "method": {
+   "en": "20 table rows from 4 public PDFs with tables (two arXiv papers, a US Census Bureau release, an IRS tax table), 5 rows per document chosen at random, converted on 12 Oct 2026 with the code of the live version (build 0.1.6). Every cell of these rows was compared with the original PDF — an independent text extraction (poppler pdftotext) and the rendered page. A cell counts when the source or our output has a value; it matches only if the text is identical apart from surrounding whitespace.",
+   "de": "20 Tabellenzeilen aus 4 öffentlichen PDFs mit Tabellen (zwei arXiv-Artikel, eine Veröffentlichung des US Census Bureau, eine Steuertabelle der IRS), 5 Zeilen je Dokument zufällig gewählt, am 12.10.2026 mit dem Code der Live-Version (Build 0.1.6) umgewandelt. Jede Zelle dieser Zeilen wurde mit dem Original-PDF verglichen — einer unabhängigen Textauslese (poppler pdftotext) und der gerenderten Seite. Eine Zelle zählt, wenn Quelle oder Ausgabe einen Wert hat; sie gilt als Treffer nur bei identischem Text (abgesehen von Leerraum am Rand)."
+  },
+  "misses": [
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 1",
+    "field": "Model",
+    "ours": "ByteNet[18]",
+    "source": "ByteNet [18]",
+    "cause": {
+     "en": "Word spaces inside the cell were lost; the characters are otherwise identical.",
+     "de": "Wortabstände in der Zelle gingen verloren; die Zeichen sind sonst gleich."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 7",
+    "field": "Model",
+    "ours": "GNMT+RLEnsemble[38]",
+    "source": "GNMT + RL Ensemble [38]",
+    "cause": {
+     "en": "Word spaces inside the cell were lost; the characters are otherwise identical.",
+     "de": "Wortabstände in der Zelle gingen verloren; die Zeichen sind sonst gleich."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 7",
+    "field": "Training cost EN-DE",
+    "ours": "1.8·1020 1.1·1021",
+    "source": "1.8 · 10^20",
+    "cause": {
+     "en": "The two training-cost columns were merged into one cell, and the superscript exponent was flattened (10^20 became “1020”).",
+     "de": "Die beiden Spalten der Trainingskosten wurden in einer Zelle zusammengelegt, und der hochgestellte Exponent wurde eingeebnet (10^20 wurde zu „1020“)."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 7",
+    "field": "Training cost EN-FR",
+    "ours": "",
+    "source": "1.1 · 10^21",
+    "cause": {
+     "en": "The value sits in the neighbouring cell, which holds both training-cost columns.",
+     "de": "Der Wert steht in der Nachbarzelle, die beide Spalten der Trainingskosten enthält."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 8",
+    "field": "Model",
+    "ours": "ConvS2SEnsemble[9]",
+    "source": "ConvS2S Ensemble [9]",
+    "cause": {
+     "en": "Word spaces inside the cell were lost; the characters are otherwise identical.",
+     "de": "Wortabstände in der Zelle gingen verloren; die Zeichen sind sonst gleich."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 8",
+    "field": "Training cost EN-DE",
+    "ours": "7.7·1019 1.2·1021",
+    "source": "7.7 · 10^19",
+    "cause": {
+     "en": "The two training-cost columns were merged into one cell, and the superscript exponent was flattened (10^20 became “1020”).",
+     "de": "Die beiden Spalten der Trainingskosten wurden in einer Zelle zusammengelegt, und der hochgestellte Exponent wurde eingeebnet (10^20 wurde zu „1020“)."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 8",
+    "field": "Training cost EN-FR",
+    "ours": "",
+    "source": "1.2 · 10^21",
+    "cause": {
+     "en": "The value sits in the neighbouring cell, which holds both training-cost columns.",
+     "de": "Der Wert steht in der Nachbarzelle, die beide Spalten der Trainingskosten enthält."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 9",
+    "field": "Model",
+    "ours": "Transformer(basemodel)",
+    "source": "Transformer (base model)",
+    "cause": {
+     "en": "Word spaces inside the cell were lost; the characters are otherwise identical.",
+     "de": "Wortabstände in der Zelle gingen verloren; die Zeichen sind sonst gleich."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 9",
+    "field": "Training cost EN-DE",
+    "ours": "3.3·1018",
+    "source": "3.3 · 10^18",
+    "cause": {
+     "en": "The superscript exponent was flattened (10^18 became “1018”) — the number reads wrong.",
+     "de": "Der hochgestellte Exponent wurde eingeebnet (10^18 wurde zu „1018“) — die Zahl liest sich falsch."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 10",
+    "field": "Model",
+    "ours": "Transformer(big)",
+    "source": "Transformer (big)",
+    "cause": {
+     "en": "Word spaces inside the cell were lost; the characters are otherwise identical.",
+     "de": "Wortabstände in der Zelle gingen verloren; die Zeichen sind sonst gleich."
+    }
+   },
+   {
+    "row": "arXiv 1706.03762v7, p. 8, Table 2, data row 10",
+    "field": "Training cost EN-DE",
+    "ours": "2.3·1019",
+    "source": "2.3 · 10^19",
+    "cause": {
+     "en": "The superscript exponent was flattened (10^18 became “1018”) — the number reads wrong.",
+     "de": "Der hochgestellte Exponent wurde eingeebnet (10^18 wurde zu „1018“) — die Zahl liest sich falsch."
+    }
+   },
+   {
+    "row": "arXiv 1512.03385v1, p. 6, Table 3, data row 2",
+    "field": "model",
+    "ours": "GoogLeNet[44]",
+    "source": "GoogLeNet [44]",
+    "cause": {
+     "en": "Word spaces inside the cell were lost; the characters are otherwise identical.",
+     "de": "Wortabstände in der Zelle gingen verloren; die Zeichen sind sonst gleich."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 3",
+    "field": "At least",
+    "ours": "",
+    "source": "3,100",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 3",
+    "field": "But less than",
+    "ours": "",
+    "source": "3,150",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 3",
+    "field": "Single",
+    "ours": "",
+    "source": "313",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 3",
+    "field": "Married filing separately",
+    "ours": "",
+    "source": "313",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 8",
+    "field": "At least",
+    "ours": "",
+    "source": "3,350",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 8",
+    "field": "But less than",
+    "ours": "",
+    "source": "3,400",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 8",
+    "field": "Single",
+    "ours": "",
+    "source": "338",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 8",
+    "field": "Married filing separately",
+    "ours": "",
+    "source": "338",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 11",
+    "field": "At least",
+    "ours": "",
+    "source": "3,500",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 11",
+    "field": "But less than",
+    "ours": "",
+    "source": "3,550",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 11",
+    "field": "Single",
+    "ours": "",
+    "source": "353",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 11",
+    "field": "Married filing separately",
+    "ours": "",
+    "source": "353",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 14",
+    "field": "At least",
+    "ours": "",
+    "source": "3,650",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 14",
+    "field": "But less than",
+    "ours": "",
+    "source": "3,700",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 14",
+    "field": "Single",
+    "ours": "",
+    "source": "368",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 14",
+    "field": "Married filing separately",
+    "ours": "",
+    "source": "368",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 18",
+    "field": "At least",
+    "ours": "",
+    "source": "3,850",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 18",
+    "field": "But less than",
+    "ours": "",
+    "source": "3,900",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 18",
+    "field": "Single",
+    "ours": "",
+    "source": "388",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   },
+   {
+    "row": "IRS 2023 Instructions 1040 Tax Table (prior-year archive), p. 4, first block, data row 18",
+    "field": "Married filing separately",
+    "ours": "",
+    "source": "388",
+    "cause": {
+     "en": "Dense table without row lines: for this column, all 20 rows of the block were packed into one cell of the block's first row — the value is in the output, but not in its row.",
+     "de": "Dichte Tabelle ohne Zeilenlinien: In dieser Spalte wurden alle 20 Zeilen des Blocks in eine Zelle der ersten Blockzeile gepackt — der Wert steht in der Ausgabe, aber nicht in seiner Zeile."
+    }
+   }
+  ],
+  "breakdown": {
+   "label": {
+    "en": "Document",
+    "de": "Dokument"
+   },
+   "items": [
+    {
+     "name": "arXiv 1706.03762v7 (Attention Is All You Need), page 8, Table 2",
+     "url": "https://arxiv.org/pdf/1706.03762v7",
+     "compared": 20,
+     "matched": 9
+    },
+    {
+     "name": "arXiv 1512.03385v1 (Deep Residual Learning), page 6, Table 3",
+     "url": "https://arxiv.org/pdf/1512.03385v1",
+     "compared": 15,
+     "matched": 14
+    },
+    {
+     "name": "US Census Bureau, Quarterly Retail E-Commerce Sales, 2nd quarter 2024, page 2, Table 1",
+     "url": "https://www2.census.gov/retail/releases/historical/ecomm/24q2.pdf",
+     "compared": 40,
+     "matched": 40
+    },
+    {
+     "name": "IRS, 2023 Instructions for Form 1040 — Tax Table (prior-year archive), page 4",
+     "url": "https://www.irs.gov/pub/irs-prior/i1040tt--2023.pdf",
+     "compared": 30,
+     "matched": 10
+    }
+   ]
+  }
+ },
+ "research-agent": {
+  "date": "2026-10-12",
+  "rows": 20,
+  "fieldsCompared": [
+   "text",
+   "title",
+   "url",
+   "evidenceLevel",
+   "date",
+   "heading"
+  ],
+  "compared": 116,
+  "matched": 108,
+  "rate": 0.931,
+  "method": {
+   "en": "20 passages from the watchdog's runs of 12 Oct 2026 (9 questions, 20 different sources; per question the highest-ranked passages from different sources). Each was compared with the cited page fetched the same day with independent tools (lxml for HTML, pdftotext for PDF; EUR-Lex via the EU Publications Office, Stack Overflow via its API). Text: every word sequence of the passage must occur on the page (case, punctuation and whitespace ignored; indentation counts in code). Title and heading must match the page; the URL must answer; the date must be one the page states for itself; the evidence level must fit the actor's published definitions.",
+   "de": "20 Textstellen aus den Läufen des Wachpostens vom 12.10.2026 (9 Fragen, 20 verschiedene Quellen; je Frage die bestplatzierten Textstellen aus verschiedenen Quellen). Jede wurde mit der zitierten Seite verglichen, am selben Tag mit unabhängigen Werkzeugen geladen (lxml für HTML, pdftotext für PDF; EUR-Lex über das Amt für Veröffentlichungen, Stack Overflow über dessen API). Text: jede Wortfolge der Textstelle muss auf der Seite stehen (Groß-/Kleinschreibung, Satzzeichen und Leerraum egal; in Code zählt die Einrückung). Titel und Überschrift müssen zur Seite passen, die URL muss antworten, das Datum muss eines sein, das die Seite für sich selbst nennt, die Evidenzstufe muss zu den veröffentlichten Definitionen des Actors passen."
+  },
+  "misses": [
+   {
+    "row": "german-law-bgb-paragraph-official · rank 1 · https://www.gesetze-im-internet.de/bgb/__438.html",
+    "field": "date",
+    "ours": "2022-01-01",
+    "source": "no date on the page",
+    "cause": {
+     "en": "The page states no date; the date heuristic read “2022” from an HTML element id (blaettercontainer_2022).",
+     "de": "Die Seite nennt kein Datum; die Datumserkennung las „2022“ aus einer HTML-Element-ID (blaettercontainer_2022)."
+    }
+   },
+   {
+    "row": "deep-research-regulation-second-round · rank 1 · https://www.enisa.europa.eu/topics/vulnerability-services",
+    "field": "date",
+    "ours": "2023-02-16",
+    "source": "topic page without own date; 16 Feb 2023 is the first listed publication",
+    "cause": {
+     "en": "Topic page without its own date; the date belongs to the first publication listed on it.",
+     "de": "Themenseite ohne eigenes Datum; das Datum gehört zur ersten dort verlinkten Veröffentlichung."
+    }
+   },
+   {
+    "row": "deep-research-regulation-second-round · rank 2 · https://www.enisa.europa.eu/topics/product-security/vulnerability-services/eu-incident-response-and-cyber-crisis-management/single-reporting-platform-srp/frequently-asked-questions",
+    "field": "date",
+    "ours": "2026-09-11",
+    "source": "FAQ page without own date; 11 Sep 2026 is a linked press release",
+    "cause": {
+     "en": "FAQ page without its own date; the date belongs to a press release linked on it.",
+     "de": "FAQ-Seite ohne eigenes Datum; das Datum gehört zu einer dort verlinkten Pressemitteilung."
+    }
+   },
+   {
+    "row": "developer-answers-stack-overflow-github · rank 1 · https://stackoverflow.com/questions/79150620/closing-a-httpx-client-results-in-a-runtimeerror-event-loop-is-closed",
+    "field": "text",
+    "ours": "code without the indentation of 'def __new__' (column 0)",
+    "source": "    def __new__(cls):  (indented 4 spaces)",
+    "cause": {
+     "en": "Words match, but in code blocks the first line after a blank line lost its indentation — Python code changes meaning.",
+     "de": "Wörter stimmen, aber in Codeblöcken verlor die erste Zeile nach einer Leerzeile ihre Einrückung — Python-Code ändert so seine Bedeutung."
+    }
+   },
+   {
+    "row": "news-this-week-cited-llm-context · rank 1 · https://www.taipeitimes.com/News/feat/archives/2026/10/08/2003865586",
+    "field": "evidenceLevel",
+    "ours": "commercial",
+    "source": "news (Taipei Times is a newspaper)",
+    "cause": {
+     "en": "Taipei Times is a news outlet; its domain is missing from the actor's news list, so the rule fell back to commercial.",
+     "de": "Taipei Times ist eine Zeitung; die Domain fehlt in der Nachrichtenliste des Actors, daher die Rückfallstufe commercial."
+    }
+   },
+   {
+    "row": "scientific-evidence-open-access-papers · rank 2 · https://exonpublications.com/index.php/exon/article/download/intermittent-fasting-methods-health-benefits-risks/1604/",
+    "field": "text",
+    "ours": "OpenAlex abstract of the book 'Intermittent Fasting: Education for the Public'",
+    "source": "PDF of the chapter 'Intermittent Fasting: Methods, Health Benefits, and Risks' with a different abstract",
+    "cause": {
+     "en": "The passage is the book abstract from OpenAlex (it is on the DOI page); the cited URL is OpenAlex's PDF link, a chapter with a different abstract.",
+     "de": "Die Textstelle ist die Buchzusammenfassung aus OpenAlex (steht auf der DOI-Seite); die zitierte URL ist OpenAlex' PDF-Link, ein Kapitel mit anderer Zusammenfassung."
+    }
+   },
+   {
+    "row": "scientific-evidence-open-access-papers · rank 2 · https://exonpublications.com/index.php/exon/article/download/intermittent-fasting-methods-health-benefits-risks/1604/",
+    "field": "title",
+    "ours": "Intermittent Fasting: Education for the Public",
+    "source": "Intermittent Fasting: Methods, Health Benefits, and Risks",
+    "cause": {
+     "en": "Title from the OpenAlex record, the cited PDF carries another title (same cause as the text).",
+     "de": "Titel aus dem OpenAlex-Eintrag, das zitierte PDF trägt einen anderen Titel (gleiche Ursache wie beim Text)."
+    }
+   },
+   {
+    "row": "scientific-evidence-open-access-papers · rank 2 · https://exonpublications.com/index.php/exon/article/download/intermittent-fasting-methods-health-benefits-risks/1604/",
+    "field": "heading",
+    "ours": "Intermittent Fasting: Education for the Public",
+    "source": "not in the cited PDF",
+    "cause": {
+     "en": "Heading is the OpenAlex title (same cause as the text).",
+     "de": "Überschrift ist der OpenAlex-Titel (gleiche Ursache wie beim Text)."
+    }
+   }
+  ],
+  "breakdown": {
+   "label": {
+    "en": "Field",
+    "de": "Feld"
+   },
+   "items": [
+    {
+     "name": "text",
+     "compared": 20,
+     "matched": 18
+    },
+    {
+     "name": "title",
+     "compared": 20,
+     "matched": 19
+    },
+    {
+     "name": "url",
+     "compared": 20,
+     "matched": 20
+    },
+    {
+     "name": "evidenceLevel",
+     "compared": 20,
+     "matched": 19
+    },
+    {
+     "name": "date",
+     "compared": 20,
+     "matched": 17
+    },
+    {
+     "name": "heading",
+     "compared": 16,
+     "matched": 15
+    }
+   ]
+  }
+ }
+}

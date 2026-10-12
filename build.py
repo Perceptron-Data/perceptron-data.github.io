@@ -240,13 +240,15 @@ Q = {
            "planned": "First public check on {date}. Until then this page lists what will be checked.",
            "last": "Last check on {date}: {passed} of {checked} cases passed", "notes": ", {n} of them with a note",
            "since": "Checked weekly since {date}.", "case": "Case", "result": "Result", "time": "Time",
-           "what": "What is checked", "details": "Details", "open": "Open problems from the last check",
+           "what": "What is checked", "details": "Details", "open": "Failures and notes from the last check",
            "none_open": "None — every case gave the known answer.", "history": "Earlier checks", "date": "Date",
            "passed": "Passed", "sample": "Sample against the original source",
            "sample_text": "On {date} we took {rows} result rows and compared {compared} field values one by one with the "
                           "original source: {matched} matched ({rate}).",
            "row": "Row", "field": "Field", "ours": "Actor output", "source": "Original source", "cause": "Cause",
            "no_miss": "No differences found.", "misses": "Every difference and its cause",
+           "matched_col": "Matched", "rate_col": "Rate",
+           "precision": "Of the values the actor delivered, {correct} of {delivered} were correct ({rate}); {missing} values that the source shows were not delivered.",
            "limits": "What this shows: on the day of the check, the live actor gave the known answers for these inputs. "
                      "It does not prove that every result is correct.",
            "limits_sample": "The sample against the original source measures accuracy on real result rows.",
@@ -264,13 +266,15 @@ Q = {
            "planned": "Erste öffentliche Prüfung am {date}. Bis dahin steht hier, was geprüft wird.",
            "last": "Letzte Prüfung am {date}: {passed} von {checked} Fällen bestanden", "notes": ", davon {n} mit Hinweis",
            "since": "Wöchentlich geprüft seit {date}.", "case": "Fall", "result": "Ergebnis", "time": "Dauer",
-           "what": "Was geprüft wird", "details": "Einzelheiten", "open": "Offene Fehler aus der letzten Prüfung",
+           "what": "Was geprüft wird", "details": "Einzelheiten", "open": "Fehler und Hinweise aus der letzten Prüfung",
            "none_open": "Keine — jeder Fall lieferte die bekannte Antwort.", "history": "Frühere Prüfungen", "date": "Datum",
            "passed": "Bestanden", "sample": "Stichprobe gegen die Originalquelle",
            "sample_text": "Am {date} haben wir {rows} Ergebniszeilen genommen und {compared} Feldwerte einzeln mit der "
                           "Originalquelle verglichen: {matched} stimmten ({rate}).",
            "row": "Zeile", "field": "Feld", "ours": "Ausgabe des Actors", "source": "Originalquelle", "cause": "Ursache",
            "no_miss": "Keine Abweichung gefunden.", "misses": "Jede Abweichung mit Ursache",
+           "matched_col": "Stimmt", "rate_col": "Quote",
+           "precision": "Von den Werten, die der Actor geliefert hat, stimmten {correct} von {delivered} ({rate}); {missing} Werte, die die Quelle zeigt, fehlten.",
            "limits": "Was das zeigt: Am Prüftag lieferte der Live-Actor für diese Eingaben die bekannten Antworten. Dass "
                      "jedes Ergebnis stimmt, beweist es nicht.",
            "limits_sample": "Die Stichprobe gegen die Originalquelle misst die Genauigkeit an echten Ergebniszeilen.",
@@ -393,7 +397,18 @@ def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | Non
     if sample:
         misses = sample.get("misses") or []
         method = (sample.get("method") or {}).get(lang) or ""
-        body = f"<p><strong>{esc(sample_summary(sample, lang))}</strong></p>" + (f"<p>{esc(method)}</p>" if method else "")
+        body = f"<p><strong>{esc(sample_summary(sample, lang))}</strong></p>"
+        if sample.get("delivered"):
+            body += f"<p>{esc(L['precision'].format(correct=sample['deliveredCorrect'], delivered=sample['delivered'], rate=fmt_rate(sample['deliveredRate'], lang), missing=sample.get('missing', 0)))}</p>"
+        body += f"<p>{esc(method)}</p>" if method else ""
+        breakdown = sample.get("breakdown") or {}
+        if breakdown.get("items"):
+            rows = "".join(
+                f'<tr><td>{esc(b.get("name"))}</td><td>{b.get("matched")} / {b.get("compared")}</td>'
+                f'<td>{fmt_rate((b.get("matched") or 0) / b["compared"], lang) if b.get("compared") else "–"}</td></tr>'
+                for b in breakdown["items"])
+            body += (f'<div class="table"><table><thead><tr><th>{esc((breakdown.get("label") or {}).get(lang, ""))}</th>'
+                     f'<th>{L["matched_col"]}</th><th>{L["rate_col"]}</th></tr></thead><tbody>{rows}</tbody></table></div>')
         if misses:
             rows = "".join(f'<tr><td>{esc(m.get("row"))}</td><td>{esc(m.get("field"))}</td><td>{esc(m.get("ours") if m.get("ours") not in (None, "") else "–")}</td>'
                            f'<td>{esc(m.get("source") if m.get("source") not in (None, "") else "–")}</td><td>{esc((m.get("cause") or {}).get(lang) or "–")}</td></tr>'

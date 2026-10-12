@@ -48,6 +48,8 @@ pre { background: var(--code); padding: 16px; border-radius: 12px; overflow-x: a
 table { border-collapse: collapse; width: 100%; font-size: 15px; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-weight: 600; }
+td p { margin: 0 0 6px; }
+td ul { margin: 0 0 6px; padding-left: 18px; }
 details { border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin: 8px 0; background: var(--card); }
 summary { cursor: pointer; font-weight: 600; }
 .crumbs { margin-top: 20px; font-size: 14px; color: var(--muted); }
