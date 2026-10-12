@@ -34,10 +34,10 @@ T = {
     "en": {"lang": "en", "home": "Home", "actors": "Actors", "run": "Run on Apify", "details": "Details",
            "features": "What you get", "uses": "Use cases", "example": "Example input", "faq": "FAQ",
            "price": "Price", "free": "Free", "per": "per 1,000", "cheaper": "Billed by Apify per result plus a small start fee per run — cheaper on paid Apify plans.",
-           "meta": "Apify actors for AI, sales and research: PDF to Markdown, Google Ads Transparency checks, DACH company data, jobs and EU tenders. No login, pay per result.",
+           "meta": "Apify actors for AI, sales and research: PDF to Markdown, Google Ads Transparency checks, DACH company data, jobs and EU tenders. No login; paid per result plus a small start fee per run.",
            "related": "Related actors", "legal": "Legal notice", "privacy": "Privacy", "other": "Deutsch",
            "tagline": "Data APIs for AI, sales and research",
-           "hero": "Clean, structured data from public and official sources — ready for AI pipelines, CRMs and spreadsheets. Every actor runs on Apify: no login or API key needed, paid actors charge per result only.",
+           "hero": "Clean, structured data from public sources – ready for AI pipelines, CRMs and spreadsheets. Every actor runs on Apify: no login or API key needed; paid actors charge per result plus a small start fee per run.",
            "updated": "Prices and catalogue updated daily from the Apify Store. Last update:",
            "disclaimer": "Independent developer. Not affiliated with Apify or the data sources named.",
            "allactors": "All actors", "start": "from", "checks": "Weekly checks"},
@@ -47,7 +47,7 @@ T = {
            "meta": "Apify-Actors für KI, Vertrieb und Marktforschung: PDF in Markdown, Google-Werbung prüfen, Impressum-Firmendaten, Stellen und EU-Ausschreibungen.",
            "related": "Ähnliche Actors", "legal": "Impressum", "privacy": "Datenschutz", "other": "English",
            "tagline": "Daten-APIs für KI, Vertrieb und Marktforschung",
-           "hero": "Saubere, strukturierte Daten aus öffentlichen und amtlichen Quellen — fertig für KI-Pipelines, CRM und Tabellen. Jeder Actor läuft auf Apify: ohne Login und API-Schlüssel, bezahlte Actors rechnen nur pro Ergebnis ab.",
+           "hero": "Saubere, strukturierte Daten aus öffentlichen Quellen – fertig für KI-Pipelines, CRM und Tabellen. Jeder Actor läuft auf Apify: ohne Login und API-Schlüssel; bezahlte Actors rechnen pro Ergebnis plus einer kleinen Startgebühr je Lauf ab.",
            "updated": "Preise und Katalog täglich aus dem Apify Store aktualisiert. Stand:",
            "disclaimer": "Unabhängiger Entwickler. Nicht verbunden mit Apify oder den genannten Datenquellen.",
            "allactors": "Alle Actors", "start": "ab", "checks": "Prüfnachweis"},
@@ -547,7 +547,7 @@ def main() -> None:
     # llms.txt: a plain summary for AI assistants and LLM-based search
     lines = ["# Perceptron Data", "", "> Data APIs on Apify for AI, sales and market research: document conversion, "
              "Google Ads Transparency checks, DACH company data, jobs, EU tenders and German registers. "
-             "No login needed; paid actors charge per result.", ""]
+             "No login needed; paid actors charge per result plus a small start fee per run.", ""]
     for g in GROUP_ORDER:
         slugs = [s for s, a in ACTORS.items() if a["group"] == g and s in items]
         if slugs:

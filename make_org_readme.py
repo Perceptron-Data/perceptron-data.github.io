@@ -8,8 +8,8 @@ from build import GROUP_ORDER, BASE, STORE_API
 items = {a["name"]: a for a in json.load(urllib.request.urlopen(STORE_API, timeout=30))["data"]["items"]}
 out = ['<p align="center"><img src="https://perceptron-data.github.io/assets/logo-256.png" width="88" alt="Perceptron Data"></p>',
        '<h2 align="center">Data APIs for AI, sales and research</h2>',
-       '<p align="center">Clean, structured data from public and official sources — on <a href="https://apify.com/perceptr0n">Apify</a>. '
-       'No login or API key needed; paid actors charge per result.<br>'
+       '<p align="center">Clean, structured data from public sources — on <a href="https://apify.com/perceptr0n">Apify</a>. '
+       'No login or API key needed; paid actors charge per result plus a small start fee per run.<br>'
        '<a href="https://perceptron-data.github.io/">Website</a> · <a href="https://perceptron-data.github.io/de/">Deutsch</a> · '
        '<a href="https://apify.com/perceptr0n">All actors on Apify</a></p>', ""]
 for g in GROUP_ORDER:
