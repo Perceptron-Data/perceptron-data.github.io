@@ -486,7 +486,7 @@
     }
    },
    {
-    "row": "tischlerei-griessner.at",
+    "row": "sole proprietorship, Austria (name withheld)",
     "field": "companyName",
     "kind": "wrong",
     "ours": "(owner's personal name — withheld here)",
@@ -497,33 +497,33 @@
     }
    },
    {
-    "row": "tischlerei-griessner.at",
+    "row": "sole proprietorship, Austria (name withheld)",
     "field": "street",
     "kind": "missing",
     "ours": null,
-    "source": "business address in the legal notice",
+    "source": "business address in the legal notice (withheld: a sole trader's address is personal data)",
     "cause": {
      "en": "Not delivered: the address is in the legal notice but was not recognised.",
      "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
     }
    },
    {
-    "row": "tischlerei-griessner.at",
+    "row": "sole proprietorship, Austria (name withheld)",
     "field": "postalCode",
     "kind": "missing",
     "ours": null,
-    "source": "8820",
+    "source": "business address in the legal notice (withheld: a sole trader's address is personal data)",
     "cause": {
      "en": "Not delivered: the address is in the legal notice but was not recognised.",
      "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
     }
    },
    {
-    "row": "tischlerei-griessner.at",
+    "row": "sole proprietorship, Austria (name withheld)",
     "field": "city",
     "kind": "missing",
     "ours": null,
-    "source": "Neumarkt",
+    "source": "business address in the legal notice (withheld: a sole trader's address is personal data)",
     "cause": {
      "en": "Not delivered: the address is in the legal notice but was not recognised.",
      "de": "Nicht geliefert: Die Anschrift steht im Impressum, wurde aber nicht erkannt."
