@@ -40,7 +40,7 @@ T = {
            "hero": "Clean, structured data from public and official sources — ready for AI pipelines, CRMs and spreadsheets. Every actor runs on Apify: no login or API key needed, paid actors charge per result only.",
            "updated": "Prices and catalogue updated daily from the Apify Store. Last update:",
            "disclaimer": "Independent developer. Not affiliated with Apify or the data sources named.",
-           "allactors": "All actors", "start": "from"},
+           "allactors": "All actors", "start": "from", "checks": "Weekly checks"},
     "de": {"lang": "de", "home": "Start", "actors": "Actors", "run": "Auf Apify starten", "details": "Details",
            "features": "Das bekommen Sie", "uses": "Anwendungsfälle", "example": "Beispiel-Eingabe", "faq": "Häufige Fragen",
            "price": "Preis", "free": "Kostenlos", "per": "pro 1.000", "cheaper": "Abrechnung über Apify pro Ergebnis plus eine kleine Startgebühr je Lauf — günstiger in bezahlten Apify-Tarifen.",
@@ -50,7 +50,7 @@ T = {
            "hero": "Saubere, strukturierte Daten aus öffentlichen und amtlichen Quellen — fertig für KI-Pipelines, CRM und Tabellen. Jeder Actor läuft auf Apify: ohne Login und API-Schlüssel, bezahlte Actors rechnen nur pro Ergebnis ab.",
            "updated": "Preise und Katalog täglich aus dem Apify Store aktualisiert. Stand:",
            "disclaimer": "Unabhängiger Entwickler. Nicht verbunden mit Apify oder den genannten Datenquellen.",
-           "allactors": "Alle Actors", "start": "ab"},
+           "allactors": "Alle Actors", "start": "ab", "checks": "Prüfnachweis"},
 }
 
 
@@ -139,7 +139,7 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
 <body>
 <header class="top"><div class="wrap">
   <a class="brand" href="{'/' if lang == 'en' else '/de/'}"><img src="/assets/logo-64.png" alt="" width="32" height="32">Perceptron Data</a>
-  <nav><a href="{'/' if lang == 'en' else '/de/'}#actors">{t['actors']}</a><a href="{alt_path}" hreflang="{'de' if lang == 'en' else 'en'}" lang="{'de' if lang == 'en' else 'en'}">{t['other']}</a></nav>
+  <nav><a href="{'/' if lang == 'en' else '/de/'}#actors">{t['actors']}</a><a href="{'/quality/' if lang == 'en' else '/de/quality/'}">{t['checks']}</a><a href="{alt_path}" hreflang="{'de' if lang == 'en' else 'en'}" lang="{'de' if lang == 'en' else 'en'}">{t['other']}</a></nav>
 </div></header>
 <main class="wrap">
 {body}
@@ -229,31 +229,216 @@ def build_actor(slug: str, a: dict, item: dict, p: dict, lang: str, all_items: d
 
 
 QUALITY = ROOT / "data" / "quality.json"     # written by the watchdog after its Sunday check
+SAMPLES = ROOT / "data" / "samples.json"     # field-by-field comparison with the original source (by hand, dated)
+MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+Q = {
+    "en": {"h1": "Weekly checks against known answers", "page_h1": "Weekly check: {title}",
+           "lead": "Every Sunday an automated watchdog runs the live actors on Apify with fixed inputs whose correct "
+                   "answers are known, and checks the content of the results — not only whether the run succeeded. The "
+                   "results are published here as they are, failures included.",
+           "planned": "First public check on {date}. Until then this page lists what will be checked.",
+           "last": "Last check on {date}: {passed} of {checked} cases passed", "notes": ", {n} of them with a note",
+           "since": "Checked weekly since {date}.", "case": "Case", "result": "Result", "time": "Time",
+           "what": "What is checked", "details": "Details", "open": "Open problems from the last check",
+           "none_open": "None — every case gave the known answer.", "history": "Earlier checks", "date": "Date",
+           "passed": "Passed", "sample": "Sample against the original source",
+           "sample_text": "On {date} we took {rows} result rows and compared {compared} field values one by one with the "
+                          "original source: {matched} matched ({rate}).",
+           "row": "Row", "field": "Field", "ours": "Actor output", "source": "Original source", "cause": "Cause",
+           "no_miss": "No differences found.", "misses": "Every difference and its cause",
+           "limits": "What this shows: on the day of the check, the live actor gave the known answers for these inputs. "
+                     "It does not prove that every result is correct.",
+           "limits_sample": "The sample against the original source measures accuracy on real result rows.",
+           "see": "See every case and result", "see_planned": "See what will be checked", "actor": "Actor",
+           "last_col": "Last check", "not_yet": "first check on {date}", "sources": "{n} sources, strongest evidence: {level}",
+           "example": "published example", "others": "Not in the content check yet: {names}. They are run once a week with "
+                                                     "an empty input like Apify's own test (does it run and return data?), "
+                                                     "but their results are not checked against known answers.",
+           "labels": {"ok": "✅ passed", "note": "⚠️ passed with a note", "fail": "❌ failed", None: "– not checked yet"},
+           "back": "Back to the actor", "title_suffix": "Weekly check"},
+    "de": {"h1": "Wöchentliche Prüfung mit bekannten Antworten", "page_h1": "Wöchentliche Prüfung: {title}",
+           "lead": "Jeden Sonntag führt ein automatischer Wachposten die Live-Actors auf Apify mit festen Eingaben aus, "
+                   "deren richtige Antworten bekannt sind, und prüft den Inhalt der Ergebnisse — nicht nur, ob der Lauf "
+                   "gelang. Die Ergebnisse stehen hier so, wie sie sind — Fehlschläge eingeschlossen.",
+           "planned": "Erste öffentliche Prüfung am {date}. Bis dahin steht hier, was geprüft wird.",
+           "last": "Letzte Prüfung am {date}: {passed} von {checked} Fällen bestanden", "notes": ", davon {n} mit Hinweis",
+           "since": "Wöchentlich geprüft seit {date}.", "case": "Fall", "result": "Ergebnis", "time": "Dauer",
+           "what": "Was geprüft wird", "details": "Einzelheiten", "open": "Offene Fehler aus der letzten Prüfung",
+           "none_open": "Keine — jeder Fall lieferte die bekannte Antwort.", "history": "Frühere Prüfungen", "date": "Datum",
+           "passed": "Bestanden", "sample": "Stichprobe gegen die Originalquelle",
+           "sample_text": "Am {date} haben wir {rows} Ergebniszeilen genommen und {compared} Feldwerte einzeln mit der "
+                          "Originalquelle verglichen: {matched} stimmten ({rate}).",
+           "row": "Zeile", "field": "Feld", "ours": "Ausgabe des Actors", "source": "Originalquelle", "cause": "Ursache",
+           "no_miss": "Keine Abweichung gefunden.", "misses": "Jede Abweichung mit Ursache",
+           "limits": "Was das zeigt: Am Prüftag lieferte der Live-Actor für diese Eingaben die bekannten Antworten. Dass "
+                     "jedes Ergebnis stimmt, beweist es nicht.",
+           "limits_sample": "Die Stichprobe gegen die Originalquelle misst die Genauigkeit an echten Ergebniszeilen.",
+           "see": "Alle Fälle und Ergebnisse ansehen", "see_planned": "Ansehen, was geprüft wird", "actor": "Actor",
+           "last_col": "Letzte Prüfung", "not_yet": "erste Prüfung am {date}", "sources": "{n} Quellen, stärkste Evidenz: {level}",
+           "example": "veröffentlichtes Beispiel", "others": "Noch nicht in der inhaltlichen Prüfung: {names}. Sie laufen einmal "
+                                                             "wöchentlich mit leerer Eingabe wie Apifys eigener Test (läuft er, "
+                                                             "liefert er Daten?), ihre Ergebnisse werden aber nicht mit bekannten "
+                                                             "Antworten verglichen.",
+           "labels": {"ok": "✅ bestanden", "note": "⚠️ bestanden mit Hinweis", "fail": "❌ fehlgeschlagen", None: "– noch nicht geprüft"},
+           "back": "Zurück zum Actor", "title_suffix": "Wöchentliche Prüfung"},
+}
+
+
+def load_data(path: Path) -> dict:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def fmt_date(iso: str | None, lang: str) -> str:
+    if not iso:
+        return "–"
+    y, m, d = (int(x) for x in iso[:10].split("-"))
+    return f"{d} {MONTHS[m - 1]} {y}" if lang == "en" else f"{d:02d}.{m:02d}.{y}"
+
+
+def fmt_rate(rate: float, lang: str) -> str:
+    text = f"{100 * rate:.1f}"
+    return f"{text}%" if lang == "en" else text.replace(".", ",") + " %"
+
+
+def quality_path(slug: str, lang: str) -> str:
+    return f"/actors/{slug}/quality/" if lang == "en" else f"/de/actors/{slug}/quality/"
+
+
+def quality_summary(q: dict, lang: str) -> str:
+    """One sentence: planned date, or last result and since when."""
+    L = Q[lang]
+    if not q.get("date"):
+        return L["planned"].format(date=fmt_date(q.get("planned"), lang))
+    notes = sum(1 for e in q.get("examples") or [] if e.get("result") == "note")
+    text = L["last"].format(date=fmt_date(q["date"], lang), passed=q.get("passed", 0), checked=q.get("checked", 0))
+    text += (L["notes"].format(n=notes) if notes else "") + "."
+    since = q.get("since") or ((q.get("history") or [{}])[-1]).get("date")
+    return text + (" " + L["since"].format(date=fmt_date(since, lang)) if since else "")
+
+
+def sample_summary(s: dict, lang: str) -> str:
+    return Q[lang]["sample_text"].format(date=fmt_date(s.get("date"), lang), rows=s.get("rows"), compared=s.get("compared"),
+                                          matched=s.get("matched"), rate=fmt_rate(s.get("rate") or 0, lang))
 
 
 def quality_html(slug: str, lang: str) -> str:
-    """Latest weekly re-run of the actor's published examples — shown as it is, failures included."""
-    try:
-        q = json.loads(QUALITY.read_text()).get(slug)
-    except (OSError, ValueError):
+    """Short section on the actor page; the details live on the proof page."""
+    q = load_data(QUALITY).get(slug)
+    sample = load_data(SAMPLES).get(slug)
+    if not q and not sample:
         return ""
-    if not q or not q.get("examples"):
-        return ""
-    de = lang == "de"
-    mark = {"ok": "✅", "note": "⚠️", "fail": "❌"}
-    rows = "".join(
-        f'<tr><td><a href="https://apify.com/{APIFY_USER}/{slug}/examples/{esc(e["slug"])}">{esc(e["title"])}</a></td>'
-        f'<td>{mark.get(e["result"], "–")}</td><td>{e.get("seconds") or 0:.0f} s</td><td>{esc(e.get("sources") or "–")}</td>'
-        f'<td>{esc(e.get("strongest") or "–")}</td></tr>' for e in q["examples"])
-    head = ("Wöchentliche Qualitätsprüfung", "Beispiel", "Ergebnis", "Dauer", "Quellen", "Stärkste Evidenz") if de else \
-           ("Weekly quality check", "Example", "Result", "Time", "Sources", "Strongest evidence")
-    text = (f"Jeden Sonntag führt unser Wachposten alle {q['checked']} veröffentlichten Beispiele mit dem Live-Actor neu aus "
-            f"und prüft die Ergebnisse. Letzte Prüfung am {q['date']}: {q['passed']} von {q['checked']} bestanden."
-            if de else
-            f"Every Sunday our watchdog re-runs all {q['checked']} published examples on the live actor and checks the "
-            f"results. Last check on {q['date']}: {q['passed']} of {q['checked']} passed.")
-    return (f'<section><h2>{head[0]}</h2><p>{esc(text)}</p><div class="table"><table><thead><tr>'
-            + "".join(f"<th>{h}</th>" for h in head[1:]) + f"</tr></thead><tbody>{rows}</tbody></table></div></section>")
+    L = Q[lang]
+    head = "Wöchentliche Qualitätsprüfung" if lang == "de" else "Weekly quality check"
+    parts = []
+    if q:
+        parts.append(f"<p>{esc(L['lead'])}</p><p><strong>{esc(quality_summary(q, lang))}</strong></p>")
+    if sample:
+        parts.append(f"<p>{esc(L['sample'])}: {esc(sample_summary(sample, lang))}</p>")
+    link = L["see"] if (q or {}).get("date") or not q else L["see_planned"]
+    return (f'<section><h2>{head}</h2>{"".join(parts)}'
+            f'<p><a href="{quality_path(slug, lang)}">{esc(link)} →</a></p></section>')
+
+
+def _case_details(e: dict, lang: str) -> str:
+    L = Q[lang]
+    bits = []
+    checks = (e.get("checks") or {}).get(lang) or []
+    if checks:
+        bits.append("<ul>" + "".join(f"<li>{esc(c)}</li>" for c in checks) + "</ul>")
+    if e.get("sources") is not None or e.get("strongest"):
+        bits.append(f"<p>{esc(L['sources'].format(n=e.get('sources') if e.get('sources') is not None else '–', level=e.get('strongest') or '–'))}</p>")
+    if e.get("link"):
+        bits.append(f'<p><a href="{esc(e["link"])}">{esc(L["example"])} →</a></p>')
+    return "".join(bits) or "–"
+
+
+def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | None, lang: str) -> str:
+    L = Q[lang]
+    t = T[lang]
+    path, alt = quality_path(slug, lang), quality_path(slug, "de" if lang == "en" else "en")
+    actor_path = f"/actors/{slug}/" if lang == "en" else f"/de/actors/{slug}/"
+    title = item["title"]
+    sections = []
+    if q:
+        examples = q.get("examples") or []
+        rows = "".join(
+            f'<tr id="{esc(e.get("slug"))}"><td>{esc(e.get("title_de") if lang == "de" and e.get("title_de") else e.get("title"))}</td>'
+            f'<td>{esc(L["labels"].get(e.get("result"), "–"))}</td>'
+            f'<td>{"–" if e.get("result") is None else str(round(e.get("seconds") or 0)) + " s"}</td>'
+            f'<td>{_case_details(e, lang)}</td></tr>' for e in examples)
+        sections.append(f'<section><p class="lead"><strong>{esc(quality_summary(q, lang))}</strong></p>'
+                        f'<div class="table"><table><thead><tr><th>{L["case"]}</th><th>{L["result"]}</th><th>{L["time"]}</th>'
+                        f'<th>{L["what"]}</th></tr></thead><tbody>{rows}</tbody></table></div></section>')
+        if q.get("date"):
+            problems = [e for e in examples if e.get("result") in ("fail", "note")]
+            if problems:
+                items_html = "".join(
+                    f'<li><strong>{esc(L["labels"][e["result"]])}</strong> — '
+                    f'{esc(e.get("title_de") if lang == "de" and e.get("title_de") else e.get("title"))}: '
+                    f'{esc("; ".join(((e.get("reasons") or {}).get(lang)) or []) or "–")}</li>' for e in problems)
+                sections.append(f'<section><h2>{L["open"]}</h2><ul>{items_html}</ul></section>')
+            else:
+                sections.append(f'<section><h2>{L["open"]}</h2><p>{esc(L["none_open"])}</p></section>')
+        history = q.get("history") or []
+        if len(history) > 1:
+            rows = "".join(f'<tr><td>{fmt_date(h.get("date"), lang)}</td><td>{h.get("passed")} / {h.get("checked")}</td></tr>'
+                           for h in history)
+            sections.append(f'<section><h2>{L["history"]}</h2><div class="table"><table><thead><tr><th>{L["date"]}</th>'
+                            f'<th>{L["passed"]}</th></tr></thead><tbody>{rows}</tbody></table></div></section>')
+    if sample:
+        misses = sample.get("misses") or []
+        method = (sample.get("method") or {}).get(lang) or ""
+        body = f"<p><strong>{esc(sample_summary(sample, lang))}</strong></p>" + (f"<p>{esc(method)}</p>" if method else "")
+        if misses:
+            rows = "".join(f'<tr><td>{esc(m.get("row"))}</td><td>{esc(m.get("field"))}</td><td>{esc(m.get("ours") if m.get("ours") not in (None, "") else "–")}</td>'
+                           f'<td>{esc(m.get("source") if m.get("source") not in (None, "") else "–")}</td><td>{esc((m.get("cause") or {}).get(lang) or "–")}</td></tr>'
+                           for m in misses)
+            body += (f'<h3>{L["misses"]}</h3><div class="table"><table><thead><tr><th>{L["row"]}</th><th>{L["field"]}</th>'
+                     f'<th>{L["ours"]}</th><th>{L["source"]}</th><th>{L["cause"]}</th></tr></thead><tbody>{rows}</tbody></table></div>')
+        else:
+            body += f"<p>{esc(L['no_miss'])}</p>"
+        sections.append(f'<section><h2>{L["sample"]}</h2>{body}</section>')
+    sections.append(f'<section><p class="muted">{esc(L["limits"] + (" " + L["limits_sample"] if sample else ""))}</p></section>')
+    body = f"""<nav class="crumbs"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › <a href="{actor_path}">{esc(title)}</a> › {esc(L['title_suffix'])}</nav>
+<section class="hero"><h1>{esc(L['page_h1'].format(title=title))}</h1><p class="lead">{esc(L['lead'])}</p></section>
+{''.join(sections)}
+<p><a class="button" href="{actor_url(slug)}">{t['run']}</a> <a href="{actor_path}">{esc(L['back'])}</a></p>"""
+    desc = quality_summary(q, lang) if q else sample_summary(sample, lang)
+    ld = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": t["home"], "item": BASE + ("/" if lang == "en" else "/de/")},
+        {"@type": "ListItem", "position": 2, "name": title, "item": f"{BASE}{actor_path}"},
+        {"@type": "ListItem", "position": 3, "name": L["title_suffix"], "item": f"{BASE}{path}"}]}]
+    return page(lang, path, alt, f"{L['title_suffix']}: {title} | Perceptron Data", desc, body, ld)
+
+
+def build_quality_index(lang: str, items: dict) -> str:
+    L = Q[lang]
+    quality, samples = load_data(QUALITY), load_data(SAMPLES)
+    path, alt = ("/quality/", "/de/quality/") if lang == "en" else ("/de/quality/", "/quality/")
+    rows = []
+    for slug in [s for s in ACTORS if s in items and (s in quality or s in samples)] + \
+                [s for s in items if s not in ACTORS and (s in quality or s in samples)]:
+        q, sample = quality.get(slug) or {}, samples.get(slug)
+        if q.get("date"):
+            last = f'{fmt_date(q["date"], lang)}: {q.get("passed")} / {q.get("checked")}'
+        elif q.get("planned"):
+            last = L["not_yet"].format(date=fmt_date(q["planned"], lang))
+        else:
+            last = "–"
+        rate = f'{fmt_rate(sample.get("rate") or 0, lang)} ({sample.get("matched")} / {sample.get("compared")})' if sample else "–"
+        rows.append(f'<tr><td><a href="{quality_path(slug, lang)}">{esc(items[slug]["title"])}</a></td><td>{esc(last)}</td><td>{esc(rate)}</td></tr>')
+    others = [items[s]["title"] for s in items if s not in quality and s not in samples]
+    body = f"""<section class="hero"><h1>{esc(L['h1'])}</h1><p class="lead">{esc(L['lead'])}</p></section>
+<section><div class="table"><table><thead><tr><th>{L['actor']}</th><th>{L['last_col']}</th><th>{L['sample']}</th></tr></thead>
+<tbody>{''.join(rows)}</tbody></table></div></section>
+{f'<section><p class="muted">{esc(L["others"].format(names=", ".join(others)))}</p></section>' if others else ''}
+<section><p class="muted">{esc(L['limits'] + (' ' + L['limits_sample'] if samples else ''))}</p></section>"""
+    return page(lang, path, alt, f"{L['h1']} | Perceptron Data", L["lead"], body, [])
 
 
 def build_index(lang: str, items: dict, prices: dict) -> str:
@@ -335,6 +520,14 @@ def main() -> None:
             a = ACTORS.get(slug, {"icon": "logo-256.png", "group": "research", "unit": {}})
             write(f"{prefix}/actors/{slug}/", build_actor(slug, a, item, prices[slug], lang, items))
             urls.append((f"{prefix}/actors/{slug}/", f"{'/de' if lang == 'en' else ''}/actors/{slug}/"))
+    quality, samples = load_data(QUALITY), load_data(SAMPLES)
+    for lang in ("en", "de"):
+        write("/quality/" if lang == "en" else "/de/quality/", build_quality_index(lang, items))
+        urls.append(("/quality/" if lang == "en" else "/de/quality/", "/de/quality/" if lang == "en" else "/quality/"))
+        for slug, item in items.items():
+            if slug in quality or slug in samples:
+                write(quality_path(slug, lang), build_quality_page(slug, item, quality.get(slug), samples.get(slug), lang))
+                urls.append((quality_path(slug, lang), quality_path(slug, "de" if lang == "en" else "en")))
     write("/impressum/", simple_page("/impressum/", "Impressum", imp))
     write("/datenschutz/", simple_page("/datenschutz/", "Datenschutz", priv))
     write("/404.html", page("en", "/404.html", "/de/", "Not found | Perceptron Data", "Page not found",
@@ -368,7 +561,8 @@ def main() -> None:
     catalogue = [{"name": s, "title": items[s]["title"], "url": actor_url(s), "page": f"{BASE}/actors/{s}/",
                   "description": ACTORS.get(s, {}).get("en", {}).get("desc") or items[s].get("description"),
                   "pricePer1000Usd": None if prices[s]["free"] else round(prices[s]["per1000"], 4),
-                  "unit": ACTORS.get(s, {}).get("unit", {}).get("en")} for s in items]
+                  "unit": ACTORS.get(s, {}).get("unit", {}).get("en"),
+                  "qualityPage": f"{BASE}{quality_path(s, 'en')}" if s in quality or s in samples else None} for s in items]
     write("/catalog.json", json.dumps({"updated": TODAY, "actors": catalogue}, indent=2, ensure_ascii=False))
     (OUT / ".nojekyll").write_text("")
     print(f"Built {len(urls)} pages for {len(items)} actors into {OUT}")
