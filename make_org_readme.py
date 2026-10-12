@@ -1,34 +1,52 @@
 #!/usr/bin/env python3
-"""Write the GitHub organisation profile (../dotgithub/profile/README.md) from content.py."""
-import json, urllib.request
+"""Write the GitHub organisation profile (../dotgithub/profile/README.md) from content.py — the same sections,
+canonical names, card texts and live prices (with start fee) as the home page."""
 from pathlib import Path
-from content import ACTORS, GROUPS
-from build import GROUP_ORDER, BASE, STORE_API
 
-items = {a["name"]: a for a in json.load(urllib.request.urlopen(STORE_API, timeout=30))["data"]["items"]}
+from build import BASE, T, actor_url, default_memory, display_name, fetch_store, money, price_info
+from content import ACTORS, SECTIONS
+
+
+def price_text(p: dict, unit: str) -> str:
+    if p["free"]:
+        return "Free"
+    text = f"{money(p['per1000'], 'en')} per 1,000 {unit}"
+    if p["from1000"] < p["per1000"]:
+        text += f" (from {money(p['from1000'], 'en')})"
+    return text + (" " + T["en"]["startfee"].format(fee=money(p["start"], "en")) if p.get("start") else "")
+
+
+store = fetch_store()
+items = {a["name"]: {**a, "url": actor_url(a["name"]), "defaultMemoryMbytes": default_memory(a["name"])} for a in store}
 out = ['<p align="center"><img src="https://perceptron-data.github.io/assets/logo-256.png" width="88" alt="Perceptron Data"></p>',
-       '<h2 align="center">Data APIs for AI, sales and research</h2>',
-       '<p align="center">Clean, structured data from public sources — on <a href="https://apify.com/perceptr0n">Apify</a>. '
-       'No login or API key needed; paid actors charge per result plus a small start fee per run.<br>'
+       '<h2 align="center">Check, don\'t guess.</h2>',
+       '<p align="center">Company checks and data from public sources, as <a href="https://apify.com/perceptr0n">Apify</a> '
+       'actors. Built in Germany. Focused on DACH and the EU.<br>'
        '<a href="https://perceptron-data.github.io/">Website</a> · <a href="https://perceptron-data.github.io/de/">Deutsch</a> · '
-       '<a href="https://apify.com/perceptr0n">All actors on Apify</a></p>', ""]
-for g in GROUP_ORDER:
-    slugs = [s for s, a in ACTORS.items() if a["group"] == g and s in items]
+       '<a href="https://perceptron-data.github.io/quality/">Weekly checks</a> · '
+       '<a href="https://apify.com/perceptr0n">All actors on Apify</a></p>', "",
+       "Paste a list of companies or domains and get one row per company with a traceable answer. Paid per company "
+       "checked or per record, plus a small start fee per run.", ""]
+for section in SECTIONS:
+    slugs = [s for s in section["actors"] if s in items]
+    out += [("## " if section["level"] == 2 else "### ") + section["en"]["heading"], "", section["en"]["intro"], ""]
     if not slugs:
         continue
-    out += [f"### {GROUPS[g]['en']}", "", "| | Actor | What it does |", "|---|---|---|"]
+    out += ["| | Actor | What you get | Price (Apify free plan) |", "|---|---|---|---|"]
     for s in slugs:
         a = ACTORS[s]
         icon = f'<img src="https://perceptron-data.github.io/assets/icons/{a["icon"]}" width="32" alt="">'
-        out.append(f"| {icon} | [{items[s]['title']}]({BASE}/actors/{s}/) | {a['en']['desc']} |")
+        p = price_info(items[s], a.get("price_event"))
+        out.append(f"| {icon} | [{display_name(s, items[s], 'en')}]({BASE}/actors/{s}/) | {a['en']['card']} | "
+                   f"{price_text(p, a['unit']['en'])} |")
     out.append("")
 out += ["### Auf Deutsch", "",
-        "Daten für KI, Vertrieb und Marktforschung aus öffentlichen und amtlichen Quellen: PDF und Word in Markdown "
-        "umwandeln, prüfen, welche Firmen Google-Werbung schalten, Firmendaten aus dem Impressum, Stellenangebote der "
-        "Arbeitsagentur, kununu-Bewertungen, Messe-Ausstellerlisten, EU-Ausschreibungen, Marktstammdatenregister und "
-        "EUDAMED — [zur deutschen Übersicht](https://perceptron-data.github.io/de/).", "",
+        "**Prüfen statt raten.** Firmen-Checks und Daten aus öffentlichen Quellen: Wer wirbt bei Google und Bing, wer "
+        "steht hinter einer Website (USt-IdNr. über die EU-Prüfung VIES), dazu Register, Stellen, Messen, Dokumente und "
+        "Recherche für KI — [zur deutschen Übersicht](https://perceptron-data.github.io/de/).", "",
         "<sub>[Impressum](https://perceptron-data.github.io/impressum/) · "
-        "[Datenschutz](https://perceptron-data.github.io/datenschutz/) · Independent developer, not affiliated with Apify.</sub>", ""]
+        "[Datenschutz](https://perceptron-data.github.io/datenschutz/) · Independent provider, not affiliated with Apify "
+        "or the data sources named. Bug reports are welcome.</sub>", ""]
 target = Path(__file__).resolve().parent.parent / "dotgithub" / "profile" / "README.md"
 target.parent.mkdir(parents=True, exist_ok=True)
 target.write_text("\n".join(out), encoding="utf-8")
