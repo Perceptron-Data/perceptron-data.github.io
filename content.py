@@ -525,3 +525,239 @@ ACTORS = {
         },
     },
 }
+
+
+# ------------------------------------------------------------------ home page and agent page (13 Oct 2026)
+# Every number here is measured and listed in the claim register (AUSSAGENREGISTER K20, K27–K30).
+
+FLAGSHIPS = ["imprint-impressum-website-contact-scraper", "research-agent", "google-ads-transparency-scraper",
+             "pdf-to-markdown-converter"]
+
+HOME = {
+    "en": {
+        "lead": "Paste website domains and get the company behind each one: legal name, register number and VAT "
+                "number, checked live against the EU's VIES register. Ask a question and get cited passages with an "
+                "evidence level for your LLM. Every row says where its data came from.",
+        "cta_primary": "Try the Imprint & VAT Check", "cta_research": "Research Agent", "cta_agents": "For AI agents",
+        "proof_title": "Measured, not promised",
+        "proof": [
+            ("8 of 9", "websites that refused automated requests or needed JavaScript came back complete, with a "
+                       "VIES-valid VAT number", "Imprint & VAT Check · Apify platform test, 13 Oct 2026", None),
+            ("10 of 10", "published research questions gave the known answer in the weekly check",
+             "Research Agent · 12 Oct 2026", "research-agent"),
+            ("164", "field values compared one by one with the original source: 136 matched (82.9%)",
+             "Imprint & VAT Check · sample, 12 Oct 2026", "imprint-impressum-website-contact-scraper"),
+        ],
+        "proof_note": "Every Sunday a watchdog re-runs the published checks; failures stay on the page.",
+        "flag_title": "Start here",
+        "flag_intro": "Four actors cover most requests: company data for DACH websites, cited research for AI, "
+                      "ad checks for company lists and documents for RAG.",
+        "rows_title": "What a row looks like",
+        "rows_intro": "Imprint & VAT Check, Apify platform run of 13 October 2026 – one row per website, including the "
+                      "one that stayed blocked:",
+        "rows_head": ["Website", "Company", "Register", "VAT number (VIES)", "Read via"],
+        "rows": [
+            ["haribo.com", "HARIBO GmbH & Co. KG, Grafschaft", "HRA 22030", "DE815499929 – valid", "the site's imprint link"],
+            ["porr-group.com", "PORR AG, Wien (AT)", "FN 34853f", "ATU14490102 – valid", "the site's imprint link"],
+            ["miele.de", "Miele Vertriebsgesellschaft Deutschland KG, Gütersloh", "HRA 8269", "DE358719156 – valid",
+             "Apify Web Fetch (the site refuses automated requests)"],
+            ["fischer.de", "fischer Deutschland Vertriebs GmbH, Waldachtal", "HRB 440715", "DE813703629 – valid",
+             "Apify Web Fetch, rendered in a browser (JavaScript site)"],
+            ["hornbach.de", "–", "–", "–", "status error, reason blocked – named in the row"],
+        ],
+        "research_row": "Research Agent: “What does Article 17 GDPR (right to erasure) require?” → status found, "
+                        "strongest evidence official, first source eur-lex.europa.eu – Regulation (EU) 2016/679, 25.3 s.",
+        "agents_title": "For AI agents",
+        "agents_text": "Every actor is a tool on Apify's MCP server. Point your agent at it: it sees the input fields "
+                       "and the price per result before it calls.",
+        "agents_link": "Set it up in Claude Code, Cursor or via the API",
+        "all_title": "All actors",
+        "faq_title": "Questions",
+        "faq": [
+            ("Where does the data come from?",
+             "From public sources only: the company's own website (its legal notice), the EU's VIES register, "
+             "Google's and Microsoft's ad libraries, public registers, job boards and trade-fair directories – or your "
+             "own documents. Each row names the page its data came from."),
+            ("How am I charged?",
+             "Through your Apify account: a price per result plus a small start fee per run, shown on every actor. "
+             "Paid Apify plans pay less. Set a maximum cost per run and the actor stops there."),
+            ("Can an AI agent use these actors?",
+             "Yes. Every actor runs as a tool on Apify's MCP server and through the Apify API – see “For AI agents”."),
+            ("What if a website blocks automated requests?",
+             "The Imprint & VAT Check and the Research Agent then try Apify's Web Fetch, which Apify bills on your "
+             "account. A site that stays unreadable gets a row with the reason instead of a silent gap."),
+            ("Who is behind Perceptron Data?",
+             "An independent developer in Germany, not affiliated with Apify or the data sources named. The legal "
+             "notice is linked at the bottom of every page."),
+        ],
+    },
+    "de": {
+        "lead": "Domains einfügen und je Website die Firma dahinter erhalten: Firmenname, Registernummer und "
+                "USt-IdNr., live gegen das EU-Register VIES geprüft. Eine Frage stellen und zitierte Textstellen mit "
+                "Evidenzstufe für Ihr Sprachmodell erhalten. Jede Zeile nennt ihre Quelle.",
+        "cta_primary": "Impressum- & USt-Check ausprobieren", "cta_research": "Research Agent", "cta_agents": "Für KI-Agenten",
+        "proof_title": "Gemessen, nicht versprochen",
+        "proof": [
+            ("8 von 9", "Websites, die automatische Abrufe abwiesen oder JavaScript brauchten, kamen vollständig "
+                        "zurück, mit gültiger USt-IdNr. laut VIES", "Impressum- & USt-Check · Plattformtest auf Apify, 13.10.2026", None),
+            ("10 von 10", "veröffentlichten Recherchefragen lieferten in der Wochenprüfung die bekannte Antwort",
+             "Research Agent · 12.10.2026", "research-agent"),
+            ("164", "Feldwerte einzeln mit der Originalquelle verglichen: 136 stimmten (82,9 %)",
+             "Impressum- & USt-Check · Stichprobe, 12.10.2026", "imprint-impressum-website-contact-scraper"),
+        ],
+        "proof_note": "Jeden Sonntag wiederholt ein Wachposten die veröffentlichten Prüfungen; Fehlschläge bleiben stehen.",
+        "flag_title": "Hier starten",
+        "flag_intro": "Vier Actors decken die meisten Anfragen ab: Firmendaten zu DACH-Websites, belegte Recherche für "
+                      "KI, Werbe-Checks für Firmenlisten und Dokumente für RAG.",
+        "rows_title": "So sieht eine Zeile aus",
+        "rows_intro": "Impressum- & USt-Check, Lauf auf Apify vom 13.10.2026 – eine Zeile je Website, auch für die, "
+                      "die gesperrt blieb:",
+        "rows_head": ["Website", "Firma", "Register", "USt-IdNr. (VIES)", "Gelesen über"],
+        "rows": [
+            ["haribo.com", "HARIBO GmbH & Co. KG, Grafschaft", "HRA 22030", "DE815499929 – gültig", "Impressums-Link der Website"],
+            ["porr-group.com", "PORR AG, Wien (AT)", "FN 34853f", "ATU14490102 – gültig", "Impressums-Link der Website"],
+            ["miele.de", "Miele Vertriebsgesellschaft Deutschland KG, Gütersloh", "HRA 8269", "DE358719156 – gültig",
+             "Apify Web Fetch (die Website weist automatische Abrufe ab)"],
+            ["fischer.de", "fischer Deutschland Vertriebs GmbH, Waldachtal", "HRB 440715", "DE813703629 – gültig",
+             "Apify Web Fetch, im Browser dargestellt (JavaScript-Website)"],
+            ["hornbach.de", "–", "–", "–", "Status error, Grund blocked – in der Zeile genannt"],
+        ],
+        "research_row": "Research Agent: „What does Article 17 GDPR (right to erasure) require?“ → Status found, "
+                        "stärkste Evidenz amtlich, erste Quelle eur-lex.europa.eu – Verordnung (EU) 2016/679, 25,3 s.",
+        "agents_title": "Für KI-Agenten",
+        "agents_text": "Jeder Actor ist ein Werkzeug auf Apifys MCP-Server. Richten Sie Ihren Agenten darauf: Er sieht "
+                       "die Eingabefelder und den Preis je Ergebnis, bevor er aufruft.",
+        "agents_link": "Einrichtung in Claude Code, Cursor oder über die API",
+        "all_title": "Alle Actors",
+        "faq_title": "Fragen",
+        "faq": [
+            ("Woher kommen die Daten?",
+             "Nur aus öffentlichen Quellen: der Website der Firma (ihrem Impressum), dem EU-Register VIES, den "
+             "Werbebibliotheken von Google und Microsoft, öffentlichen Registern, Jobbörsen und Messeverzeichnissen – "
+             "oder aus Ihren eigenen Dokumenten. Jede Zeile nennt die Seite, aus der ihre Daten stammen."),
+            ("Wie wird abgerechnet?",
+             "Über Ihr Apify-Konto: ein Preis je Ergebnis plus eine kleine Startgebühr je Lauf, bei jedem Actor "
+             "angegeben. Bezahlte Apify-Tarife zahlen weniger. Mit einer Kostengrenze je Lauf hört der Actor dort auf."),
+            ("Kann ein KI-Agent die Actors nutzen?",
+             "Ja. Jeder Actor läuft als Werkzeug auf Apifys MCP-Server und über die Apify-API – siehe „Für KI-Agenten“."),
+            ("Was, wenn eine Website automatische Abrufe sperrt?",
+             "Dann versuchen es der Impressum- & USt-Check und der Research Agent über Apifys Web Fetch, den Apify über "
+             "Ihr Konto abrechnet. Bleibt eine Website unlesbar, bekommt sie eine Zeile mit dem Grund statt einer stillen Lücke."),
+            ("Wer steht hinter Perceptron Data?",
+             "Ein unabhängiger Entwickler aus Deutschland, nicht verbunden mit Apify oder den genannten Datenquellen. "
+             "Das Impressum ist unten auf jeder Seite verlinkt."),
+        ],
+    },
+}
+
+# What an agent would ask for, per actor (agent page table); the input is a working example of the live actor.
+AGENT_TASKS = {
+    "imprint-impressum-website-contact-scraper": {
+        "en": "Company behind a DACH website, with its VAT number checked against VIES",
+        "de": "Firma hinter einer DACH-Website, mit gegen VIES geprüfter USt-IdNr.",
+        "input": {"websites": ["haribo.com", "miele.de"]}},
+    "research-agent": {
+        "en": "Cited passages for an LLM answer, each source with an evidence level",
+        "de": "Zitierte Textstellen für eine KI-Antwort, jede Quelle mit Evidenzstufe",
+        "input": {"query": "What does Article 17 GDPR require?"}},
+    "google-ads-transparency-scraper": {
+        "en": "Do these companies advertise on Google or Microsoft Bing?",
+        "de": "Werben diese Firmen bei Google oder Microsoft Bing?",
+        "input": {"mode": "companies", "domains": ["otto.de", "frischpack.de"]}},
+    "pdf-to-markdown-converter": {
+        "en": "PDF, Word, Excel or PowerPoint to Markdown (OCR for scans)",
+        "de": "PDF, Word, Excel oder PowerPoint in Markdown (OCR für Scans)",
+        "input": {"urls": ["https://www.irs.gov/pub/irs-pdf/fw9.pdf"], "output": "chunks"}},
+    "free-website-contact-imprint-scraper": {
+        "en": "The same company row for up to 10 websites per run, free",
+        "de": "Dieselbe Firmenzeile für bis zu 10 Websites je Lauf, kostenlos"},
+    "kununu-employer-data-scraper": {"en": "Employer ratings, salaries and benefits from kununu",
+                                     "de": "Arbeitgeberbewertungen, Gehälter und Benefits von kununu"},
+    "arbeitsagentur-jobs-scraper": {"en": "Job ads from the German Federal Employment Agency's Jobbörse",
+                                    "de": "Stellenangebote aus der Jobbörse der Bundesagentur für Arbeit"},
+    "messe-muenchen-exhibitor-list-scraper": {"en": "Exhibitors of Messe München fairs (bauma, IFAT, BAU …)",
+                                              "de": "Aussteller der Messe München (bauma, IFAT, BAU …)"},
+    "anuga-ism-koelnmesse-exhibitor-scraper": {"en": "Exhibitors of Koelnmesse fairs (Anuga, ISM, imm cologne …)",
+                                               "de": "Aussteller der Koelnmesse (Anuga, ISM, imm cologne …)"},
+    "appstore-google-play-intelligence": {"en": "App Store and Google Play apps, ratings and reviews",
+                                          "de": "Apps, Bewertungen und Rezensionen aus App Store und Google Play"},
+    "eu-tenders-ted-scraper": {"en": "EU public tenders from TED by country and CPV code",
+                               "de": "EU-Ausschreibungen aus TED nach Land und CPV-Code"},
+    "german-energy-assets-mastr": {"en": "German power plants from the Marktstammdatenregister",
+                                   "de": "Kraftwerke und Anlagen aus dem Marktstammdatenregister"},
+    "eudamed-medical-device-scraper": {"en": "EU medical devices and manufacturers from EUDAMED",
+                                       "de": "Medizinprodukte und Hersteller aus EUDAMED"},
+    "dach-eu-data-source-finder": {"en": "Which actor fits a data need (free)",
+                                   "de": "Welcher Actor passt zu einem Datenbedarf (kostenlos)"},
+}
+
+AGENTS = {
+    "en": {
+        "title": "Perceptron Data actors for AI agents – MCP server and API",
+        "desc": "Call Perceptron Data actors from Claude, Cursor, ChatGPT or your own agent through Apify's MCP server "
+                "or API: JSON in, one row per result out, price per result shown before the call.",
+        "h1": "For AI agents and developers",
+        "lead": "Every Perceptron Data actor is a tool your agent can call through Apify's MCP server or the Apify API: "
+                "JSON in, one row per result out, and a price per result the agent sees before it calls.",
+        "connect": "Connect",
+        "mcp_url": "MCP server with only our flagship tools – each actor becomes one tool, named like "
+                   "perceptr0n--research-agent (add any other actor the same way, comma-separated):",
+        "claude": "Claude Code – then run /mcp once to sign in to Apify:",
+        "json": "Cursor, VS Code, Claude Desktop and other MCP clients:",
+        "token": "Without the browser sign-in, send your Apify token as a header instead: "
+                 "\"headers\": {\"Authorization\": \"Bearer <APIFY_TOKEN>\"}.",
+        "api": "Plain HTTP – start a run and get the rows in one request:",
+        "search": "Apify's default MCP server also finds these actors through its search-actors tool; naming them in "
+                  "tools= loads them directly.",
+        "table": "Which actor for which task",
+        "head": ["Task", "MCP tool", "Example input", "Price"],
+        "know": "What your agent should know",
+        "notes": [
+            "Read the status before the values: the Imprint & VAT Check gives every row a status and a reason, the "
+            "Research Agent a status per question and an evidence level per source, the Advertiser Check a status "
+            "per platform, PDF to Markdown a status per document.",
+            "Cap the cost: pass a maximum cost per run (maxTotalChargeUsd); Apify never charges a run beyond it.",
+            "The Imprint & VAT Check and the Research Agent read pages that refuse automated requests through Apify's "
+            "Web Fetch, which Apify bills separately on the same account ($0.0015 per delivered page on the free plan).",
+            "Each actor's limits are in its README on Apify – read them before you rely on a field.",
+        ],
+        "machine": "Machine-readable",
+        "machine_items": [("llms.txt", "the catalogue in plain text"),
+                          ("catalog.json", "names, prices, MCP tool names, example inputs"),
+                          ("index.md", "every page of this site as Markdown: add index.md to its address")],
+    },
+    "de": {
+        "title": "Perceptron-Data-Actors für KI-Agenten – MCP-Server und API",
+        "desc": "Perceptron-Data-Actors aus Claude, Cursor, ChatGPT oder dem eigenen Agenten aufrufen – über Apifys "
+                "MCP-Server oder die API: JSON rein, eine Zeile je Ergebnis, Preis je Ergebnis vor dem Aufruf sichtbar.",
+        "h1": "Für KI-Agenten und Entwickler",
+        "lead": "Jeder Perceptron-Data-Actor ist ein Werkzeug, das Ihr Agent über Apifys MCP-Server oder die Apify-API "
+                "aufruft: JSON rein, eine Zeile je Ergebnis raus, und den Preis je Ergebnis sieht der Agent vor dem Aufruf.",
+        "connect": "Verbinden",
+        "mcp_url": "MCP-Server nur mit unseren wichtigsten Werkzeugen – jeder Actor wird ein Werkzeug, benannt wie "
+                   "perceptr0n--research-agent (weitere Actors genauso, durch Komma getrennt):",
+        "claude": "Claude Code – danach einmal /mcp ausführen und bei Apify anmelden:",
+        "json": "Cursor, VS Code, Claude Desktop und andere MCP-Programme:",
+        "token": "Ohne Anmeldung im Browser schicken Sie stattdessen Ihren Apify-Token als Kopfzeile: "
+                 "\"headers\": {\"Authorization\": \"Bearer <APIFY_TOKEN>\"}.",
+        "api": "Reines HTTP – Lauf starten und die Zeilen in einer Anfrage erhalten:",
+        "search": "Apifys Standard-MCP-Server findet diese Actors auch über sein Werkzeug search-actors; mit tools= "
+                  "werden sie direkt geladen.",
+        "table": "Welcher Actor für welche Aufgabe",
+        "head": ["Aufgabe", "MCP-Werkzeug", "Beispiel-Eingabe", "Preis"],
+        "know": "Was Ihr Agent wissen sollte",
+        "notes": [
+            "Erst den Status lesen, dann die Werte: Der Impressum- & USt-Check gibt jeder Zeile Status und Grund, der "
+            "Research Agent einen Status je Frage und eine Evidenzstufe je Quelle, der Werbe-Check einen Status je "
+            "Plattform, PDF to Markdown einen Status je Dokument.",
+            "Kosten begrenzen: eine Kostengrenze je Lauf mitgeben (maxTotalChargeUsd); mehr berechnet Apify für den Lauf nie.",
+            "Der Impressum- & USt-Check und der Research Agent lesen Seiten, die automatische Abrufe abweisen, über "
+            "Apifys Web Fetch; Apify rechnet ihn getrennt über dasselbe Konto ab (0,0015 $ je gelieferter Seite im Gratis-Tarif).",
+            "Die Grenzen jedes Actors stehen in seiner README auf Apify – vor dem Verlass auf ein Feld lesen.",
+        ],
+        "machine": "Maschinenlesbar",
+        "machine_items": [("llms.txt", "der Katalog als Text"),
+                          ("catalog.json", "Namen, Preise, MCP-Werkzeugnamen, Beispiel-Eingaben"),
+                          ("index.md", "jede Seite dieser Website als Markdown: index.md an die Adresse anhängen")],
+    },
+}

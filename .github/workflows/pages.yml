@@ -20,12 +20,15 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    outputs:
+      changed: ${{ steps.build.outputs.changed }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Build site (fails instead of publishing an empty catalogue)
+        id: build
         run: python build.py
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
@@ -41,3 +44,18 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  indexnow:
+    # Only pages whose content really changed (build.py compares with the live site, dates aside).
+    needs: [build, deploy]
+    if: ${{ needs.build.outputs.changed != '' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Report changed pages to IndexNow (Bing and others)
+        env:
+          CHANGED: ${{ needs.build.outputs.changed }}
+        run: python indexnow.py

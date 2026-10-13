@@ -3,8 +3,8 @@
 canonical names, card texts and live prices (with start fee) as the home page."""
 from pathlib import Path
 
-from build import BASE, T, actor_url, default_memory, display_name, fetch_store, money, price_info
-from content import ACTORS, SECTIONS
+from build import BASE, FLAGSHIPS, T, actor_url, default_memory, display_name, fetch_store, mcp_url, money, price_info
+from content import ACTORS, HOME, SECTIONS
 
 
 def price_text(p: dict, unit: str) -> str:
@@ -25,8 +25,10 @@ out = ['<p align="center"><img src="https://perceptron-data.github.io/assets/log
        '<a href="https://perceptron-data.github.io/">Website</a> · <a href="https://perceptron-data.github.io/de/">Deutsch</a> · '
        '<a href="https://perceptron-data.github.io/quality/">Weekly checks</a> · '
        '<a href="https://apify.com/perceptr0n">All actors on Apify</a></p>', "",
-       "Paste a list of companies or domains and get one row per company with a traceable answer. Paid per company "
-       "checked or per record, plus a small start fee per run.", ""]
+       HOME["en"]["lead"] + " Paid per result, plus a small start fee per run.", "",
+       "**Measured, not promised:** " + " · ".join(f"{n} {what} ({src})" for n, what, src, _ in HOME["en"]["proof"]), "",
+       f"**For AI agents:** every actor is a tool on Apify's MCP server — `{mcp_url(FLAGSHIPS[:2])}` · "
+       f"[setup for Claude Code, Cursor and the API]({BASE}/agents/)", ""]
 for section in SECTIONS:
     slugs = [s for s in section["actors"] if s in items]
     out += [("## " if section["level"] == 2 else "### ") + section["en"]["heading"], "", section["en"]["intro"], ""]
