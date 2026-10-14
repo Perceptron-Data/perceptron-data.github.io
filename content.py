@@ -569,7 +569,7 @@ HOME = {
                         "strongest evidence official, first source eur-lex.europa.eu – Regulation (EU) 2016/679, 25.3 s.",
         "agents_title": "For AI agents",
         "agents_text": "Every actor is a tool on Apify's MCP server. Point your agent at it: it sees the input fields "
-                       "and the price per result before it calls.",
+                       "and the price per result before it calls (plus a small start fee per run).",
         "agents_link": "Set it up in Claude Code, Cursor or via the API",
         "all_title": "All actors",
         "faq_title": "Questions",
@@ -626,7 +626,7 @@ HOME = {
                         "stärkste Evidenz amtlich, erste Quelle eur-lex.europa.eu – Verordnung (EU) 2016/679, 25,3 s.",
         "agents_title": "Für KI-Agenten",
         "agents_text": "Jeder Actor ist ein Werkzeug auf Apifys MCP-Server. Richten Sie Ihren Agenten darauf: Er sieht "
-                       "die Eingabefelder und den Preis je Ergebnis, bevor er aufruft.",
+                       "die Eingabefelder und den Preis je Ergebnis, bevor er aufruft (plus eine kleine Startgebühr je Lauf).",
         "agents_link": "Einrichtung in Claude Code, Cursor oder über die API",
         "all_title": "Alle Actors",
         "faq_title": "Fragen",
@@ -694,11 +694,12 @@ AGENT_TASKS = {
 AGENTS = {
     "en": {
         "title": "Perceptron Data actors for AI agents – MCP server and API",
-        "desc": "Call Perceptron Data actors from Claude, Cursor, ChatGPT or your own agent through Apify's MCP server "
-                "or API: JSON in, one row per result out, price per result shown before the call.",
+        "desc": "Call Perceptron Data actors from Claude, Cursor, ChatGPT or your own agent via Apify's MCP server or "
+                "API. Price per result plus a small start fee per run.",
         "h1": "For AI agents and developers",
         "lead": "Every Perceptron Data actor is a tool your agent can call through Apify's MCP server or the Apify API: "
-                "JSON in, one row per result out, and a price per result the agent sees before it calls.",
+                "JSON in, one row per result out, and a price per result the agent sees before it calls (plus a small start "
+                "fee per run).",
         "connect": "Connect",
         "mcp_url": "MCP server with only our flagship tools – each actor becomes one tool, named like "
                    "perceptr0n--research-agent (add any other actor the same way, comma-separated):",
@@ -728,11 +729,12 @@ AGENTS = {
     },
     "de": {
         "title": "Perceptron-Data-Actors für KI-Agenten – MCP-Server und API",
-        "desc": "Perceptron-Data-Actors aus Claude, Cursor, ChatGPT oder dem eigenen Agenten aufrufen – über Apifys "
-                "MCP-Server oder die API: JSON rein, eine Zeile je Ergebnis, Preis je Ergebnis vor dem Aufruf sichtbar.",
+        "desc": "Perceptron-Data-Actors aus Claude, Cursor, ChatGPT oder eigenen Agenten über Apifys MCP-Server oder "
+                "API aufrufen – Preis je Ergebnis plus Startgebühr je Lauf.",
         "h1": "Für KI-Agenten und Entwickler",
         "lead": "Jeder Perceptron-Data-Actor ist ein Werkzeug, das Ihr Agent über Apifys MCP-Server oder die Apify-API "
-                "aufruft: JSON rein, eine Zeile je Ergebnis raus, und den Preis je Ergebnis sieht der Agent vor dem Aufruf.",
+                "aufruft: JSON rein, eine Zeile je Ergebnis raus, und den Preis je Ergebnis sieht der Agent vor dem Aufruf "
+                "(dazu eine kleine Startgebühr je Lauf).",
         "connect": "Verbinden",
         "mcp_url": "MCP-Server nur mit unseren wichtigsten Werkzeugen – jeder Actor wird ein Werkzeug, benannt wie "
                    "perceptr0n--research-agent (weitere Actors genauso, durch Komma getrennt):",

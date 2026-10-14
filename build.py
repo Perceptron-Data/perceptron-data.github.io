@@ -174,6 +174,10 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
          markdown: bool = True, dated: bool = True) -> str:
     t = T[lang]
     en_path, de_path = (path, alt_path) if lang == "en" else (alt_path, path)
+    # German-only pages (Impressum, Datenschutz) have no English version to point to.
+    alternates = "" if en_path == de_path else (f'<link rel="alternate" hreflang="en" href="{BASE}{en_path}">\n'
+                                                f'<link rel="alternate" hreflang="de" href="{BASE}{de_path}">\n'
+                                                f'<link rel="alternate" hreflang="x-default" href="{BASE}{en_path}">')
     ld = "\n".join(f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False)}</script>' for d in jsonld)
     md = f'<link rel="alternate" type="text/markdown" href="{path}index.md">' if markdown and path.endswith("/") else ""
     updated = (f'<p class="updated-line muted">{t["updated_label"]} <time class="updated" datetime="{LASTMOD}">{LASTMOD}</time></p>'
@@ -187,9 +191,7 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
 <meta name="description" content="{esc(desc)}">
 {f'<meta name="robots" content="{esc(robots)}">' if robots else ''}
 <link rel="canonical" href="{BASE}{path}">
-<link rel="alternate" hreflang="en" href="{BASE}{en_path}">
-<link rel="alternate" hreflang="de" href="{BASE}{de_path}">
-<link rel="alternate" hreflang="x-default" href="{BASE}{en_path}">
+{alternates}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Perceptron Data">
 <meta property="og:title" content="{esc(title)}">
@@ -355,13 +357,14 @@ SAMPLES = ROOT / "data" / "samples.json"     # field-by-field comparison with th
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 Q = {
-    "en": {"h1": "Weekly checks against known answers", "page_h1": "Weekly check: {title}",
+    "en": {"h1": "Weekly checks against known answers", "page_h1": "Weekly check – {title}",
            "lead": "Every Sunday an automated watchdog runs the live actors on Apify with fixed inputs whose correct "
                    "answers are known, and checks the content of the results — not only whether the run succeeded. The "
                    "results are published here as they are, failures included.",
-           "planned": "First public check on {date}. Until then this page lists what will be checked.",
+           "planned": "First public check on {date}. Until then this page lists every case that will run each Sunday and "
+                      "what is checked in its result.",
            "last": "Last check on {date}: {passed} of {checked} cases passed", "notes": ", {n} of them with a note",
-           "since": "Checked weekly since {date}.", "case": "Case", "result": "Result", "time": "Time",
+           "since": "Checked weekly since {date}; every case and result is listed.", "case": "Case", "result": "Result", "time": "Time",
            "what": "What is checked", "details": "Details", "open": "Failures and notes from the last check",
            "none_open": "None — every case gave the known answer.", "history": "Earlier checks", "date": "Date",
            "passed": "Passed", "sample": "Sample against the original source",
@@ -380,14 +383,17 @@ Q = {
                                                      "an empty input like Apify's own test (does it run and return data?), "
                                                      "but their results are not checked against known answers.",
            "labels": {"ok": "✅ passed", "note": "⚠️ passed with a note", "fail": "❌ failed", None: "– not checked yet"},
-           "back": "Back to the actor", "title_suffix": "Weekly check"},
-    "de": {"h1": "Wöchentliche Prüfung mit bekannten Antworten", "page_h1": "Wöchentliche Prüfung: {title}",
+           "back": "Back to the actor", "title_suffix": "Weekly check",
+           "meta": "Every Sunday a watchdog runs the live actors on Apify with fixed inputs whose answers are known and "
+                   "checks the results – published as is, failures included."},
+    "de": {"h1": "Wöchentliche Prüfung mit bekannten Antworten", "page_h1": "Wöchentliche Prüfung – {title}",
            "lead": "Jeden Sonntag führt ein automatischer Wachposten die Live-Actors auf Apify mit festen Eingaben aus, "
                    "deren richtige Antworten bekannt sind, und prüft den Inhalt der Ergebnisse — nicht nur, ob der Lauf "
                    "gelang. Die Ergebnisse stehen hier so, wie sie sind — Fehlschläge eingeschlossen.",
-           "planned": "Erste öffentliche Prüfung am {date}. Bis dahin steht hier, was geprüft wird.",
+           "planned": "Erste öffentliche Prüfung am {date}. Bis dahin steht hier jeder Fall, der jeden Sonntag läuft, und "
+                      "was an seinem Ergebnis geprüft wird.",
            "last": "Letzte Prüfung am {date}: {passed} von {checked} Fällen bestanden", "notes": ", davon {n} mit Hinweis",
-           "since": "Wöchentlich geprüft seit {date}.", "case": "Fall", "result": "Ergebnis", "time": "Dauer",
+           "since": "Wöchentlich geprüft seit {date}; jeder Fall steht hier mit Ergebnis.", "case": "Fall", "result": "Ergebnis", "time": "Dauer",
            "what": "Was geprüft wird", "details": "Einzelheiten", "open": "Fehler und Hinweise aus der letzten Prüfung",
            "none_open": "Keine — jeder Fall lieferte die bekannte Antwort.", "history": "Frühere Prüfungen", "date": "Datum",
            "passed": "Bestanden", "sample": "Stichprobe gegen die Originalquelle",
@@ -407,7 +413,9 @@ Q = {
                                                              "liefert er Daten?), ihre Ergebnisse werden aber nicht mit bekannten "
                                                              "Antworten verglichen.",
            "labels": {"ok": "✅ bestanden", "note": "⚠️ bestanden mit Hinweis", "fail": "❌ fehlgeschlagen", None: "– noch nicht geprüft"},
-           "back": "Zurück zum Actor", "title_suffix": "Wöchentliche Prüfung"},
+           "back": "Zurück zum Actor", "title_suffix": "Wöchentliche Prüfung",
+           "meta": "Jeden Sonntag startet ein Wachposten die Live-Actors auf Apify mit festen Eingaben und bekannten "
+                   "Antworten, prüft die Ergebnisse – Fehlschläge eingeschlossen."},
 }
 
 
@@ -550,7 +558,7 @@ def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | Non
         {"@type": "ListItem", "position": 1, "name": t["home"], "item": BASE + ("/" if lang == "en" else "/de/")},
         {"@type": "ListItem", "position": 2, "name": title, "item": f"{BASE}{actor_path}"},
         {"@type": "ListItem", "position": 3, "name": L["title_suffix"], "item": f"{BASE}{path}"}]}]
-    return page(lang, path, alt, f"{L['title_suffix']}: {title} | Perceptron Data", desc, body, ld, markdown=False)
+    return page(lang, path, alt, f"{L['title_suffix']} – {title}", desc, body, ld, markdown=False)
 
 
 def build_quality_index(lang: str, items: dict) -> str:
@@ -575,7 +583,8 @@ def build_quality_index(lang: str, items: dict) -> str:
 <tbody>{''.join(rows)}</tbody></table></div></section>
 {f'<section><p class="muted">{esc(L["others"].format(names=", ".join(others)))}</p></section>' if others else ''}
 <section><p class="muted">{esc(L['limits'] + (' ' + L['limits_sample'] if samples else ''))}</p></section>"""
-    return page(lang, path, alt, f"{L['h1']} | Perceptron Data", L["lead"], body, [], markdown=False)
+    return page(lang, path, alt, L["h1"] + (" – Perceptron Data" if lang == "en" else ""), L["meta"], body, [],
+                markdown=False)
 
 
 def mcp_url(slugs: list[str]) -> str:
@@ -720,12 +729,12 @@ def build_legal() -> tuple[str, str]:
     if any(not L.get(k) or "TODO" in str(L.get(k)) for k in ("name", "street", "city", "email")):
         sys.exit("data/legal.json is incomplete — not publishing without a full legal notice.")
     addr = f"{esc(L['name'])}<br>{esc(L['street'])}<br>{esc(L['city'])}<br>{esc(L.get('country', 'Deutschland'))}"
-    imp = f"""<h1>Impressum / Legal notice</h1>
+    imp = f"""<h1>Impressum</h1>
 <h2>Angaben gemäß § 5 DDG</h2><p>{addr}</p>
 <h2>Kontakt</h2><p>E-Mail: <a href="mailto:{esc(L['email'])}">{esc(L['email'])}</a></p>
 <h2>Verantwortlich für den Inhalt</h2><p>{esc(L['name'])}, Anschrift wie oben.</p>
 <h2>Hinweis</h2><p>Die Actors werden über die Plattform Apify (Apify Technologies s.r.o., Prag) angeboten und abgerechnet. Für Inhalte externer Links sind deren Betreiber verantwortlich.</p>"""
-    priv = f"""<h1>Datenschutzerklärung / Privacy</h1>
+    priv = f"""<h1>Datenschutzerklärung</h1>
 <h2>Verantwortlicher</h2><p>{addr}<br>E-Mail: <a href="mailto:{esc(L['email'])}">{esc(L['email'])}</a></p>
 <h2>Hosting</h2><p>Diese Website wird bei GitHub Pages gehostet (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Beim Aufruf verarbeitet GitHub technisch notwendige Daten wie die IP-Adresse in Server-Protokollen, um die Seite auszuliefern und abzusichern. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren, verfügbaren Website). GitHub ist unter dem EU-US Data Privacy Framework zertifiziert. Details: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a>.</p>
 <h2>Keine Cookies, kein Tracking</h2><p>Diese Website setzt keine Cookies, nutzt keine Analyse- oder Werbedienste und bindet keine externen Schriftarten oder Skripte ein.</p>
@@ -735,7 +744,7 @@ def build_legal() -> tuple[str, str]:
 
 
 def simple_page(path: str, title: str, inner: str) -> str:
-    return page("de", path, path, f"{title} | Perceptron Data", title, f'<section class="prose">{inner}</section>', [],
+    return page("de", path, path, f"{title} – Perceptron Data", title, f'<section class="prose">{inner}</section>', [],
                 markdown=False, dated=False)
 
 
@@ -858,7 +867,10 @@ def stamp(text: str, iso: str, lang: str) -> str:
 # ------------------------------------------------------------------ output
 
 def main() -> None:
-    store = fetch_store()
+    # The Store API returns the actors in a different order every day; sorted, a page changes only when its content
+    # does (otherwise lastmod and IndexNow reported unchanged pages, found by the test bench 14.10.2026).
+    store = sorted(fetch_store(), key=lambda a: (list(ACTORS).index(a["name"]) if a["name"] in ACTORS else len(ACTORS),
+                                                 a["name"]))
     items = {a["name"]: {**a, "url": actor_url(a["name"]), "defaultMemoryMbytes": default_memory(a["name"])} for a in store}
     prices = {s: price_info(a, (ACTORS.get(s) or {}).get("price_event")) for s, a in items.items()}
     imp, priv = build_legal()
@@ -906,7 +918,7 @@ def main() -> None:
                 urls.append((quality_path(slug, lang), quality_path(slug, "de" if lang == "en" else "en")))
     write("/impressum/", simple_page("/impressum/", "Impressum", imp))
     write("/datenschutz/", simple_page("/datenschutz/", "Datenschutz", priv))
-    write("/404.html", page("en", "/404.html", "/de/", "Not found | Perceptron Data", "Page not found",
+    write("/404.html", page("en", "/404.html", "/de/", "Not found – Perceptron Data", "Page not found",
                              '<section class="hero"><h1>Not found</h1><p><a href="/">Back to the catalogue</a></p></section>', [],
                              markdown=False, dated=False))
 
