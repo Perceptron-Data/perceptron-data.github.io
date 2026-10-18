@@ -1091,16 +1091,16 @@
  },
  "research-agent": {
   "checked": 10,
-  "date": "2026-10-12",
+  "date": "2026-10-18",
   "examples": [
    {
     "checks": null,
     "link": "https://apify.com/perceptr0n/research-agent/examples/eu-ai-act-obligations-official-text",
     "reasons": null,
     "result": "ok",
-    "seconds": 59,
+    "seconds": 68,
     "slug": "eu-ai-act-obligations-official-text",
-    "sources": 5,
+    "sources": 4,
     "strongest": "official",
     "title": "EU AI Act obligations – cited from the official text",
     "title_de": "Pflichten nach der EU-KI-Verordnung – zitiert aus dem amtlichen Text"
@@ -1110,9 +1110,9 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/gdpr-article-official-text-lookup",
     "reasons": null,
     "result": "ok",
-    "seconds": 30,
+    "seconds": 79,
     "slug": "gdpr-article-official-text-lookup",
-    "sources": 5,
+    "sources": 4,
     "strongest": "official",
     "title": "GDPR article lookup – official text with sources",
     "title_de": "DSGVO-Artikel nachschlagen – amtlicher Text mit Quellen"
@@ -1120,18 +1120,6 @@
    {
     "checks": null,
     "link": "https://apify.com/perceptr0n/research-agent/examples/german-law-bgb-paragraph-official",
-    "reasons": null,
-    "result": "ok",
-    "seconds": 34,
-    "slug": "german-law-bgb-paragraph-official",
-    "sources": 7,
-    "strongest": "official",
-    "title": "German law § lookup (BGB, HGB, GG) – official text",
-    "title_de": "Paragraf im deutschen Recht (BGB, HGB, GG) – amtlicher Text"
-   },
-   {
-    "checks": null,
-    "link": "https://apify.com/perceptr0n/research-agent/examples/fact-check-prices-across-sites",
     "reasons": {
      "de": [
       "Google antwortete nicht (partial, nicht berechnet) — meist vorübergehend"
@@ -1141,10 +1129,22 @@
      ]
     },
     "result": "note",
-    "seconds": 87,
+    "seconds": 100,
+    "slug": "german-law-bgb-paragraph-official",
+    "sources": 3,
+    "strongest": "official",
+    "title": "German law § lookup (BGB, HGB, GG) – official text",
+    "title_de": "Paragraf im deutschen Recht (BGB, HGB, GG) – amtlicher Text"
+   },
+   {
+    "checks": null,
+    "link": "https://apify.com/perceptr0n/research-agent/examples/fact-check-prices-across-sites",
+    "reasons": null,
+    "result": "ok",
+    "seconds": 48,
     "slug": "fact-check-prices-across-sites",
-    "sources": null,
-    "strongest": null,
+    "sources": 6,
+    "strongest": "reference",
     "title": "Fact-check prices and figures across independent sites",
     "title_de": "Preise und Zahlen über unabhängige Seiten abgleichen"
    },
@@ -1153,9 +1153,9 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/scientific-evidence-open-access-papers",
     "reasons": null,
     "result": "ok",
-    "seconds": 3,
+    "seconds": 4,
     "slug": "scientific-evidence-open-access-papers",
-    "sources": 6,
+    "sources": 7,
     "strongest": "academic",
     "title": "Scientific evidence from open-access papers",
     "title_de": "Wissenschaftliche Belege aus frei zugänglichen Fachartikeln"
@@ -1163,9 +1163,16 @@
    {
     "checks": null,
     "link": "https://apify.com/perceptr0n/research-agent/examples/developer-answers-stack-overflow-github",
-    "reasons": null,
-    "result": "ok",
-    "seconds": 45,
+    "reasons": {
+     "de": [
+      "Google antwortete nicht (partial, nicht berechnet) — meist vorübergehend"
+     ],
+     "en": [
+      "Google did not answer (status partial, not charged) — usually temporary"
+     ]
+    },
+    "result": "note",
+    "seconds": 88,
     "slug": "developer-answers-stack-overflow-github",
     "sources": 4,
     "strongest": "community",
@@ -1177,9 +1184,9 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/news-this-week-cited-llm-context",
     "reasons": null,
     "result": "ok",
-    "seconds": 32,
+    "seconds": 40,
     "slug": "news-this-week-cited-llm-context",
-    "sources": 7,
+    "sources": 9,
     "strongest": "official",
     "title": "This week's news as cited context for LLMs",
     "title_de": "Nachrichten dieser Woche als belegter Kontext für Sprachmodelle"
@@ -1189,9 +1196,9 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/rag-chunks-for-vector-database",
     "reasons": null,
     "result": "ok",
-    "seconds": 100,
+    "seconds": 39,
     "slug": "rag-chunks-for-vector-database",
-    "sources": 6,
+    "sources": 7,
     "strongest": "academic",
     "title": "RAG chunks for Pinecone or Qdrant with stable IDs",
     "title_de": "RAG-Textabschnitte für Pinecone oder Qdrant mit stabilen IDs"
@@ -1201,7 +1208,7 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/web-search-api-for-ai-agents",
     "reasons": null,
     "result": "ok",
-    "seconds": 5,
+    "seconds": 18,
     "slug": "web-search-api-for-ai-agents",
     "sources": 7,
     "strongest": "reference",
@@ -1213,7 +1220,7 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/deep-research-regulation-second-round",
     "reasons": null,
     "result": "ok",
-    "seconds": 49,
+    "seconds": 73,
     "slug": "deep-research-regulation-second-round",
     "sources": 9,
     "strongest": "official",
@@ -1222,6 +1229,11 @@
    }
   ],
   "history": [
+   {
+    "checked": 10,
+    "date": "2026-10-18",
+    "passed": 10
+   },
    {
     "checked": 10,
     "date": "2026-10-12",
