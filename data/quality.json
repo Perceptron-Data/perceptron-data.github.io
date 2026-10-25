@@ -1,7 +1,7 @@
 {
  "anuga-ism-koelnmesse-exhibitor-scraper": {
-  "checked": 0,
-  "date": null,
+  "checked": 5,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -21,7 +21,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 28,
     "slug": "anuga-list-current-edition",
     "title": "Anuga: 10 exhibitors from the current exhibitor list, each delivered once, with fair name and edition year",
     "title_de": "Anuga: 10 Aussteller aus dem aktuellen Ausstellerverzeichnis, jeder genau einmal, mit Messename und Ausgabejahr"
@@ -40,7 +42,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 28,
     "slug": "hall-and-stand",
     "title": "Every exhibitor comes with company name, hall and stand",
     "title_de": "Jeder Aussteller mit Firmenname, Halle und Stand"
@@ -59,7 +63,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 28,
     "slug": "country-iso-code",
     "title": "Every exhibitor has its country, also as a two-letter ISO code",
     "title_de": "Jeder Aussteller mit Land, auch als zweistelliger ISO-Code"
@@ -78,7 +84,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 28,
     "slug": "profile-link",
     "title": "Every row links to the exhibitor's profile page on anuga.com and says whether the profile was read",
     "title_de": "Jede Zeile verlinkt das Ausstellerprofil auf anuga.com und sagt, ob das Profil gelesen wurde"
@@ -103,19 +111,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 28,
     "slug": "contact-from-profile",
     "title": "Where the exhibitor profile was read: street, city and website for every exhibitor, an e-mail address for at least 70 %",
     "title_de": "Wo das Ausstellerprofil gelesen wurde: Straße, Ort und Website bei jedem Aussteller, E-Mail-Adresse bei mindestens 70 %"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 5,
+    "date": "2026-10-25",
+    "passed": 5
+   }
+  ],
+  "passed": 5,
+  "since": "2026-10-25"
  },
  "appstore-google-play-intelligence": {
-  "checked": 0,
-  "date": null,
+  "checked": 3,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -145,7 +161,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "whatsapp-app-store",
     "title": "WhatsApp on the App Store (Germany): found by its id, bundle id net.whatsapp.WhatsApp, rating between 1 and 5 from at least 100,000 ratings",
     "title_de": "WhatsApp im App Store (Deutschland): über die ID gefunden, Bundle-ID net.whatsapp.WhatsApp, Bewertung zwischen 1 und 5 aus mindestens 100.000 Bewertungen"
@@ -176,7 +194,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "whatsapp-google-play",
     "title": "WhatsApp on Google Play: found by its package name, rating between 1 and 5, at least one billion installs",
     "title_de": "WhatsApp bei Google Play: über den Paketnamen gefunden, Bewertung zwischen 1 und 5, mindestens eine Milliarde Installationen"
@@ -199,19 +219,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "not-found-no-row",
     "title": "Two app ids that do not exist and a repeated App Store link become no row and no charge — only found apps are rows",
     "title_de": "Zwei App-IDs, die es nicht gibt, und ein wiederholter App-Store-Link ergeben keine Zeile und keine Kosten — nur gefundene Apps sind Zeilen"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 3,
+    "date": "2026-10-25",
+    "passed": 3
+   }
+  ],
+  "passed": 3,
+  "since": "2026-10-25"
  },
  "arbeitsagentur-jobs-scraper": {
-  "checked": 0,
-  "date": null,
+  "checked": 5,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -235,7 +263,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "electricians-berlin-20-jobs",
     "title": "A search for electricians (Elektriker) within 25 km of Berlin returns the 20 jobs asked for, each with title, employer, reference number and its job page on arbeitsagentur.de",
     "title_de": "Eine Suche nach Elektrikern im Umkreis von 25 km um Berlin liefert die 20 bestellten Stellen, jede mit Titel, Arbeitgeber, Referenznummer und ihrer Stellenseite auf arbeitsagentur.de"
@@ -254,7 +284,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "jobs-within-radius",
     "title": "Every job lies in Berlin or Brandenburg and at most 25 km from Berlin — the radius searched",
     "title_de": "Jede Stelle liegt in Berlin oder Brandenburg und höchstens 25 km von Berlin entfernt — im gesuchten Umkreis"
@@ -273,7 +305,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "full-descriptions",
     "title": "With full descriptions switched on, every job was fetched in detail (detailStatus ok) and at least 90 % carry the description text",
     "title_de": "Mit eingeschalteten Stellenbeschreibungen wurde jede Stelle im Detail abgerufen (detailStatus ok), mindestens 90 % tragen den Beschreibungstext"
@@ -290,7 +324,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "no-duplicate-jobs",
     "title": "No job is delivered or charged twice: 20 rows, 20 different reference numbers",
     "title_de": "Keine Stelle wird doppelt geliefert oder berechnet: 20 Zeilen, 20 verschiedene Referenznummern"
@@ -315,19 +351,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 6,
     "slug": "proof-on-every-row",
     "title": "Every row names its source (the Jobsuche interface of the Bundesagentur für Arbeit), the search it answers and when it was retrieved",
     "title_de": "Jede Zeile nennt ihre Quelle (Jobsuche-Schnittstelle der Bundesagentur für Arbeit), die Suche, aus der sie stammt, und den Abrufzeitpunkt"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 5,
+    "date": "2026-10-25",
+    "passed": 5
+   }
+  ],
+  "passed": 5,
+  "since": "2026-10-25"
  },
  "free-website-contact-imprint-scraper": {
-  "checked": 0,
-  "date": null,
+  "checked": 4,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -357,7 +401,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 25,
     "slug": "bosch-register-and-vat",
     "title": "bosch.de: Robert Bosch GmbH, register number HRB 14000 (Stuttgart), VAT ID DE811128135 valid in VIES",
     "title_de": "bosch.de: Robert Bosch GmbH, Handelsregister HRB 14000 (Stuttgart), USt-IdNr. DE811128135 in VIES gültig"
@@ -390,7 +436,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 25,
     "slug": "tu-wien-austrian-vat",
     "title": "tuwien.at (Austria): VAT ID ATU37675002 is valid in VIES and VIES returns the registered name Technische Universität Wien",
     "title_de": "tuwien.at (Österreich): USt-IdNr. ATU37675002 ist in VIES gültig, VIES nennt den eingetragenen Namen Technische Universität Wien"
@@ -417,7 +465,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 25,
     "slug": "sbb-swiss-company",
     "title": "sbb.ch (Switzerland): the legal notice names Schweizerische Bundesbahnen AG in Bern",
     "title_de": "sbb.ch (Schweiz): Das Impressum nennt die Schweizerische Bundesbahnen AG in Bern"
@@ -444,19 +494,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 25,
     "slug": "no-legal-notice-not-a-company",
     "title": "example.com has no legal notice: reported as not found, without any invented company data",
     "title_de": "example.com hat kein Impressum: als nicht gefunden gemeldet, ohne erfundene Firmendaten"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 4,
+    "date": "2026-10-25",
+    "passed": 4
+   }
+  ],
+  "passed": 4,
+  "since": "2026-10-25"
  },
  "google-ads-transparency-scraper": {
-  "checked": 0,
-  "date": null,
+  "checked": 5,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -480,7 +538,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 34,
     "slug": "zalando-google-advertiser",
     "title": "zalando.de advertises on Google: found in the Ads Transparency Center, main advertiser Zalando, at least 1,000 ads",
     "title_de": "zalando.de wirbt bei Google: im Ads Transparency Center gefunden, Hauptwerbetreibender Zalando, mindestens 1.000 Anzeigen"
@@ -509,7 +569,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 34,
     "slug": "check24-google-and-bing",
     "title": "check24.de advertises on Google and on Microsoft (Bing): both platforms answered, the main Bing advertiser is CHECK24",
     "title_de": "check24.de wirbt bei Google und bei Microsoft (Bing): beide Plattformen haben geantwortet, Haupt-Werbekonto bei Bing ist CHECK24"
@@ -532,7 +594,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 34,
     "slug": "duplicate-not-charged",
     "title": "The same company entered twice (https://www.zalando.de/) gets one row marked as duplicate and is not checked or charged again",
     "title_de": "Dieselbe Firma zweimal eingegeben (https://www.zalando.de/) wird als Duplikat markiert und nicht erneut geprüft oder berechnet"
@@ -555,7 +619,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 34,
     "slug": "nonexistent-domain-not-charged",
     "title": "A domain that does not exist is reported as invalid input, with the reason, and is not charged",
     "title_de": "Eine Domain, die es nicht gibt, wird als ungültige Eingabe mit Begründung gemeldet und nicht berechnet"
@@ -580,19 +646,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 34,
     "slug": "one-row-per-input",
     "title": "Every input gets exactly one row with a status and the time of the check",
     "title_de": "Jede Eingabe bekommt genau eine Zeile mit Status und Prüfzeitpunkt"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 5,
+    "date": "2026-10-25",
+    "passed": 5
+   }
+  ],
+  "passed": 5,
+  "since": "2026-10-25"
  },
  "imprint-impressum-website-contact-scraper": {
-  "checked": 0,
-  "date": null,
+  "checked": 5,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -628,7 +702,26 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": {
+     "de": [
+      "legalForm ist Inc., erwartet AG",
+      "postalCode ist null, erwartet 80333",
+      "city ist null, erwartet München",
+      "country ist null, erwartet DE",
+      "registerNumber passt nicht zu ^HRB \\d+$ (null)",
+      "… und 3 weitere"
+     ],
+     "en": [
+      "legalForm is Inc., expected AG",
+      "postalCode is null, expected 80333",
+      "city is null, expected München",
+      "country is null, expected DE",
+      "registerNumber does not match ^HRB \\d+$ (null)",
+      "… and 3 more"
+     ]
+    },
+    "result": "fail",
+    "seconds": 26,
     "slug": "siemens-ag-vat-valid",
     "title": "siemens.com: the legal notice names Siemens AG in München with VAT ID DE129274202, confirmed valid in the EU VIES register",
     "title_de": "siemens.com: Das Impressum nennt die Siemens AG in München mit USt-IdNr. DE129274202, im EU-Register VIES als gültig bestätigt"
@@ -661,7 +754,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 26,
     "slug": "liebherr-register-and-vat",
     "title": "liebherr.com: Liebherr-International Deutschland GmbH, register number HRB 640080, VAT ID DE811154028 valid in VIES",
     "title_de": "liebherr.com: Liebherr-International Deutschland GmbH, Handelsregister HRB 640080, USt-IdNr. DE811154028 in VIES gültig"
@@ -694,7 +789,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 26,
     "slug": "tu-wien-austrian-vat",
     "title": "tuwien.at (Austria): VAT ID ATU37675002 is valid in VIES and VIES returns the registered name Technische Universität Wien",
     "title_de": "tuwien.at (Österreich): USt-IdNr. ATU37675002 ist in VIES gültig, VIES nennt den eingetragenen Namen Technische Universität Wien"
@@ -721,7 +818,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 26,
     "slug": "sbb-swiss-company",
     "title": "sbb.ch (Switzerland): the legal notice names Schweizerische Bundesbahnen AG in Bern",
     "title_de": "sbb.ch (Schweiz): Das Impressum nennt die Schweizerische Bundesbahnen AG in Bern"
@@ -748,19 +847,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 26,
     "slug": "no-legal-notice-not-a-company",
     "title": "example.com has no legal notice: reported as not found, without any invented company data",
     "title_de": "example.com hat kein Impressum: als nicht gefunden gemeldet, ohne erfundene Firmendaten"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 5,
+    "date": "2026-10-25",
+    "passed": 4
+   }
+  ],
+  "passed": 4,
+  "since": "2026-10-25"
  },
  "kununu-employer-data-scraper": {
-  "checked": 0,
-  "date": null,
+  "checked": 4,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -790,7 +897,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 41,
     "slug": "siemens-profile",
     "title": "Siemens AG: score between 1 and 5, at least 1,000 reviews, main location Munich, read from kununu.com/de/siemens",
     "title_de": "Siemens AG: Score zwischen 1 und 5, mindestens 1.000 Bewertungen, Hauptstandort München, gelesen auf kununu.com/de/siemens"
@@ -813,7 +922,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 41,
     "slug": "siemens-salaries",
     "title": "Siemens salaries: salary ranges read from the salary page, together with the number kununu holds",
     "title_de": "Siemens-Gehälter: Gehaltsspannen von der Gehaltsseite, zusammen mit der Zahl, die kununu führt"
@@ -840,7 +951,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 41,
     "slug": "bosch-profile",
     "title": "Bosch: the profile kununu shows for “bosch” (also when kununu forwards to another address), score between 1 and 5, at least 1,000 reviews",
     "title_de": "Bosch: das Profil, das kununu für „bosch“ zeigt (auch wenn kununu auf eine andere Adresse weiterleitet), Score zwischen 1 und 5, mindestens 1.000 Bewertungen"
@@ -863,19 +976,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 41,
     "slug": "unknown-company-not-delivered",
     "title": "A company kununu does not know is neither delivered nor charged: only the 2 real companies come back, each once",
     "title_de": "Eine Firma, die kununu nicht kennt, wird weder geliefert noch berechnet: nur die 2 echten Firmen kommen zurück, jede einmal"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 4,
+    "date": "2026-10-25",
+    "passed": 4
+   }
+  ],
+  "passed": 4,
+  "since": "2026-10-25"
  },
  "messe-muenchen-exhibitor-list-scraper": {
-  "checked": 0,
-  "date": null,
+  "checked": 4,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -899,7 +1020,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 20,
     "slug": "bauma-list-edition",
     "title": "bauma: the first 10 exhibitors in alphabetical order, each delivered once, with fair name and edition",
     "title_de": "bauma: die ersten 10 Aussteller in alphabetischer Reihenfolge, jeder genau einmal, mit Messename und Ausgabe"
@@ -920,7 +1043,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 20,
     "slug": "read-from-profile-page",
     "title": "Every row was read from the exhibitor's own profile page: status ok, link to the page and time of the check",
     "title_de": "Jede Zeile stammt aus dem eigenen Profil des Ausstellers: Status ok, Link zur Seite und Prüfzeit"
@@ -943,7 +1068,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 20,
     "slug": "stand-and-address",
     "title": "Every exhibitor has hall and stand, country and city; a postal code for at least 80 %",
     "title_de": "Jeder Aussteller mit Halle und Stand, Land und Ort; Postleitzahl bei mindestens 80 %"
@@ -970,19 +1097,27 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 20,
     "slug": "known-exhibitor-123erfasst",
     "title": "Known exhibitor: 123erfasst.de GmbH at bauma 2025, stand A2.114, postal code 49393, country in English (Germany)",
     "title_de": "Bekannter Aussteller: 123erfasst.de GmbH auf der bauma 2025, Stand A2.114, Postleitzahl 49393, Land auf Englisch (Germany)"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 4,
+    "date": "2026-10-25",
+    "passed": 4
+   }
+  ],
+  "passed": 4,
+  "since": "2026-10-25"
  },
  "pdf-to-markdown-converter": {
-  "checked": 0,
-  "date": null,
+  "checked": 4,
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": {
@@ -1010,7 +1145,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 12,
     "slug": "pdf-paper-all-pages",
     "title": "A 15-page research paper (arXiv 1706.03762v7) is converted in full: status ok, 15 of 15 pages charged as text pages, the paper title as a Markdown heading and the section text",
     "title_de": "Ein 15-seitiger Fachartikel (arXiv 1706.03762v7) wird vollständig umgewandelt: Status ok, 15 von 15 Seiten als Textseiten abgerechnet, der Titel als Markdown-Überschrift und der Abschnittstext"
@@ -1031,7 +1168,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 12,
     "slug": "pdf-paper-results-table",
     "title": "Table 2 of the same paper comes out as a table row: “Transformer (big)” with BLEU 28.4 (English–German) and 41.8 (English–French)",
     "title_de": "Tabelle 2 desselben Artikels kommt als Tabellenzeile heraus: „Transformer (big)“ mit BLEU 28,4 (Englisch–Deutsch) und 41,8 (Englisch–Französisch)"
@@ -1056,7 +1195,9 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 12,
     "slug": "excel-typed-cells",
     "title": "An Excel file (pandas test file, fixed version) becomes a table with the exact cell values — whole numbers, decimals, TRUE/FALSE and dates",
     "title_de": "Eine Excel-Datei (pandas-Testdatei, feste Fassung) wird zur Tabelle mit den genauen Zellwerten — ganze Zahlen, Dezimalzahlen, TRUE/FALSE und Datumsangaben"
@@ -1079,28 +1220,36 @@
      ]
     },
     "link": null,
-    "result": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 12,
     "slug": "missing-file-not-charged",
     "title": "A missing file (HTTP 404) is reported as failed with the reason and not charged — no empty document is delivered",
     "title_de": "Eine fehlende Datei (HTTP 404) wird als fehlgeschlagen mit Grund gemeldet und nicht berechnet — kein leeres Dokument"
    }
   ],
-  "history": [],
-  "passed": 0,
-  "planned": "2026-10-25"
+  "history": [
+   {
+    "checked": 4,
+    "date": "2026-10-25",
+    "passed": 4
+   }
+  ],
+  "passed": 4,
+  "since": "2026-10-25"
  },
  "research-agent": {
   "checked": 10,
-  "date": "2026-10-18",
+  "date": "2026-10-25",
   "examples": [
    {
     "checks": null,
     "link": "https://apify.com/perceptr0n/research-agent/examples/eu-ai-act-obligations-official-text",
     "reasons": null,
     "result": "ok",
-    "seconds": 68,
+    "seconds": 58,
     "slug": "eu-ai-act-obligations-official-text",
-    "sources": 4,
+    "sources": 1,
     "strongest": "official",
     "title": "EU AI Act obligations – cited from the official text",
     "title_de": "Pflichten nach der EU-KI-Verordnung – zitiert aus dem amtlichen Text"
@@ -1110,9 +1259,9 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/gdpr-article-official-text-lookup",
     "reasons": null,
     "result": "ok",
-    "seconds": 79,
+    "seconds": 30,
     "slug": "gdpr-article-official-text-lookup",
-    "sources": 4,
+    "sources": 6,
     "strongest": "official",
     "title": "GDPR article lookup – official text with sources",
     "title_de": "DSGVO-Artikel nachschlagen – amtlicher Text mit Quellen"
@@ -1120,18 +1269,11 @@
    {
     "checks": null,
     "link": "https://apify.com/perceptr0n/research-agent/examples/german-law-bgb-paragraph-official",
-    "reasons": {
-     "de": [
-      "Google antwortete nicht (partial, nicht berechnet) — meist vorübergehend"
-     ],
-     "en": [
-      "Google did not answer (status partial, not charged) — usually temporary"
-     ]
-    },
-    "result": "note",
-    "seconds": 100,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 22,
     "slug": "german-law-bgb-paragraph-official",
-    "sources": 3,
+    "sources": 7,
     "strongest": "official",
     "title": "German law § lookup (BGB, HGB, GG) – official text",
     "title_de": "Paragraf im deutschen Recht (BGB, HGB, GG) – amtlicher Text"
@@ -1139,12 +1281,19 @@
    {
     "checks": null,
     "link": "https://apify.com/perceptr0n/research-agent/examples/fact-check-prices-across-sites",
-    "reasons": null,
-    "result": "ok",
-    "seconds": 48,
+    "reasons": {
+     "de": [
+      "Lauf FAILED"
+     ],
+     "en": [
+      "run FAILED"
+     ]
+    },
+    "result": "fail",
+    "seconds": 20,
     "slug": "fact-check-prices-across-sites",
-    "sources": 6,
-    "strongest": "reference",
+    "sources": null,
+    "strongest": null,
     "title": "Fact-check prices and figures across independent sites",
     "title_de": "Preise und Zahlen über unabhängige Seiten abgleichen"
    },
@@ -1163,18 +1312,11 @@
    {
     "checks": null,
     "link": "https://apify.com/perceptr0n/research-agent/examples/developer-answers-stack-overflow-github",
-    "reasons": {
-     "de": [
-      "Google antwortete nicht (partial, nicht berechnet) — meist vorübergehend"
-     ],
-     "en": [
-      "Google did not answer (status partial, not charged) — usually temporary"
-     ]
-    },
-    "result": "note",
-    "seconds": 88,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 58,
     "slug": "developer-answers-stack-overflow-github",
-    "sources": 4,
+    "sources": 5,
     "strongest": "community",
     "title": "Developer answers from Stack Overflow, GitHub and HN",
     "title_de": "Entwicklerantworten aus Stack Overflow, GitHub und Hacker News"
@@ -1184,10 +1326,10 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/news-this-week-cited-llm-context",
     "reasons": null,
     "result": "ok",
-    "seconds": 40,
+    "seconds": 54,
     "slug": "news-this-week-cited-llm-context",
-    "sources": 9,
-    "strongest": "official",
+    "sources": 6,
+    "strongest": "news",
     "title": "This week's news as cited context for LLMs",
     "title_de": "Nachrichten dieser Woche als belegter Kontext für Sprachmodelle"
    },
@@ -1196,7 +1338,7 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/rag-chunks-for-vector-database",
     "reasons": null,
     "result": "ok",
-    "seconds": 39,
+    "seconds": 14,
     "slug": "rag-chunks-for-vector-database",
     "sources": 7,
     "strongest": "academic",
@@ -1208,10 +1350,10 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/web-search-api-for-ai-agents",
     "reasons": null,
     "result": "ok",
-    "seconds": 18,
+    "seconds": 20,
     "slug": "web-search-api-for-ai-agents",
-    "sources": 7,
-    "strongest": "reference",
+    "sources": 5,
+    "strongest": "commercial",
     "title": "Web search API for AI agents – cited context in one call",
     "title_de": "Websuche-API für KI-Agenten – belegter Kontext in einem Aufruf"
    },
@@ -1220,15 +1362,20 @@
     "link": "https://apify.com/perceptr0n/research-agent/examples/deep-research-regulation-second-round",
     "reasons": null,
     "result": "ok",
-    "seconds": 73,
+    "seconds": 53,
     "slug": "deep-research-regulation-second-round",
-    "sources": 9,
+    "sources": 8,
     "strongest": "official",
     "title": "Deep research: second search round with learned terms",
     "title_de": "Tiefe Recherche: zweite Suchrunde mit gelernten Begriffen"
    }
   ],
   "history": [
+   {
+    "checked": 10,
+    "date": "2026-10-25",
+    "passed": 9
+   },
    {
     "checked": 10,
     "date": "2026-10-18",
@@ -1245,7 +1392,7 @@
     "passed": 10
    }
   ],
-  "passed": 10,
+  "passed": 9,
   "since": "2026-10-08"
  }
 }
