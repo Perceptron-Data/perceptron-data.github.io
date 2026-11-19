@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
 
-from content import ACTORS, AGENT_TASKS, AGENTS, FLAGSHIPS, HOME, SECTIONS
+from content import ACTORS, AGENT_TASKS, AGENTS, CUSTOM, CUSTOM_EMAIL, FLAGSHIPS, HOME, SECTIONS
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "_site"
@@ -607,6 +607,28 @@ def flagship(slug: str, item: dict, p: dict, lang: str) -> str:
 </article>"""
 
 
+def custom_html(lang: str) -> str:
+    """Custom actors (Tom, 19 Nov 2026): what we build, how it works, what we do not do, contact."""
+    c = CUSTOM[lang]
+    mail = f'<a href="mailto:{esc(CUSTOM_EMAIL)}">{esc(CUSTOM_EMAIL)}</a>'
+    steps = "".join(f"<li>{esc(x)}</li>" for x in c["steps"])
+    nots = "".join(f"<li>{esc(x)}</li>" for x in c["not"])
+    contact = esc(c["contact"]).replace(esc("{email}"), mail)
+    return (f'<section id="custom"><h2>{esc(c["title"])}</h2><p>{esc(c["intro"])}</p>'
+            f'<h3>{esc(c["build_title"])}</h3><p>{esc(c["build"])}</p>'
+            f'<h3>{esc(c["steps_title"])}</h3><ol>{steps}</ol>'
+            f'<h3>{esc(c["not_title"])}</h3><ul>{nots}</ul>'
+            f'<p><strong>{contact}</strong></p></section>')
+
+
+def custom_md(lang: str) -> list[str]:
+    c = CUSTOM[lang]
+    return ([f"## {c['title']}", "", c["intro"], "", f"### {c['build_title']}", "", c["build"], "",
+             f"### {c['steps_title']}", ""] + [f"{i}. {x}" for i, x in enumerate(c["steps"], 1)]
+            + ["", f"### {c['not_title']}", ""] + [f"- {x}" for x in c["not"]]
+            + ["", c["contact"].format(email=CUSTOM_EMAIL), ""])
+
+
 def build_index(lang: str, items: dict, prices: dict) -> str:
     t, h = T[lang], HOME[lang]
     path, alt = ("/", "/de/") if lang == "en" else ("/de/", "/")
@@ -653,6 +675,7 @@ def build_index(lang: str, items: dict, prices: dict) -> str:
 <pre><code>{esc(mcp_url(FLAGSHIPS[:2]))}</code></pre><p><a href="{agents}">{esc(h['agents_link'])} →</a></p></section>
 <section id="how"><h2>{esc(t['how_title'])}</h2><ol>{steps}</ol><p class="muted">{esc(t['how_note'])}</p></section>
 <section id="actors"><h2>{esc(h['all_title'])}</h2>{''.join(sections)}</section>
+{custom_html(lang)}
 <section id="faq"><h2>{esc(h['faq_title'])}</h2>{faq}</section>"""
     ld = [{"@context": "https://schema.org", "@type": "WebSite", "name": "Perceptron Data", "url": BASE + "/",
            "inLanguage": lang},
@@ -738,6 +761,7 @@ def build_legal() -> tuple[str, str]:
 <h2>Verantwortlicher</h2><p>{addr}<br>E-Mail: <a href="mailto:{esc(L['email'])}">{esc(L['email'])}</a></p>
 <h2>Hosting</h2><p>Diese Website wird bei GitHub Pages gehostet (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Beim Aufruf verarbeitet GitHub technisch notwendige Daten wie die IP-Adresse in Server-Protokollen, um die Seite auszuliefern und abzusichern. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren, verfügbaren Website). GitHub ist unter dem EU-US Data Privacy Framework zertifiziert. Details: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a>.</p>
 <h2>Keine Cookies, kein Tracking</h2><p>Diese Website setzt keine Cookies, nutzt keine Analyse- oder Werbedienste und bindet keine externen Schriftarten oder Skripte ein.</p>
+<h2>Kontakt per E-Mail</h2><p>Wenn Sie per E-Mail Kontakt aufnehmen – etwa mit einer Anfrage nach einem Actor nach Maß –, verarbeitet der oben genannte Verantwortliche Ihre E-Mail-Adresse und den Inhalt Ihrer Nachricht nur, um Ihre Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO, soweit es um einen Auftrag geht, sonst lit. f). Die Daten werden gelöscht, wenn die Anfrage erledigt ist und keine gesetzliche Aufbewahrungspflicht besteht. Das Postfach wird bei Google (Gmail) geführt.</p>
 <h2>Externe Links</h2><p>Links führen zu apify.com und github.com. Dort gelten die Datenschutzerklärungen der jeweiligen Anbieter.</p>
 <h2>Ihre Rechte</h2><p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15–21 DSGVO) sowie das Recht auf Beschwerde bei einer Datenschutz-Aufsichtsbehörde (Art. 77 DSGVO).</p>"""
     return imp, priv
@@ -793,7 +817,7 @@ def md_home(lang: str, items: dict, prices: dict) -> str:
     for s in items:
         c = (ACTORS.get(s) or {}).get(lang) or {}
         out.append(f"- [{display_name(s, items[s], lang)}]({prefix}{s}/index.md): {c.get('desc') or items[s].get('description', '')}")
-    out += ["", f"## {h['faq_title']}", ""]
+    out += [""] + custom_md(lang) + [f"## {h['faq_title']}", ""]
     for question, answer in h["faq"]:
         out += [f"### {question}", "", answer, ""]
     out += [f"{t['updated_label']}: {LASTMOD}", ""]
@@ -967,6 +991,7 @@ def main() -> None:
                 lines.append(f"- [{display_name(s, items[s], 'en')}]({actor_url(s)}): {ACTORS[s]['en']['desc']} "
                              f"MCP tool: {mcp_tool(s)}. Price: {price_text(prices[s], ACTORS[s].get('unit', {}).get('en', 'results'), 'en')}.")
             lines.append("")
+    lines += [f"## {CUSTOM['en']['title']}", "", f"{CUSTOM['en']['intro']} {CUSTOM['en']['contact'].format(email=CUSTOM_EMAIL)}", ""]
     write("/llms.txt", "\n".join(lines))
 
     # machine-readable catalogue

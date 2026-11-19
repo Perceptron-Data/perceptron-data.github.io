@@ -11,7 +11,7 @@ SECTIONS = [
     {"key": "checks", "level": 2, "actors": ["google-ads-transparency-scraper", "imprint-impressum-website-contact-scraper", "free-website-contact-imprint-scraper"], "en": {"heading": "Company checks", "intro": "Two checks for lists of companies, with a traceable answer per company."}, "de": {"heading": "Firmen-Checks", "intro": "Zwei Checks für Firmenlisten, mit nachvollziehbarer Antwort je Firma."}},
     {"key": "more", "level": 2, "actors": [], "en": {"heading": "More data from public sources", "intro": "Each actor reads public sources – or your own documents – and returns one row per record."}, "de": {"heading": "Weitere Daten aus öffentlichen Quellen", "intro": "Jeder Actor liest öffentliche Quellen – oder Ihre eigenen Dokumente – und liefert eine Zeile je Datensatz."}},
     {"key": "ads-apps", "level": 3, "actors": ["appstore-google-play-intelligence"], "en": {"heading": "Ads & Apps", "intro": "App ratings, versions and App Store reviews from both stores in one table."}, "de": {"heading": "Werbung & Apps", "intro": "Bewertungen, Versionen und App-Store-Rezensionen aus beiden Stores in einer Tabelle."}},
-    {"key": "people-fairs", "level": 3, "actors": ["arbeitsagentur-jobs-scraper", "kununu-employer-data-scraper", "messe-muenchen-exhibitor-list-scraper", "anuga-ism-koelnmesse-exhibitor-scraper"], "en": {"heading": "Hiring & Trade Fairs", "intro": "Who is hiring in Germany, how employees rate employers, who exhibits in Munich and Cologne."}, "de": {"heading": "Personal & Messen", "intro": "Wer in Deutschland einstellt, wie Beschäftigte Arbeitgeber bewerten, wer in München und Köln ausstellt."}},
+    {"key": "people-fairs", "level": 3, "actors": ["arbeitsagentur-jobs-scraper", "xing-jobs-scraper", "kununu-employer-data-scraper", "messe-muenchen-exhibitor-list-scraper", "anuga-ism-koelnmesse-exhibitor-scraper"], "en": {"heading": "Hiring & Trade Fairs", "intro": "Who is hiring in Germany, how employees rate employers, who exhibits in Munich and Cologne."}, "de": {"heading": "Personal & Messen", "intro": "Wer in Deutschland einstellt, wie Beschäftigte Arbeitgeber bewerten, wer in München und Köln ausstellt."}},
     {"key": "registers", "level": 3, "actors": ["eu-tenders-ted-scraper", "german-energy-assets-mastr", "eudamed-medical-device-scraper"], "en": {"heading": "Registers", "intro": "EU tenders, German power plants and EU medical devices from public registers."}, "de": {"heading": "Register", "intro": "EU-Ausschreibungen, deutsche Stromerzeugungsanlagen und EU-Medizinprodukte aus öffentlichen Registern."}},
     {"key": "documents", "level": 3, "actors": ["pdf-to-markdown-converter"], "en": {"heading": "Documents", "intro": "PDF, Word, Excel and PowerPoint to Markdown – tables as Markdown and JSON rows, OCR for scans."}, "de": {"heading": "Dokumente", "intro": "PDF, Word, Excel und PowerPoint in Markdown – Tabellen als Markdown und JSON, OCR für Scans."}},
     {"key": "ai-research", "level": 3, "actors": ["research-agent"], "en": {"heading": "Research for AI", "intro": "Cited passages from the web, EU and German legal texts and open research for AI agents and RAG, with an evidence level for every source."}, "de": {"heading": "Recherche für KI", "intro": "Zitierte Textstellen aus dem Web, aus EU- und Bundesrecht und aus frei zugänglicher Forschung für KI-Agenten und RAG, mit Evidenzstufe je Quelle."}},
@@ -360,6 +360,42 @@ ACTORS = {
             ],
         },
     },
+    "xing-jobs-scraper": {
+        "icon": "logo-256.png", "group": "people-fairs",
+        "unit": {"en": "jobs", "de": "Stellen"},
+        "example": {"keyword": "Python", "location": "Berlin", "includeDetails": True, "maxItems": 30},
+        "en": {
+            "title": "XING Jobs – Perceptron Data",
+            "h1": "XING Jobs",
+            "desc": "Search XING Jobs by keyword and place: one row per job with company, salary and its source, employment type, career level and full text.",
+            "card": "Keyword and place in, one row per job out: company, salary with its source, career level, full text – DACH jobs from XING.",
+            "intro": "XING Jobs lists job offers mostly from Germany, Austria and Switzerland. This actor reads XING's public job pages – no browser, no login, no proxy, one request per second – and takes the same input fields as Arbeitsagentur Jobs, so the same search runs on both sources.",
+            "features": ["The same input fields as Arbeitsagentur Jobs, and the same row field names where XING has the same data", "Salary with its source: the employer's range or XING's own estimate, always marked", "Full job text, career level, discipline, industry, remote option and the company's XING page", "Up to 100 searches in one run with one start fee; a job found twice is stored and charged once", "With a list name, each run delivers only jobs that are new or that XING refreshed since the last run", "Every run writes a free coverage record: XING's count, jobs stored, repeats skipped and why the run stopped"],
+            "uses": ["Monitor new jobs in your cities every morning", "Run the same search on XING and the Arbeitsagentur and merge the rows", "Compare employer salary ranges with XING's estimates", "See which companies are hiring for which roles"],
+            "price_note": "Billed by Apify per stored job plus a start fee per run, charged per GB of memory — cheaper on paid Apify plans. Repeated jobs and unchanged jobs of a list are not charged.",
+            "faq": [
+                ("Where does the data come from?", "From XING's public job pages that its robots.txt allows for all crawlers. No account, no proxy, one request per second; if XING refuses, the run stops and says so. Not affiliated with or endorsed by New Work SE or XING."),
+                ("Are the salaries real?", "The field salarySource says whether the employer published the amount or XING estimated it. Most XING salaries are estimates."),
+                ("How many jobs does one search return?", "XING shows at most 2,000 jobs per search and always searches 20 km around a place. Split large searches by place; up to 100 searches fit in one run."),
+            ],
+            "robots": "noindex, follow",
+        },
+        "de": {
+            "title": "Stellenangebote von XING exportieren – XING Jobs",
+            "h1": "XING-Stellen",
+            "desc": "Stellenangebote von XING exportieren: je Stelle eine Zeile mit Firma, Gehalt und seiner Quelle, Anstellungsart, Karrierestufe und vollem Text.",
+            "card": "Stichwort und Ort rein, je Stelle eine Zeile raus: Firma, Gehalt mit Quelle, Karrierestufe, voller Text – Stellen von XING.",
+            "intro": "XING Jobs führt Stellenangebote vor allem aus Deutschland, Österreich und der Schweiz. Dieser Actor liest die öffentlichen Stellenseiten von XING – ohne Browser, ohne Anmeldung, ohne Proxy, eine Anfrage pro Sekunde – und nimmt dieselben Eingabefelder wie der Actor Arbeitsagentur-Stellen: Dieselbe Suche läuft auf beiden Quellen.",
+            "features": ["Dieselben Eingabefelder wie Arbeitsagentur-Stellen und dieselben Feldnamen in den Zeilen, wo XING dasselbe hat", "Gehalt mit Quelle: Spanne des Arbeitgebers oder Schätzung von XING, immer gekennzeichnet", "Voller Stellentext, Karrierestufe, Fachgebiet, Branche, Remote-Option und die XING-Seite der Firma", "Bis zu 100 Suchen in einem Lauf mit einer Startgebühr; eine doppelt gefundene Stelle wird einmal gespeichert und berechnet", "Mit einem Listennamen liefert jeder Lauf nur Stellen, die neu sind oder die XING seit dem letzten Lauf aufgefrischt hat", "Jeder Lauf schreibt einen kostenlosen Abdeckungs-Bericht: Zahl laut XING, gespeicherte Stellen, übersprungene Dubletten und warum der Lauf endete"],
+            "uses": ["Jeden Morgen neue Stellen in Ihren Städten sehen", "Dieselbe Suche bei XING und der Arbeitsagentur ausführen und die Zeilen zusammenführen", "Gehaltsspannen der Arbeitgeber mit den Schätzungen von XING vergleichen", "Sehen, welche Firmen für welche Aufgaben einstellen"],
+            "price_note": "Abrechnung über Apify je gespeicherter Stelle plus eine Startgebühr je Lauf, berechnet je GB Speicher — günstiger in bezahlten Apify-Tarifen. Doppelte Stellen und unveränderte Stellen einer Liste werden nicht berechnet.",
+            "faq": [
+                ("Woher stammen die Daten?", "Aus den öffentlichen Stellenseiten von XING, die seine robots.txt allen Crawlern erlaubt. Ohne Konto, ohne Proxy, eine Anfrage pro Sekunde; weist XING ab, endet der Lauf mit einer Meldung. Kein Angebot der New Work SE oder von XING."),
+                ("Sind die Gehälter echt?", "Das Feld salarySource sagt, ob der Arbeitgeber den Betrag veröffentlicht oder XING ihn geschätzt hat. Die meisten Gehälter bei XING sind Schätzungen."),
+                ("Wie viele Stellen liefert eine Suche?", "XING zeigt je Suche höchstens 2.000 Stellen und sucht immer 20 km um den Ort. Große Suchen nach Orten aufteilen; bis zu 100 Suchen passen in einen Lauf."),
+            ],
+        },
+    },
     "appstore-google-play-intelligence": {
         "icon": "appstores-256.png", "group": "ads-apps",
         "unit": {"en": "apps", "de": "Apps"},
@@ -650,6 +686,52 @@ HOME = {
     },
 }
 
+# Custom actors (Tom, 19 Nov 2026): contact by his e-mail address "for the beginning" or an issue on an actor's Apify
+# page; no fixed prices, no response times, no support promises. Same wording rules as marke.json → auftragsarbeit.
+CUSTOM_EMAIL = "thom.ehr@gmail.com"
+CUSTOM = {
+    "en": {
+        "title": "Custom Actors",
+        "intro": "Need a source that is not in the catalogue, extra fields or a different delivery? Perceptron Data also "
+                 "builds actors to order.",
+        "build_title": "What we build",
+        "build": "Actors for public sources in Germany, Austria, Switzerland and the EU: job boards, registers, company "
+                 "websites, trade-fair directories and documents.",
+        "steps_title": "How it works",
+        "steps": ["You describe the source and the data you need – in an e-mail or in an issue on the Apify page of "
+                  "one of our actors.",
+                  "You get a quote for that description; there is no price list.",
+                  "We build the actor.",
+                  "Before delivery it passes the same test bench as our published actors: a run like Apify's daily "
+                  "test, a restart in the middle of a run, and simulated blocks and outages of the source.",
+                  "You get it as an actor in your own Apify account."],
+        "not_title": "What we do not do",
+        "not": ["No data behind a login.", "No bypassing of bot protection."],
+        "contact": "Write to {email} with the source and the data you need, or open an issue on the Apify page of one "
+                   "of our actors. Prices are quoted per project.",
+    },
+    "de": {
+        "title": "Actors nach Maß",
+        "intro": "Sie brauchen eine Quelle, die nicht im Katalog steht, zusätzliche Felder oder eine andere Lieferung? "
+                 "Perceptron Data baut Actors auch im Auftrag.",
+        "build_title": "Was wir bauen",
+        "build": "Actors für öffentliche Quellen in Deutschland, Österreich, der Schweiz und der EU: Jobbörsen, Register, "
+                 "Firmen-Websites, Messeverzeichnisse und Dokumente.",
+        "steps_title": "So läuft es ab",
+        "steps": ["Sie beschreiben die Quelle und die Daten, die Sie brauchen – per E-Mail oder in einem Issue auf der "
+                  "Apify-Seite eines unserer Actors.",
+                  "Sie erhalten ein Angebot für diese Beschreibung; eine Preisliste gibt es nicht.",
+                  "Wir bauen den Actor.",
+                  "Vor der Lieferung durchläuft er denselben Prüfstand wie unsere veröffentlichten Actors: einen Lauf "
+                  "wie Apifys Tagestest, einen Neustart mitten im Lauf und nachgestellte Sperren und Ausfälle der Quelle.",
+                  "Sie erhalten ihn als Actor in Ihrem eigenen Apify-Konto."],
+        "not_title": "Was wir nicht tun",
+        "not": ["Keine Daten hinter einem Login.", "Keine Umgehung von Bot-Schutz."],
+        "contact": "Schreiben Sie an {email}, welche Quelle und welche Daten Sie brauchen, oder eröffnen Sie ein Issue "
+                   "auf der Apify-Seite eines unserer Actors. Preise je Projekt nach Angebot.",
+    },
+}
+
 # What an agent would ask for, per actor (agent page table); the input is a working example of the live actor.
 AGENT_TASKS = {
     "imprint-impressum-website-contact-scraper": {
@@ -675,6 +757,8 @@ AGENT_TASKS = {
                                      "de": "Arbeitgeberbewertungen, Gehälter und Benefits von kununu"},
     "arbeitsagentur-jobs-scraper": {"en": "Job ads from the German Federal Employment Agency's Jobbörse",
                                     "de": "Stellenangebote aus der Jobbörse der Bundesagentur für Arbeit"},
+    "xing-jobs-scraper": {"en": "Job listings from XING (DACH), with the salary's source and the full text",
+                          "de": "Stellenangebote von XING (DACH), mit Quelle des Gehalts und vollem Text"},
     "messe-muenchen-exhibitor-list-scraper": {"en": "Exhibitors of Messe München fairs (bauma, IFAT, BAU …)",
                                               "de": "Aussteller der Messe München (bauma, IFAT, BAU …)"},
     "anuga-ism-koelnmesse-exhibitor-scraper": {"en": "Exhibitors of Koelnmesse fairs (Anuga, ISM, imm cologne …)",
