@@ -4,7 +4,7 @@ canonical names, card texts and live prices (with start fee) as the home page.""
 from pathlib import Path
 
 from build import BASE, FLAGSHIPS, T, actor_url, default_memory, display_name, fetch_store, mcp_url, money, price_info
-from content import ACTORS, HOME, SECTIONS
+from content import ACTORS, CUSTOM, CUSTOM_EMAIL, HOME, SECTIONS
 
 
 def price_text(p: dict, unit: str) -> str:
@@ -42,10 +42,13 @@ for section in SECTIONS:
         out.append(f"| {icon} | [{display_name(s, items[s], 'en')}]({BASE}/actors/{s}/) | {a['en']['card']} | "
                    f"{price_text(p, a['unit']['en'])} |")
     out.append("")
+out += [f"## {CUSTOM['en']['title']}", "",
+        f"{CUSTOM['en']['intro']} {CUSTOM['en']['contact'].format(email=CUSTOM_EMAIL)}", ""]
 out += ["### Auf Deutsch", "",
         "**Prüfen statt raten.** Firmen-Checks und Daten aus öffentlichen Quellen: Wer wirbt bei Google und Bing, wer "
         "steht hinter einer Website (USt-IdNr. über die EU-Prüfung VIES), dazu Register, Stellen, Messen, Dokumente und "
         "Recherche für KI — [zur deutschen Übersicht](https://perceptron-data.github.io/de/).", "",
+        f"**{CUSTOM['de']['title']}:** {CUSTOM['de']['contact'].format(email=CUSTOM_EMAIL)}", "",
         "<sub>[Impressum](https://perceptron-data.github.io/impressum/) · "
         "[Datenschutz](https://perceptron-data.github.io/datenschutz/) · Independent provider, not affiliated with Apify "
         "or the data sources named. Bug reports are welcome.</sub>", ""]
