@@ -414,6 +414,140 @@
   "passed": 5,
   "since": "2026-10-25"
  },
+ "dach-eu-data-source-finder": {
+  "checked": 5,
+  "date": "2026-11-22",
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "Zeile mit query = https://exhibitors.bauma.de/, rank = 1",
+      "matched ist wahr",
+      "actorUrl = https://apify.com/perceptr0n/messe-muenchen-exhibitor-list-…",
+      "whyThisMatch mit mindestens 1 Einträgen"
+     ],
+     "en": [
+      "row with query = https://exhibitors.bauma.de/, rank = 1",
+      "matched is true",
+      "actorUrl = https://apify.com/perceptr0n/messe-muenchen-exhibitor-list-…",
+      "whyThisMatch has at least 1 entries"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "bauma-address-leads-to-messe-muenchen",
+    "title": "The address of bauma's exhibitor directory leads to the Messe München exhibitor actor as the first match, with the reason for the match",
+    "title_de": "Die Adresse des bauma-Ausstellerverzeichnisses führt als erster Treffer zum Aussteller-Actor der Messe München, mit dem Grund für den Treffer"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit query = anuga exhibitor list, rank = 1",
+      "matched ist wahr",
+      "actorUrl = https://apify.com/perceptr0n/anuga-ism-koelnmesse-exhibitor…"
+     ],
+     "en": [
+      "row with query = anuga exhibitor list, rank = 1",
+      "matched is true",
+      "actorUrl = https://apify.com/perceptr0n/anuga-ism-koelnmesse-exhibitor…"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "anuga-leads-to-koelnmesse",
+    "title": "“anuga exhibitor list” leads to the Koelnmesse exhibitor actor as the first match",
+    "title_de": "„anuga exhibitor list“ führt als erster Treffer zum Aussteller-Actor der Koelnmesse"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit query = MaStR solar plants, rank = 1",
+      "matched ist wahr",
+      "actorUrl = https://apify.com/perceptr0n/german-energy-assets-mastr"
+     ],
+     "en": [
+      "row with query = MaStR solar plants, rank = 1",
+      "matched is true",
+      "actorUrl = https://apify.com/perceptr0n/german-energy-assets-mastr"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "mastr-leads-to-the-energy-register",
+    "title": "“MaStR solar plants” leads to the actor for the Marktstammdatenregister as the first match",
+    "title_de": "„MaStR solar plants“ führt als erster Treffer zum Actor für das Marktstammdatenregister"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit query = weather forecast for Berlin",
+      "mindestens 1 Zeilen",
+      "matched ist falsch",
+      "actorUrl leer",
+      "note gefüllt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "row with query = weather forecast for Berlin",
+      "at least 1 rows",
+      "matched is false",
+      "actorUrl empty",
+      "note present",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "a-source-without-an-actor-gets-no-match",
+    "title": "A request no actor covers (a weather forecast) gets “no match” and a note – no actor is passed off as fitting",
+    "title_de": "Eine Anfrage, die kein Actor abdeckt (eine Wettervorhersage), bekommt „kein Treffer“ und einen Hinweis – kein Actor wird als passend ausgegeben"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit matched = true",
+      "mindestens 3 Zeilen",
+      "pricing gefüllt",
+      "pricingSource im Format ^Apify Store API, read 20\\d\\d-\\d\\d-\\d\\dT",
+      "actorId gefüllt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "row with matched = true",
+      "at least 3 rows",
+      "pricing present",
+      "pricingSource matches ^Apify Store API, read 20\\d\\d-\\d\\d-\\d\\dT",
+      "actorId present",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "every-match-with-price-from-the-store",
+    "title": "Every match names the actor's price, read from the Apify Store during the run, with the time of reading",
+    "title_de": "Jeder Treffer nennt den Preis des Actors, während des Laufs aus dem Apify Store gelesen, mit der Lesezeit"
+   }
+  ],
+  "history": [
+   {
+    "checked": 5,
+    "date": "2026-11-22",
+    "passed": 5
+   }
+  ],
+  "passed": 5,
+  "since": "2026-11-22"
+ },
  "free-website-contact-imprint-scraper": {
   "checked": 4,
   "date": "2026-11-22",
