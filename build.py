@@ -239,7 +239,7 @@ def price_html(p: dict, unit: str, lang: str) -> str:
     return f'<span class="price">{main}</span> <span class="muted">{fee}</span>'
 
 
-SINGULAR = {"companies checked": "company checked", "queries": "query", "Websites": "Website", "Fragen": "Frage",
+SINGULAR = {"companies checked": "company checked", "companies": "company", "Firmen": "Firma", "queries": "query", "Websites": "Website", "Fragen": "Frage",
             "Seiten": "Seite", "geprüfte Firmen": "geprüfte Firma", "Datensätze": "Datensatz", "Stellen": "Stelle",
             "Ausschreibungen": "Ausschreibung", "Anlagen": "Anlage", "Anfragen": "Anfrage", "Apps": "App",
             "Firmenzeilen": "Firmenzeile", "rows in merge or dedupe mode": "row in merge or dedupe mode",
