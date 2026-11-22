@@ -548,6 +548,108 @@
   "passed": 5,
   "since": "2026-11-22"
  },
+ "eu-tenders-ted-scraper": {
+  "checked": 3,
+  "date": "2026-11-22",
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "mindestens 2 Zeilen",
+      "publicationNumber ist eines von 756775-2026, 757317-2026",
+      "buyerCountry = DEU",
+      "publicationDate = 2026-11-02",
+      "noticeUrl im Format ^https://ted\\.europa\\.eu/en/notice/-/detail/\\d+-2026$",
+      "kein publicationNumber doppelt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 2 rows",
+      "publicationNumber is one of 756775-2026, 757317-2026",
+      "buyerCountry = DEU",
+      "publicationDate = 2026-11-02",
+      "noticeUrl matches ^https://ted\\.europa\\.eu/en/notice/-/detail/\\d+-2026$",
+      "no duplicate publicationNumber",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 4,
+    "slug": "two-notices-by-publication-number",
+    "title": "Two notices asked for by their publication numbers come back, each once, published on 2 November 2026, with the link to the notice on ted.europa.eu",
+    "title_de": "Zwei Bekanntmachungen, nach ihrer Veröffentlichungsnummer bestellt, kommen je einmal zurück, veröffentlicht am 2. November 2026, mit dem Link zur Bekanntmachung auf ted.europa.eu"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit publicationNumber = 756775-2026",
+      "buyerName enthält „Fraunhofer-Gesellschaft“",
+      "buyerCity = München",
+      "noticeType = cn-standard",
+      "procedureType = open",
+      "contractNature = services",
+      "cpvMain = 72227000",
+      "tenderDeadline = 2026-11-30"
+     ],
+     "en": [
+      "row with publicationNumber = 756775-2026",
+      "buyerName contains “Fraunhofer-Gesellschaft”",
+      "buyerCity = München",
+      "noticeType = cn-standard",
+      "procedureType = open",
+      "contractNature = services",
+      "cpvMain = 72227000",
+      "tenderDeadline = 2026-11-30"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 4,
+    "slug": "contract-notice-fraunhofer",
+    "title": "Known contract notice 756775-2026: buyer Fraunhofer-Gesellschaft in München, open procedure for services, main CPV code 72227000, deadline for tenders 30 November 2026",
+    "title_de": "Bekannte Auftragsbekanntmachung 756775-2026: Auftraggeber Fraunhofer-Gesellschaft in München, offenes Verfahren für Dienstleistungen, Haupt-CPV-Code 72227000, Angebotsfrist 30. November 2026"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit publicationNumber = 757317-2026",
+      "buyerName = Universitätsklinikum Düsseldorf",
+      "buyerCity = Düsseldorf",
+      "noticeType = can-standard",
+      "winnerName = Plensys Kft.",
+      "cpvCodes mit mindestens 2 Einträgen"
+     ],
+     "en": [
+      "row with publicationNumber = 757317-2026",
+      "buyerName = Universitätsklinikum Düsseldorf",
+      "buyerCity = Düsseldorf",
+      "noticeType = can-standard",
+      "winnerName = Plensys Kft.",
+      "cpvCodes has at least 2 entries"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 4,
+    "slug": "award-notice-names-the-winner",
+    "title": "Known award notice 757317-2026: buyer Universitätsklinikum Düsseldorf, and the company that won the contract is named",
+    "title_de": "Bekannte Vergabebekanntmachung 757317-2026: Auftraggeber Universitätsklinikum Düsseldorf, und die Firma, die den Zuschlag erhielt, ist genannt"
+   }
+  ],
+  "history": [
+   {
+    "checked": 3,
+    "date": "2026-11-22",
+    "passed": 3
+   }
+  ],
+  "passed": 3,
+  "since": "2026-11-22"
+ },
  "free-website-contact-imprint-scraper": {
   "checked": 4,
   "date": "2026-11-22",
