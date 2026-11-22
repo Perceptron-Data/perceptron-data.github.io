@@ -12,51 +12,12 @@ SECTIONS = [
     {"key": "more", "level": 2, "actors": [], "en": {"heading": "More data from public sources", "intro": "Each actor reads public sources – or your own documents – and returns one row per record."}, "de": {"heading": "Weitere Daten aus öffentlichen Quellen", "intro": "Jeder Actor liest öffentliche Quellen – oder Ihre eigenen Dokumente – und liefert eine Zeile je Datensatz."}},
     {"key": "ads-apps", "level": 3, "actors": ["appstore-google-play-intelligence"], "en": {"heading": "Ads & Apps", "intro": "App ratings, versions and App Store reviews from both stores in one table."}, "de": {"heading": "Werbung & Apps", "intro": "Bewertungen, Versionen und App-Store-Rezensionen aus beiden Stores in einer Tabelle."}},
     {"key": "people-fairs", "level": 3, "actors": ["arbeitsagentur-jobs-scraper", "xing-jobs-scraper", "hiring-companies-germany", "kununu-employer-data-scraper", "messe-muenchen-exhibitor-list-scraper", "anuga-ism-koelnmesse-exhibitor-scraper"], "en": {"heading": "Hiring & Trade Fairs", "intro": "Who is hiring in Germany, how employees rate employers, who exhibits in Munich and Cologne."}, "de": {"heading": "Personal & Messen", "intro": "Wer in Deutschland einstellt, wie Beschäftigte Arbeitgeber bewerten, wer in München und Köln ausstellt."}},
-    {"key": "registers", "level": 3, "actors": ["german-insolvency-handelsregister-monitor", "eu-tenders-ted-scraper", "german-energy-assets-mastr", "eudamed-medical-device-scraper"], "en": {"heading": "Registers", "intro": "Insolvency and register notices for German companies, EU tenders and German power plants – from public registers."}, "de": {"heading": "Register", "intro": "Insolvenz- und Registerbekanntmachungen zu deutschen Firmen, EU-Ausschreibungen und deutsche Stromerzeugungsanlagen – aus öffentlichen Registern."}},
+    {"key": "registers", "level": 3, "actors": ["german-insolvency-handelsregister-monitor", "eu-tenders-ted-scraper", "german-energy-assets-mastr"], "en": {"heading": "Registers", "intro": "Insolvency and register notices for German companies, EU tenders and German power plants – from public registers."}, "de": {"heading": "Register", "intro": "Insolvenz- und Registerbekanntmachungen zu deutschen Firmen, EU-Ausschreibungen und deutsche Stromerzeugungsanlagen – aus öffentlichen Registern."}},
     {"key": "documents", "level": 3, "actors": ["pdf-to-markdown-converter"], "en": {"heading": "Documents", "intro": "PDF, Word, Excel and PowerPoint to Markdown – tables as Markdown and JSON rows, OCR for scans."}, "de": {"heading": "Dokumente", "intro": "PDF, Word, Excel und PowerPoint in Markdown – Tabellen als Markdown und JSON, OCR für Scans."}},
-    {"key": "ai-research", "level": 3, "actors": ["research-agent"], "en": {"heading": "Research for AI", "intro": "Cited passages from the web, EU and German legal texts and open research for AI agents and RAG, with an evidence level for every source."}, "de": {"heading": "Recherche für KI", "intro": "Zitierte Textstellen aus dem Web, aus EU- und Bundesrecht und aus frei zugänglicher Forschung für KI-Agenten und RAG, mit Evidenzstufe je Quelle."}},
     {"key": "tools", "level": 3, "actors": ["merge-dedupe-datasets-company-leads", "dach-eu-data-source-finder"], "en": {"heading": "Tools", "intro": "Merge datasets and remove duplicates – or let the free finder name the actor that fits, with fields and run cost."}, "de": {"heading": "Werkzeuge", "intro": "Datasets zusammenführen und Dubletten entfernen – oder der kostenlose Finder nennt den passenden Actor, mit Feldern und Kosten."}},
 ]
 
 ACTORS = {
-    "research-agent": {
-        "icon": "research-agent-256.png", "group": "ai-research",
-        "unit": {"en": "questions", "de": "Fragen"},
-        "example": {"query": "What obligations do providers of high-risk AI systems have under the EU AI Act?", "sources": ["web", "law"], "preferEvidence": "official_first"},
-        "en": {
-            "title": "Research Agent – Perceptron Data",
-            "h1": "Research Agent",
-            "desc": "Ask a question, get cited passages from Google, EU and German law texts, open-access papers and Wikipedia, each with an evidence level and a freshness check.",
-            "card": "A question in, ranked passages out – each with its source and an evidence level; EU and German law texts included.",
-            "intro": "One call searches the sources you pick (Google web and news, EU and German law texts, open-access research, Wikipedia, Stack Overflow, Hacker News and GitHub), reads the pages and PDFs and keeps the passages that match the question most closely. Each source gets an evidence level from fixed rules, figures are compared across independent sites, and old sources and wording such as “amended by” are flagged, so your model can judge how far to trust its context.",
-            "features": ["Evidence level for every source, set by domain and source rules – official, academic, preprint, institution, reference, news, documentation, community or commercial", "Figures compared across independent sites: consistent, single source or conflicting, with the sentences side by side", "Freshness check: age of the cited sources and wording such as “amended by”, “repealed” or “postponed” – a page gets a date only when it states one for itself", "EU law from the EU Publications Office in its current consolidated version (24 languages) and German federal law from gesetze-im-internet.de – name a provision and it is ranked first", "Open-access papers read in full (top 3 per question), not just the abstract", "Pages that refuse automated requests, do not answer or need JavaScript are read through Apify's Web Fetch, rendered in a browser where needed", "Ready-to-paste context with numbered citations, or one row per passage with a stable ID for vector databases"],
-            "uses": ["Grounding for AI agents and chatbots (MCP, LangChain, n8n, API)", "Compliance assistants that must quote the law text", "Checking figures before they reach a report", "Feeding a vector database with cited, deduplicated chunks"],
-            "price_note": "Billed by Apify per answered question plus a start fee per run (per GB of memory); each further Google search beyond the included one (news, legal-text search, second round) is billed separately. Questions without relevant results, answers without Google (status partial), skipped or failed questions and the example question prefilled in the form are not charged.",
-            "faq": [
-                ("Is a language model involved?", "No. Search, ranking and all checks follow fixed rules, and nothing is sent to an AI provider."),
-                ("What is not charged?", "Questions without relevant results, answers given without Google (status partial), skipped or failed questions and the example question prefilled in the form."),
-                ("How is the quality checked?", "Every Sunday a watchdog re-runs all ten published examples on the live actor and checks the results – for legal questions, for example, that the named provision is cited first from the law text itself. On 12 October 2026, 20 passages from these runs were compared with the pages they cite: 108 of 116 fields matched, and the misses are published with their causes."),
-                ("What are the limits?", "The checks are signals, not verdicts. Evidence levels come from domain rules, so a site missing from the lists falls back to commercial; a page gets a date only when it states one for itself. Pages the agent cannot read itself – they refuse automated requests, do not answer or need JavaScript – are read through Apify's Web Fetch (JavaScript pages rendered in a browser there, billed by Apify on your account) or else listed with the reason; PDFs are not sent there. Google returns at most 10 results per search."),
-            ],
-            "robots": "noindex, follow",
-        },
-        "de": {
-            "title": "Websuche mit Quellen für KI-Agenten und RAG – Research Agent",
-            "h1": "Research Agent",
-            "desc": "Frage stellen, zitierte Textstellen aus Google, EU- und Bundesrecht, offenen Fachartikeln und Wikipedia erhalten – mit Evidenzstufe und Aktualitätsprüfung.",
-            "card": "Frage rein, sortierte Textstellen raus – jede mit Quelle und Evidenzstufe; EU- und Bundesrecht inklusive.",
-            "intro": "Ein Aufruf durchsucht die Quellen, die Sie wählen (Google-Web und -Nachrichten, EU- und Bundesrecht, frei zugängliche Forschung, Wikipedia, Stack Overflow, Hacker News und GitHub), liest Seiten und PDFs und behält die Textstellen, die am genauesten zur Frage passen. Jede Quelle bekommt nach festen Regeln eine Evidenzstufe, Zahlen werden über unabhängige Seiten abgeglichen, alte Quellen und Formulierungen wie „geändert durch“ werden markiert – so kann Ihr Modell einschätzen, wie weit es dem Kontext trauen kann.",
-            "features": ["Evidenzstufe je Quelle nach Domain- und Quellenregeln – amtlich, wissenschaftlich, Preprint, Institution, Nachschlagewerk, Nachrichten, Dokumentation, Community oder kommerziell", "Zahlen über unabhängige Seiten abgeglichen: übereinstimmend, nur eine Quelle oder widersprüchlich – mit den Sätzen nebeneinander", "Aktualitäts-Check: Alter der zitierten Quellen und Formulierungen wie „geändert durch“, „aufgehoben“ oder „verschoben“ – ein Datum bekommt eine Seite nur, wenn sie es selbst nennt", "EU-Recht vom Amt für Veröffentlichungen der EU in der aktuellen konsolidierten Fassung (24 Sprachen) und Bundesrecht von gesetze-im-internet.de – genannte Vorschriften stehen an erster Stelle", "Frei zugängliche Fachartikel vollständig gelesen (die ersten 3 je Frage), nicht nur die Zusammenfassung", "Seiten, die automatische Abrufe abweisen, nicht antworten oder JavaScript brauchen, liest der Agent über Apifys Web Fetch, wenn nötig im Browser dargestellt", "Fertiger Kontext mit nummerierten Quellen oder eine Zeile je Textstelle mit stabiler ID für Vektordatenbanken"],
-            "uses": ["Fundierte Antworten für KI-Agenten und Chatbots (MCP, LangChain, n8n, API)", "Compliance-Assistenten, die den Gesetzestext zitieren müssen", "Zahlen prüfen, bevor sie in einen Bericht gehen", "Vektordatenbanken mit zitierten Textabschnitten ohne Beinahe-Dubletten füllen"],
-            "price_note": "Abrechnung über Apify je beantworteter Frage plus Startgebühr je Lauf (je GB Speicher); jede weitere Google-Suche über die enthaltene hinaus (Nachrichten, Rechtstext-Suche, zweite Runde) wird einzeln berechnet. Fragen ohne passende Treffer, Antworten ohne Google (Status partial), übersprungene oder fehlgeschlagene Fragen und die im Formular vorausgefüllte Beispielfrage werden nicht berechnet.",
-            "faq": [
-                ("Wird ein Sprachmodell verwendet?", "Nein. Suche, Rangfolge und alle Prüfungen folgen festen Regeln, und nichts geht an einen KI-Anbieter."),
-                ("Was wird nicht berechnet?", "Fragen ohne passende Treffer, Antworten ohne Google (Status partial), übersprungene oder fehlgeschlagene Fragen und die im Formular vorausgefüllte Beispielfrage."),
-                ("Wie wird die Qualität geprüft?", "Jeden Sonntag führt ein Wachposten alle zehn veröffentlichten Beispiele mit dem Live-Actor neu aus und prüft die Ergebnisse – bei Rechtsfragen etwa, ob die genannte Vorschrift aus dem Gesetzestext selbst zuerst zitiert wird. Am 12. Oktober 2026 wurden 20 Textstellen aus diesen Läufen mit den zitierten Seiten verglichen: 108 von 116 Feldern stimmten, die Abweichungen sind mit Ursache veröffentlicht."),
-                ("Wo liegen die Grenzen?", "Die Prüfungen sind Hinweise, keine Urteile. Evidenzstufen folgen Domain-Regeln, eine Seite, die in keiner Liste steht, fällt auf kommerziell zurück; Ein Datum bekommt eine Seite nur, wenn sie es selbst nennt. Seiten, die der Agent selbst nicht lesen kann – sie sperren automatische Abrufe, antworten nicht oder brauchen JavaScript –, liest er über Apifys Web Fetch (JavaScript-Seiten dort im Browser, Apify rechnet über das eigene Konto ab) oder führt sie mit Grund auf; PDFs gehen nicht dorthin. Google liefert höchstens 10 Treffer je Suche."),
-            ],
-        },
-    },
     "pdf-to-markdown-converter": {
         "icon": "doc-markdown-256.png", "group": "documents",
         "unit": {"en": "pages", "de": "Seiten"},
@@ -173,7 +134,7 @@ ACTORS = {
         },
     },
     "free-website-contact-imprint-scraper": {
-        "icon": "impressum-256.png", "group": "checks",
+        "icon": "website-contact-256.png", "group": "checks",
         "unit": {"en": "websites", "de": "Websites"},
         "example": {"websites": ["liebherr.com", "frischpack.de", "tuwien.at"]},
         "en": {
@@ -361,7 +322,7 @@ ACTORS = {
         },
     },
     "xing-jobs-scraper": {
-        "icon": "logo-256.png", "group": "people-fairs",
+        "icon": "xing-jobs-256.png", "group": "people-fairs",
         "unit": {"en": "jobs", "de": "Stellen"},
         "example": {"keyword": "Python", "location": "Berlin", "includeDetails": True, "maxItems": 30},
         "en": {
@@ -397,7 +358,7 @@ ACTORS = {
         },
     },
     "hiring-companies-germany": {
-        "icon": "logo-256.png", "group": "people-fairs",
+        "icon": "hiring-companies-256.png", "group": "people-fairs",
         "unit": {"en": "companies", "de": "Firmen"},
         "example": {"keyword": "Elektriker", "location": "Berlin", "maxCompanies": 10},
         "en": {
@@ -406,7 +367,7 @@ ACTORS = {
             "desc": "Job and place in, one row per company that is hiring: open positions from the Jobbörse, its own website confirmed by its legal notice, contact data.",
             "card": "Job and place in, one row per hiring company out: open positions, own website confirmed by its Impressum, contact data.",
             "intro": "Give a job and a place, get one row per company that is hiring for it: open positions, job titles and locations from the Jobbörse of the Bundesagentur für Arbeit, plus the company's own website and the contact data of its legal notice (Impressum). The job ads name the employer, never its website – so every candidate website is read like an imprint check and counts only when its legal notice names the company. Temp agencies and private recruiters are left out by default.",
-            "features": ["One row per company with its open positions, job titles and locations – the companies with the most open positions first", "The website is searched in the ads, in Wikidata and under domains built from the name, and confirmed by its legal notice; a guessed domain of a namesake is not passed off as the company's", "websiteStatus says how sure the website is: confirmed, group (the legal notice names another company of the same group), not_confirmed or not_found", "From the legal notice: legal name, address, phone, e-mail, register number and the EU VAT ID checked against VIES (Swiss UIDs cannot be checked there)", "With a list name, each run delivers only companies that were not in the list before", "Every row lists the websites that were checked, each with its result"],
+            "features": ["One row per company with its open positions, job titles and locations – the companies with the most open positions first", "One row also when the ads write the company in several ways – with or without its legal form, with a branch behind it; companySpellings lists what the ads wrote", "The website is searched in the ads, in Wikidata and under domains built from the name, and confirmed by its legal notice; a guessed domain of a namesake is not passed off as the company's", "websiteStatus says how sure the website is: confirmed, group (the legal notice names another company of the same group), not_confirmed or not_found", "From the legal notice: legal name, address, phone, e-mail, register number and the EU VAT ID checked against VIES (Swiss UIDs cannot be checked there)", "With a list name, each run delivers only companies that were not in the list before", "Every row lists the websites that were checked, each with its result"],
             "uses": ["Staffing and recruiting sales: who is hiring for which roles in your region, with the phone number from the company's legal notice", "Lead lists by trade and place: companies with open positions, a confirmed website and contact data", "A weekly list of companies that started hiring: ads of the last 7 days, a list name and a weekly schedule", "AI agents: two text fields in, rows with the evidence for every website out"],
             "price_note": "Billed by Apify per stored company plus a start fee per run, charged per GB of memory — cheaper on paid Apify plans. Temp agencies that were left out, companies already in your list and companies the run did not reach are not charged. Rows of companies whose website could not be confirmed are charged; their status says so.",
             "faq": [
@@ -414,6 +375,7 @@ ACTORS = {
                 ("What does group mean for my outreach?", "The legal notice belongs to another company of the same group – usually the parent. Its phone number and address reach the group, not necessarily the hiring branch."),
                 ("Where does the data come from?", "The job ads come from the Jobbörse of the Bundesagentur für Arbeit; company data from the companies' own public legal notices, Wikidata and the EU's VIES service. Not affiliated with or endorsed by the Bundesagentur für Arbeit."),
                 ("Are names of persons included?", "Not by default. Names of managing directors, personal e-mail addresses and mobile numbers from the ads are left out unless includePersonNames is on."),
+                ("How do I match the rows of two runs?", "By companyKey: the company's name without its legal form, the same for every spelling and in every run. A list name (listId) makes each run deliver only companies that were not in the list before."),
             ],
             "robots": "noindex, follow",
         },
@@ -423,7 +385,7 @@ ACTORS = {
             "desc": "Beruf und Ort rein, je einstellender Firma eine Zeile raus: offene Stellen aus der Jobbörse, eigene Website per Impressum bestätigt, Kontaktdaten.",
             "card": "Beruf und Ort rein, je einstellender Firma eine Zeile raus: offene Stellen, eigene Website per Impressum bestätigt, Kontaktdaten.",
             "intro": "Beruf und Ort rein, je einstellender Firma eine Zeile raus: offene Stellen, Stellentitel und Orte aus der Jobbörse der Bundesagentur für Arbeit, dazu die eigene Website der Firma und die Kontaktdaten aus ihrem Impressum. Die Stellenanzeigen nennen den Arbeitgeber, nie seine Website – deshalb wird jede mögliche Website wie bei einer Impressumsprüfung gelesen und zählt nur, wenn ihr Impressum die Firma nennt. Zeitarbeit und private Vermittler fallen standardmäßig heraus.",
-            "features": ["Je Firma eine Zeile mit offenen Stellen, Stellentiteln und Orten – die Firmen mit den meisten offenen Stellen zuerst", "Die Website wird in den Anzeigen, in Wikidata und unter aus dem Namen gebildeten Domains gesucht und über ihr Impressum bestätigt; die geratene Domain eines Namensvetters wird nicht als die der Firma ausgegeben", "websiteStatus sagt, wie sicher die Website ist: confirmed, group (das Impressum nennt eine andere Firma derselben Gruppe), not_confirmed oder not_found", "Aus dem Impressum: Firmenname, Adresse, Telefon, E-Mail, Registernummer und die gegen VIES geprüfte EU-USt-IdNr. (Schweizer UIDs lassen sich dort nicht prüfen)", "Mit einem Listennamen liefert jeder Lauf nur Firmen, die vorher noch nicht in der Liste standen", "Jede Zeile nennt die geprüften Websites, jede mit ihrem Ergebnis"],
+            "features": ["Je Firma eine Zeile mit offenen Stellen, Stellentiteln und Orten – die Firmen mit den meisten offenen Stellen zuerst", "Eine Zeile auch dann, wenn die Anzeigen die Firma verschieden schreiben – mit oder ohne Rechtsform, mit Niederlassung dahinter; companySpellings nennt die Schreibweisen", "Die Website wird in den Anzeigen, in Wikidata und unter aus dem Namen gebildeten Domains gesucht und über ihr Impressum bestätigt; die geratene Domain eines Namensvetters wird nicht als die der Firma ausgegeben", "websiteStatus sagt, wie sicher die Website ist: confirmed, group (das Impressum nennt eine andere Firma derselben Gruppe), not_confirmed oder not_found", "Aus dem Impressum: Firmenname, Adresse, Telefon, E-Mail, Registernummer und die gegen VIES geprüfte EU-USt-IdNr. (Schweizer UIDs lassen sich dort nicht prüfen)", "Mit einem Listennamen liefert jeder Lauf nur Firmen, die vorher noch nicht in der Liste standen", "Jede Zeile nennt die geprüften Websites, jede mit ihrem Ergebnis"],
             "uses": ["Vertrieb für Personaldienstleister und Recruiting: wer in Ihrer Region für welche Aufgaben einstellt, mit der Telefonnummer aus dem Impressum der Firma", "Lead-Listen nach Beruf und Ort: Firmen mit offenen Stellen, bestätigter Website und Kontaktdaten", "Wöchentliche Liste der Firmen, die neu einstellen: Anzeigen der letzten 7 Tage, ein Listenname und ein wöchentlicher Zeitplan", "KI-Agenten: zwei Textfelder rein, Zeilen mit dem Beleg für jede Website raus"],
             "price_note": "Abrechnung über Apify je gespeicherter Firma plus eine Startgebühr je Lauf, berechnet je GB Speicher — günstiger in bezahlten Apify-Tarifen. Ausgelassene Zeitarbeitsfirmen, Firmen, die schon in Ihrer Liste stehen, und Firmen, die der Lauf nicht mehr erreicht hat, werden nicht berechnet. Zeilen von Firmen ohne bestätigte Website werden berechnet; ihr Status sagt es.",
             "faq": [
@@ -431,6 +393,7 @@ ACTORS = {
                 ("Was bedeutet group für die Ansprache?", "Das Impressum gehört einer anderen Firma derselben Gruppe – meist der Mutter. Telefonnummer und Adresse erreichen die Gruppe, nicht unbedingt die einstellende Niederlassung."),
                 ("Woher stammen die Daten?", "Die Stellenanzeigen stammen aus der Jobbörse der Bundesagentur für Arbeit, die Firmendaten aus den öffentlichen Impressen der Firmen, aus Wikidata und aus dem EU-Register VIES. Kein Angebot der Bundesagentur für Arbeit."),
                 ("Sind Namen von Personen enthalten?", "Standardmäßig nicht. Namen von Geschäftsführern, persönliche E-Mail-Adressen und Mobilnummern aus den Anzeigen bleiben weg, solange includePersonNames aus ist."),
+                ("Wie ordne ich die Zeilen zweier Läufe einander zu?", "Über companyKey: den Namen der Firma ohne Rechtsform, gleich für jede Schreibweise und in jedem Lauf. Mit einem Listennamen (listId) liefert jeder Lauf nur Firmen, die vorher nicht in der Liste standen."),
             ],
         },
     },
@@ -572,38 +535,6 @@ ACTORS = {
             ],
         },
     },
-    "eudamed-medical-device-scraper": {
-        "icon": "eudamed-256.png", "group": "registers",
-        "unit": {"en": "records", "de": "Datensätze"},
-        "example": {"mode": "devices", "risk_class": "refdata.risk-class.class-iii", "max_items": 200},
-        "en": {
-            "title": "EUDAMED Medical Devices – Perceptron Data",
-            "h1": "EUDAMED Medical Devices",
-            "desc": "Export EUDAMED records as a table: medical devices with UDI-DI and risk class, manufacturers with SRN and contact, notified-body certificates.",
-            "card": "Filters in, one row per device, manufacturer or certificate out – who makes which medical devices in the EU.",
-            "intro": "EUDAMED is the EU's public database for medical devices under the MDR and IVDR. This actor exports devices, economic operators and notified-body certificates and resolves its codes into plain language – risk class, market status, sterility, CMR substances, market availability per country and warnings.",
-            "features": ["Devices, manufacturers, importers, authorised representatives, certificates", "Risk class, market status, sterility, latex, CMR", "Market availability per EU country", "CND codes and 423 warning texts in plain language", "Filters by risk class, status, Primary DI, Basic UDI-DI, manufacturer SRN, company name, trade name and country"],
-            "uses": ["Regulatory monitoring", "Competitor product mapping", "Market access research", "Supplier and manufacturer checks"],
-            "faq": [
-                ("Can I download EUDAMED data directly?", "There is no documented API. The EUDAMED portal has its own download of public data; this actor reads the same public data as the EUDAMED website and adds filters, full device profiles and codes resolved to plain language."),
-                ("How fast is it?", "EUDAMED's own speed varies during the day; the actor paces itself and stops cleanly before your run timeout."),
-            ],
-            "robots": "noindex, follow",
-        },
-        "de": {
-            "title": "EUDAMED-Datenbank durchsuchen & exportieren – Hersteller",
-            "h1": "EUDAMED-Medizinprodukte",
-            "desc": "EUDAMED als Excel: Medizinprodukte mit UDI-DI, Risikoklasse, Marktstatus und Marktverfügbarkeit, Hersteller mit SRN und Zertifikate Benannter Stellen.",
-            "card": "Filter rein, je Produkt, Hersteller oder Zertifikat eine Zeile raus – wer in der EU welche Medizinprodukte herstellt.",
-            "intro": "EUDAMED ist die öffentliche EU-Datenbank für Medizinprodukte nach MDR und IVDR. Dieser Actor exportiert Produkte, Wirtschaftsakteure und Zertifikate Benannter Stellen und übersetzt die Codes in Klartext – Risikoklasse, Marktstatus, Sterilität, CMR-Stoffe, Marktverfügbarkeit je Land und Warnhinweise.",
-            "features": ["Produkte, Hersteller, Importeure, Bevollmächtigte, Zertifikate", "Risikoklasse, Marktstatus, Sterilität, Latex, CMR", "Marktverfügbarkeit je EU-Land", "CND-Codes und 423 Warnhinweise im Klartext", "Filter nach Risikoklasse, Status, Primary DI, Basic UDI-DI, Hersteller-SRN, Firmenname, Handelsname und Land"],
-            "uses": ["Regulatorische Marktbeobachtung", "Produkte von Wettbewerbern erfassen", "Marktzugang recherchieren", "Hersteller und Lieferanten prüfen"],
-            "faq": [
-                ("Kann ich EUDAMED-Daten direkt herunterladen?", "Eine dokumentierte API gibt es nicht. Das EUDAMED-Portal bietet einen eigenen Download öffentlicher Daten; der Actor liest dieselben öffentlichen Daten wie die EUDAMED-Website und ergänzt Filter, vollständige Produktprofile und Codes im Klartext."),
-                ("Wie schnell ist er?", "EUDAMED selbst schwankt im Tagesverlauf; der Actor drosselt sich und endet sauber vor dem Zeitlimit des Laufs."),
-            ],
-        },
-    },
     "merge-dedupe-datasets-company-leads": {
         "icon": "dataset-merge-dedupe-256.png", "group": "tools",
         # The Store's primary event is the row in merge and dedupe mode; a row in company mode has its own event.
@@ -683,28 +614,62 @@ ACTORS = {
 # ------------------------------------------------------------------ home page and agent page (13 Oct 2026)
 # Every number here is measured and listed in the claim register (AUSSAGENREGISTER K20, K27–K30).
 
-FLAGSHIPS = ["imprint-impressum-website-contact-scraper", "research-agent", "google-ads-transparency-scraper",
-             "pdf-to-markdown-converter"]
+# Withdrawn actors (Tom, 22 Nov 2026). They are still public on Apify until Tom takes them down, and the daily build
+# reads the Store: without this list they would come back as cards without texts. build.py drops them everywhere –
+# home page, /agents/, /quality/, llms.txt, catalog.json, sitemap and the organisation profile.
+RETIRED = ("eudamed-medical-device-scraper", "research-agent")
+# Actors whose image starts a browser (their Dockerfiles, checked 22 Nov 2026). Every other actor reads its source over
+# plain HTTP; the "Built by" section counts them from this list and the live catalogue.
+BROWSER_ACTORS = ("kununu-employer-data-scraper",)
+
+# The four actors shown first (Tom, 22 Nov 2026) – also the tools of the ready-made MCP address on /agents/.
+FLAGSHIPS = ["merge-dedupe-datasets-company-leads", "german-insolvency-handelsregister-monitor",
+             "imprint-impressum-website-contact-scraper", "arbeitsagentur-jobs-scraper"]
 
 HOME = {
     "en": {
-        "lead": "Paste website domains and get the company behind each one: legal name, register number and VAT "
-                "number, checked live against the EU's VIES register. Ask a question and get cited passages with an "
-                "evidence level for your LLM. Every row says where its data came from.",
-        "cta_primary": "Try the Imprint & VAT Check", "cta_research": "Research Agent", "cta_agents": "For AI agents",
+        "lead": "Merge lead lists into one row per company, see who is legally behind a website, and watch suppliers "
+                "and customers for insolvency and register notices. Every row says where its data came from.",
+        "cta_primary": "Try Merge & Dedupe", "cta_second": "Insolvency & Handelsregister Monitor",
+        "cta_agents": "For AI agents",
         "proof_title": "Measured, not promised",
         "proof": [
+            ("8 s", "for 15,000 rows deduplicated by two fields, on the default 512 MB of memory",
+             "Dataset Merge & Company Dedupe · Apify platform run, 22 Nov 2026", None),
+            ("78.5 days", "median by which a notice about provisional measures came before the opening of insolvency "
+                          "proceedings – in 54 of 157 measured openings",
+             "Insolvency & Handelsregister Monitor · openings of 16–20 Nov 2026", None),
             ("8 of 9", "websites that refused automated requests or needed JavaScript came back complete, with a "
                        "VIES-valid VAT number", "Imprint & VAT Check · Apify platform test, 13 Oct 2026", None),
-            ("10 of 10", "published research questions gave the known answer in the weekly check",
-             "Research Agent · 12 Oct 2026", "research-agent"),
-            ("164", "field values compared one by one with the original source: 136 matched (82.9%)",
-             "Imprint & VAT Check · sample, 12 Oct 2026", "imprint-impressum-website-contact-scraper"),
         ],
+        # The fourth tile is counted from data/quality.json at build time (build.weekly_proof): it stays true every week.
+        "proof_weekly": {"what": "checks with known answers passed in the weekly check, across {actors} actors",
+                         "src": "Weekly check · {date}"},
         "proof_note": "Every Sunday a watchdog re-runs the published checks; failures stay on the page.",
         "flag_title": "Start here",
-        "flag_intro": "Four actors cover most requests: company data for DACH websites, cited research for AI, "
-                      "ad checks for company lists and documents for RAG.",
+        "flag_intro": "Four actors for B2B list work: merge and deduplicate lead lists, watch companies for "
+                      "insolvency and register notices, find the company behind a website, and read the job board of "
+                      "the Bundesagentur für Arbeit.",
+        "flow_title": "How the actors work together",
+        "flow_intro": "A lead pipeline in four runs – each run works on the rows of the one before:",
+        "flow": [
+            {"title": "Fetch jobs and sources",
+             "text": "Job ads, companies that are hiring, trade-fair exhibitors – or your own export. One row per record, "
+                     "with the company's name.",
+             "actors": ["arbeitsagentur-jobs-scraper", "hiring-companies-germany", "messe-muenchen-exhibitor-list-scraper"]},
+            {"title": "Merge company duplicates",
+             "text": "Several lists become one row per company. Every merged row names the reason.",
+             "actors": ["merge-dedupe-datasets-company-leads"]},
+            {"title": "Check imprint and VAT ID",
+             "text": "For rows that carry a website: legal name, register number and EU VAT ID from its legal notice, "
+                     "the VAT ID checked against VIES.",
+             "actors": ["imprint-impressum-website-contact-scraper"]},
+            {"title": "Insolvency watchlist",
+             "text": "The register numbers go onto a watchlist. After the first run, a scheduled run returns a row "
+                     "only for companies where something changed.",
+             "actors": ["german-insolvency-handelsregister-monitor"]},
+        ],
+        "flow_note": "Each step is one run on Apify – started by hand, on a schedule, through the API or by an AI agent.",
         "rows_title": "What a row looks like",
         "rows_intro": "Imprint & VAT Check, Apify platform run of 13 October 2026 – one row per website, including the "
                       "one that stayed blocked:",
@@ -718,50 +683,76 @@ HOME = {
              "Apify Web Fetch, rendered in a browser (JavaScript site)"],
             ["hornbach.de", "–", "–", "–", "status error, reason blocked – named in the row"],
         ],
-        "research_row": "Research Agent: “What does Article 17 GDPR (right to erasure) require?” → status found, "
-                        "strongest evidence official, first source eur-lex.europa.eu – Regulation (EU) 2016/679, 25.3 s.",
         "agents_title": "For AI agents",
-        "agents_text": "Every actor is a tool on Apify's MCP server. Point your agent at it: it sees the input fields "
-                       "and the price per result before it calls (plus a small start fee per run).",
-        "agents_link": "Set it up in Claude Code, Cursor or via the API",
+        "agents_text": "Every actor is a tool on Apify's MCP server. Name the tools in the address and your agent has "
+                       "them at hand: it sees the input fields and the price per result before it calls (plus a small "
+                       "start fee per run).",
+        "agents_link": "Set it up in Claude Code, Cursor or n8n",
         "all_title": "All actors",
+        "filter_label": "Show a category", "filter_all": "All",
+        "filter_status": "{n} actors shown",
         "faq_title": "Questions",
         "faq": [
             ("Where does the data come from?",
-             "From public sources only: the company's own website (its legal notice), the EU's VIES register, "
-             "Google's and Microsoft's ad libraries, public registers, job boards and trade-fair directories – or your "
-             "own documents. Each row names the page its data came from."),
+             "From public sources only: the company's own website (its legal notice), the EU's VIES register, the courts' "
+             "insolvency notices, Google's and Microsoft's ad libraries, public registers, job boards, kununu, the app "
+             "stores and trade-fair directories – or your own datasets and documents. Each row names the page its data "
+             "came from."),
             ("How am I charged?",
              "Through your Apify account: a price per result plus a small start fee per run, shown on every actor. "
              "Paid Apify plans pay less. Set a maximum cost per run and the actor stops there."),
             ("Can an AI agent use these actors?",
              "Yes. Every actor runs as a tool on Apify's MCP server and through the Apify API – see “For AI agents”."),
             ("What if a website blocks automated requests?",
-             "The Imprint & VAT Check and the Research Agent then try Apify's Web Fetch, which Apify bills on your "
-             "account. A site that stays unreadable gets a row with the reason instead of a silent gap."),
+             "The Imprint & VAT Check and Hiring Companies Germany then try Apify's Web Fetch, which Apify bills on your "
+             "account. A site that stays unreadable is reported with the reason instead of a silent gap."),
             ("Who is behind Perceptron Data?",
-             "An independent developer in Germany, not affiliated with Apify or the data sources named. The legal "
-             "notice is linked at the bottom of every page."),
+             "Thomas Ehrler, an independent developer in Germany, not affiliated with Apify or the data sources named. "
+             "The legal notice is linked at the bottom of every page."),
         ],
     },
     "de": {
-        "lead": "Domains einfügen und je Website die Firma dahinter erhalten: Firmenname, Registernummer und "
-                "USt-IdNr., live gegen das EU-Register VIES geprüft. Eine Frage stellen und zitierte Textstellen mit "
-                "Evidenzstufe für Ihr Sprachmodell erhalten. Jede Zeile nennt ihre Quelle.",
-        "cta_primary": "Impressum- & USt-Check ausprobieren", "cta_research": "Research Agent", "cta_agents": "Für KI-Agenten",
+        "lead": "Lead-Listen zu einer Zeile je Firma zusammenführen, sehen, wer rechtlich hinter einer Website steht, und "
+                "Lieferanten und Kunden auf Insolvenz- und Registerbekanntmachungen beobachten. Jede Zeile nennt ihre Quelle.",
+        "cta_primary": "Dubletten-Actor ausprobieren", "cta_second": "Insolvenz- und Handelsregister-Monitor",
+        "cta_agents": "Für KI-Agenten",
         "proof_title": "Gemessen, nicht versprochen",
         "proof": [
+            ("8 s", "für 15.000 Zeilen, nach zwei Feldern von Dubletten befreit, mit den voreingestellten 512 MB Speicher",
+             "Datasets zusammenführen & Firmen-Dubletten · Lauf auf Apify, 22.11.2026", None),
+            ("78,5 Tage", "Median, um den eine Bekanntmachung über Sicherungsmaßnahmen vor der Eröffnung des "
+                          "Insolvenzverfahrens kam – bei 54 von 157 gemessenen Eröffnungen",
+             "Insolvenz- und Handelsregister-Monitor · Eröffnungen vom 16.–20.11.2026", None),
             ("8 von 9", "Websites, die automatische Abrufe abwiesen oder JavaScript brauchten, kamen vollständig "
                         "zurück, mit gültiger USt-IdNr. laut VIES", "Impressum- & USt-Check · Plattformtest auf Apify, 13.10.2026", None),
-            ("10 von 10", "veröffentlichten Recherchefragen lieferten in der Wochenprüfung die bekannte Antwort",
-             "Research Agent · 12.10.2026", "research-agent"),
-            ("164", "Feldwerte einzeln mit der Originalquelle verglichen: 136 stimmten (82,9 %)",
-             "Impressum- & USt-Check · Stichprobe, 12.10.2026", "imprint-impressum-website-contact-scraper"),
         ],
+        "proof_weekly": {"what": "Prüfungen mit bekannter Antwort in der Wochenprüfung bestanden, über {actors} Actors",
+                         "src": "Wochenprüfung · {date}"},
         "proof_note": "Jeden Sonntag wiederholt ein Wachposten die veröffentlichten Prüfungen; Fehlschläge bleiben stehen.",
         "flag_title": "Hier starten",
-        "flag_intro": "Vier Actors decken die meisten Anfragen ab: Firmendaten zu DACH-Websites, belegte Recherche für "
-                      "KI, Werbe-Checks für Firmenlisten und Dokumente für RAG.",
+        "flag_intro": "Vier Actors für die Arbeit mit B2B-Listen: Lead-Listen zusammenführen und von "
+                      "Dubletten befreien, Firmen auf Insolvenz- und Registerbekanntmachungen beobachten, die Firma "
+                      "hinter einer Website finden und die Jobbörse der Bundesagentur für Arbeit lesen.",
+        "flow_title": "So greifen die Actors ineinander",
+        "flow_intro": "Eine Lead-Pipeline in vier Läufen – jeder Lauf arbeitet mit den Zeilen des vorigen:",
+        "flow": [
+            {"title": "Stellen und Quellen abrufen",
+             "text": "Stellenanzeigen, Firmen, die einstellen, Messe-Aussteller – oder Ihr eigener Export. Je Datensatz "
+                     "eine Zeile mit dem Namen der Firma.",
+             "actors": ["arbeitsagentur-jobs-scraper", "hiring-companies-germany", "messe-muenchen-exhibitor-list-scraper"]},
+            {"title": "Firmen-Dubletten zusammenführen",
+             "text": "Aus mehreren Listen wird eine Zeile je Firma. Jede zusammengelegte Zeile nennt den Grund.",
+             "actors": ["merge-dedupe-datasets-company-leads"]},
+            {"title": "Impressum und USt-IdNr. prüfen",
+             "text": "Für Zeilen mit Website: Firmenname, Registernummer und EU-USt-IdNr. aus ihrem Impressum, die "
+                     "USt-IdNr. gegen VIES geprüft.",
+             "actors": ["imprint-impressum-website-contact-scraper"]},
+            {"title": "Insolvenz-Watchlist",
+             "text": "Die Registernummern kommen auf eine Watchlist. Nach dem ersten Lauf liefert ein geplanter Lauf "
+                     "nur für Firmen eine Zeile, bei denen sich etwas geändert hat.",
+             "actors": ["german-insolvency-handelsregister-monitor"]},
+        ],
+        "flow_note": "Jeder Schritt ist ein Lauf auf Apify – von Hand gestartet, per Zeitplan, über die API oder durch einen KI-Agenten.",
         "rows_title": "So sieht eine Zeile aus",
         "rows_intro": "Impressum- & USt-Check, Lauf auf Apify vom 13.10.2026 – eine Zeile je Website, auch für die, "
                       "die gesperrt blieb:",
@@ -775,31 +766,93 @@ HOME = {
              "Apify Web Fetch, im Browser dargestellt (JavaScript-Website)"],
             ["hornbach.de", "–", "–", "–", "Status error, Grund blocked – in der Zeile genannt"],
         ],
-        "research_row": "Research Agent: „What does Article 17 GDPR (right to erasure) require?“ → Status found, "
-                        "stärkste Evidenz amtlich, erste Quelle eur-lex.europa.eu – Verordnung (EU) 2016/679, 25,3 s.",
         "agents_title": "Für KI-Agenten",
-        "agents_text": "Jeder Actor ist ein Werkzeug auf Apifys MCP-Server. Richten Sie Ihren Agenten darauf: Er sieht "
-                       "die Eingabefelder und den Preis je Ergebnis, bevor er aufruft (plus eine kleine Startgebühr je Lauf).",
-        "agents_link": "Einrichtung in Claude Code, Cursor oder über die API",
+        "agents_text": "Jeder Actor ist ein Werkzeug auf Apifys MCP-Server. Nennen Sie die Werkzeuge in der Adresse, und "
+                       "Ihr Agent hat sie zur Hand: Er sieht die Eingabefelder und den Preis je Ergebnis, bevor er "
+                       "aufruft (plus eine kleine Startgebühr je Lauf).",
+        "agents_link": "Einrichtung in Claude Code, Cursor oder n8n",
         "all_title": "Alle Actors",
+        "filter_label": "Kategorie anzeigen", "filter_all": "Alle",
+        "filter_status": "{n} Actors angezeigt",
         "faq_title": "Fragen",
         "faq": [
             ("Woher kommen die Daten?",
              "Nur aus öffentlichen Quellen: der Website der Firma (ihrem Impressum), dem EU-Register VIES, den "
-             "Werbebibliotheken von Google und Microsoft, öffentlichen Registern, Jobbörsen und Messeverzeichnissen – "
-             "oder aus Ihren eigenen Dokumenten. Jede Zeile nennt die Seite, aus der ihre Daten stammen."),
+             "Insolvenzbekanntmachungen der Gerichte, den Werbebibliotheken von Google und Microsoft, öffentlichen "
+             "Registern, Jobbörsen, kununu, den App-Stores und Messeverzeichnissen – oder aus Ihren eigenen Datasets und "
+             "Dokumenten. Jede Zeile nennt die Seite, aus der ihre Daten stammen."),
             ("Wie wird abgerechnet?",
              "Über Ihr Apify-Konto: ein Preis je Ergebnis plus eine kleine Startgebühr je Lauf, bei jedem Actor "
              "angegeben. Bezahlte Apify-Tarife zahlen weniger. Mit einer Kostengrenze je Lauf hört der Actor dort auf."),
             ("Kann ein KI-Agent die Actors nutzen?",
              "Ja. Jeder Actor läuft als Werkzeug auf Apifys MCP-Server und über die Apify-API – siehe „Für KI-Agenten“."),
             ("Was, wenn eine Website automatische Abrufe sperrt?",
-             "Dann versuchen es der Impressum- & USt-Check und der Research Agent über Apifys Web Fetch, den Apify über "
-             "Ihr Konto abrechnet. Bleibt eine Website unlesbar, bekommt sie eine Zeile mit dem Grund statt einer stillen Lücke."),
+             "Dann versuchen es der Impressum- & USt-Check und „Firmen, die einstellen“ über Apifys Web Fetch, den Apify "
+             "über Ihr Konto abrechnet. Bleibt eine Website unlesbar, wird sie mit dem Grund gemeldet statt als stille Lücke."),
             ("Wer steht hinter Perceptron Data?",
-             "Ein unabhängiger Entwickler aus Deutschland, nicht verbunden mit Apify oder den genannten Datenquellen. "
-             "Das Impressum ist unten auf jeder Seite verlinkt."),
+             "Thomas Ehrler, ein unabhängiger Entwickler aus Deutschland, nicht verbunden mit Apify oder den genannten "
+             "Datenquellen. Das Impressum ist unten auf jeder Seite verlinkt."),
         ],
+    },
+}
+
+# "Built by" section (Tom, 22 Nov 2026): who builds the actors and by which rules – his four points: direct interfaces
+# instead of browsers, nothing guessed, tested against outages and restarts, based in Germany. The custom-actor offer
+# (CUSTOM below) is its second half. {plain}, {total} and the memory range in {mem} are counted at build time from the live catalogue
+# and BROWSER_ACTORS – a new actor changes the numbers without anyone editing this text.
+BUILT = {
+    "en": {
+        "title": "Built by Thomas Ehrler · Engineering & Custom Actors",
+        "intro": "One developer builds and runs every actor in this catalogue. The rules below hold for each of them – "
+                 "and for every actor built to order.",
+        "points": [
+            ("Direct interfaces, plain HTTP",
+             "{plain} of the {total} actors start no browser: they read their sources over direct interfaces and plain "
+             "HTTP{mem}. kununu Employer Data starts one; the imprint checks and Hiring Companies Germany can hand a "
+             "page that needs JavaScript to Apify's Web Fetch."),
+            ("Fixed rules, nothing guessed",
+             "When rows are put together or a website is assigned to a company, the row names the reason. What cannot "
+             "be shown stays apart or is reported as not found. In the Imprint & VAT Check and the Insolvency & "
+             "Handelsregister Monitor an outage of a source is a status of its own – not “nothing found”."),
+            ("Tested against outages and restarts",
+             "Before an upload every actor goes through a test bench: a run like Apify's daily test, simulated blocks "
+             "and outages of the source, and – where a run is long enough – a restart in the middle. Every Sunday a "
+             "watchdog repeats the published checks."),
+            ("Based in Germany",
+             "Thomas Ehrler builds and runs the actors from Germany; the legal notice names him. The focus is on "
+             "company data from Germany, Austria, Switzerland and the EU, and every actor is described in English "
+             "and German."),
+        ],
+        "mem": ", on {lo} to {hi} of default memory",
+        "custom_title": "Custom Apify actors and B2B pipelines",
+        "mail": "Write an e-mail", "issue": "Open an issue on Apify", "github": "Code and checks on GitHub",
+    },
+    "de": {
+        "title": "Gebaut von Thomas Ehrler · Engineering & Actors nach Maß",
+        "intro": "Ein Entwickler baut und betreibt jeden Actor in diesem Katalog. Die Regeln unten gelten für jeden "
+                 "davon – und für jeden Actor im Auftrag.",
+        "points": [
+            ("Direkte Schnittstellen, reines HTTP",
+             "{plain} der {total} Actors starten keinen Browser: Sie lesen ihre Quellen über direkte Schnittstellen und "
+             "reines HTTP{mem}. kununu-Arbeitgeberdaten startet einen; die Impressum-Checks und „Firmen, die "
+             "einstellen“ können eine Seite, die JavaScript braucht, an Apifys Web Fetch geben."),
+            ("Feste Regeln, nichts geraten",
+             "Werden Zeilen zusammengelegt oder wird einer Firma eine Website zugeordnet, nennt die Zeile den Grund. "
+             "Was sich nicht zeigen lässt, bleibt getrennt oder wird als nicht gefunden gemeldet. Im Impressum- & "
+             "USt-Check und im Insolvenz- und Handelsregister-Monitor ist der Ausfall einer Quelle ein eigener Status – "
+             "nicht „nichts gefunden“."),
+            ("Gegen Ausfälle und Neustarts getestet",
+             "Vor einem Upload durchläuft jeder Actor einen Prüfstand: einen Lauf wie Apifys Tagestest, nachgestellte "
+             "Sperren und Ausfälle der Quelle und – wo ein Lauf lang genug ist – einen Neustart mittendrin. Jeden "
+             "Sonntag wiederholt ein Wachposten die veröffentlichten Prüfungen."),
+            ("Standort Deutschland",
+             "Thomas Ehrler baut und betreibt die Actors von Deutschland aus; das Impressum nennt ihn. Der Schwerpunkt "
+             "liegt auf Firmendaten aus Deutschland, Österreich, der Schweiz und der EU, und jeder Actor ist auf "
+             "Deutsch und Englisch beschrieben."),
+        ],
+        "mem": ", mit {lo} bis {hi} voreingestelltem Speicher",
+        "custom_title": "Apify-Actors und B2B-Pipelines nach Maß",
+        "mail": "E-Mail schreiben", "issue": "Issue auf Apify eröffnen", "github": "Code und Prüfungen auf GitHub",
     },
 }
 
@@ -855,10 +908,6 @@ AGENT_TASKS = {
         "en": "Company behind a DACH website, with its VAT number checked against VIES",
         "de": "Firma hinter einer DACH-Website, mit gegen VIES geprüfter USt-IdNr.",
         "input": {"websites": ["haribo.com", "miele.de"]}},
-    "research-agent": {
-        "en": "Cited passages for an LLM answer, each source with an evidence level",
-        "de": "Zitierte Textstellen für eine KI-Antwort, jede Quelle mit Evidenzstufe",
-        "input": {"query": "What does Article 17 GDPR require?"}},
     "google-ads-transparency-scraper": {
         "en": "Do these companies advertise on Google or Microsoft Bing?",
         "de": "Werben diese Firmen bei Google oder Microsoft Bing?",
@@ -876,8 +925,9 @@ AGENT_TASKS = {
                                     "de": "Stellenangebote aus der Jobbörse der Bundesagentur für Arbeit"},
     "xing-jobs-scraper": {"en": "Job listings from XING (DACH), with the salary's source and the full text",
                           "de": "Stellenangebote von XING (DACH), mit Quelle des Gehalts und vollem Text"},
-    "hiring-companies-germany": {"en": "Companies that are hiring in Germany, with their own website confirmed by its legal notice",
-                                 "de": "Firmen, die in Deutschland einstellen, mit per Impressum bestätigter eigener Website"},
+    "hiring-companies-germany": {"en": "Companies that are hiring in Germany – one row per company, its own website confirmed by its legal notice",
+                                 "de": "Firmen, die in Deutschland einstellen – eine Zeile je Firma, eigene Website per Impressum bestätigt",
+                                 "input": {"keyword": "Elektriker", "location": "Berlin", "maxCompanies": 10}},
     "messe-muenchen-exhibitor-list-scraper": {"en": "Exhibitors of Messe München fairs (bauma, IFAT, BAU …)",
                                               "de": "Aussteller der Messe München (bauma, IFAT, BAU …)"},
     "anuga-ism-koelnmesse-exhibitor-scraper": {"en": "Exhibitors of Koelnmesse fairs (Anuga, ISM, imm cologne …)",
@@ -892,8 +942,6 @@ AGENT_TASKS = {
                                "de": "EU-Ausschreibungen aus TED nach Land und CPV-Code"},
     "german-energy-assets-mastr": {"en": "German power plants from the Marktstammdatenregister",
                                    "de": "Kraftwerke und Anlagen aus dem Marktstammdatenregister"},
-    "eudamed-medical-device-scraper": {"en": "EU medical devices and manufacturers from EUDAMED",
-                                       "de": "Medizinprodukte und Hersteller aus EUDAMED"},
     "merge-dedupe-datasets-company-leads": {
         "en": "Merge datasets and remove duplicates; with mode companies one row per company for lead lists",
         "de": "Datasets zusammenführen und Dubletten entfernen; mit mode companies eine Zeile je Firma für Lead-Listen",
@@ -905,72 +953,120 @@ AGENT_TASKS = {
 AGENTS = {
     "en": {
         "title": "Perceptron Data actors for AI agents – MCP server and API",
-        "desc": "Call Perceptron Data actors from Claude, Cursor, ChatGPT or your own agent via Apify's MCP server or "
+        "desc": "Call Perceptron Data actors from Claude Code, Cursor, n8n or your own agent via Apify's MCP server or "
                 "API. Price per result plus a small start fee per run.",
         "h1": "For AI agents and developers",
         "lead": "Every Perceptron Data actor is a tool your agent can call through Apify's MCP server or the Apify API: "
                 "JSON in, one row per result out, and a price per result the agent sees before it calls (plus a small start "
                 "fee per run).",
         "connect": "Connect",
-        "mcp_url": "MCP server with only our flagship tools – each actor becomes one tool, named like "
-                   "perceptr0n--research-agent (add any other actor the same way, comma-separated):",
+        "direct": "An agent that searches Apify for a tool sees what Apify's search returns that day. This address "
+                  "names our tools instead, so they are loaded whatever the search shows.",
+        "mcp_url": "MCP server with our four flagship tools – each actor becomes one tool, named like "
+                   "perceptr0n--merge-dedupe-datasets-company-leads (add any other actor the same way, comma-separated):",
         "claude": "Claude Code – then run /mcp once to sign in to Apify:",
-        "json": "Cursor, VS Code, Claude Desktop and other MCP clients:",
+        "json": "Cursor (.cursor/mcp.json), VS Code, Claude Desktop and other MCP clients:",
+        "n8n": "n8n – in an AI Agent node add the tool “MCP Client Tool”, set Endpoint to the address above and "
+               "Authentication to Bearer Auth with your Apify token.",
         "token": "Without the browser sign-in, send your Apify token as a header instead: "
                  "\"headers\": {\"Authorization\": \"Bearer <APIFY_TOKEN>\"}.",
         "api": "Plain HTTP – start a run and get the rows in one request:",
-        "search": "Apify's default MCP server also finds these actors through its search-actors tool; naming them in "
-                  "tools= loads them directly.",
+        "search": "Apify's default MCP server finds actors through its search-actors tool, and what that shows follows "
+                  "Apify's ranking. Naming actors in tools= loads them directly.",
+        "prompts_title": "Prompts that use several tools",
+        "prompts_intro": "With the address above an agent has all four tools at hand. Three tasks to start from – "
+                         "replace the parts in angle brackets:",
+        "prompts": [
+            ("Claude Code", "One row per employer",
+             "Use perceptr0n--arbeitsagentur-jobs-scraper to get 100 job ads for \"Elektriker\" within 25 km of Berlin. "
+             "Pass the dataset of that run to perceptr0n--merge-dedupe-datasets-company-leads with mode companies, so "
+             "that every employer is one row. List the ten employers with the highest mergedRows and say for each why "
+             "its rows were merged (matchedBy)."),
+            ("Cursor", "Merge two lists, then check them",
+             "Merge the Apify datasets <DATASET_ID_1> and <DATASET_ID_2> with "
+             "perceptr0n--merge-dedupe-datasets-company-leads in mode companies. Then check the websites of the ten rows "
+             "with the highest mergedRows with perceptr0n--imprint-impressum-website-contact-scraper and add legal "
+             "name, register number and vatStatus to the table. Read each row's status before its values."),
+            ("n8n", "Daily supplier check",
+             "Run perceptr0n--german-insolvency-handelsregister-monitor with watchlistId suppliers and these companies: "
+             "<COURT, REGISTER TYPE AND NUMBER, one per line>. The first run returns every company once, every later run only the companies with a change. "
+             "Summarise every change with its date and source. If no row comes back, answer that nothing changed."),
+        ],
         "table": "Which actor for which task",
         "head": ["Task", "MCP tool", "Example input", "Price"],
         "know": "What your agent should know",
         "notes": [
             "Read the status before the values: the Imprint & VAT Check gives every row a status and a reason, the "
-            "Research Agent a status per question and an evidence level per source, the Advertiser Check a status "
-            "per platform, PDF to Markdown a status per document.",
+            "Insolvency & Handelsregister Monitor a status per row and names a source that did not answer, the "
+            "Advertiser Check a status per platform, Dataset Merge & Company Dedupe says in matchedBy why rows were merged.",
             "Cap the cost: pass a maximum cost per run (maxTotalChargeUsd); Apify never charges a run beyond it.",
-            "The Imprint & VAT Check and the Research Agent read pages that refuse automated requests through Apify's "
-            "Web Fetch, which Apify bills separately on the same account ($0.0015 per delivered page on the free plan).",
+            "The Imprint & VAT Check and Hiring Companies Germany read pages that refuse automated requests through "
+            "Apify's Web Fetch, which Apify bills separately on the same account ($0.0015 per delivered page on the free plan).",
             "Each actor's limits are in its README on Apify – read them before you rely on a field.",
         ],
         "machine": "Machine-readable",
         "machine_items": [("llms.txt", "the catalogue in plain text"),
                           ("catalog.json", "names, prices, MCP tool names, example inputs"),
-                          ("index.md", "every page of this site as Markdown: add index.md to its address")],
+                          ("index.md", "the home page, this page and every actor page as Markdown: add index.md to the address")],
     },
     "de": {
         "title": "Perceptron-Data-Actors für KI-Agenten – MCP-Server und API",
-        "desc": "Perceptron-Data-Actors aus Claude, Cursor, ChatGPT oder eigenen Agenten über Apifys MCP-Server oder "
+        "desc": "Perceptron-Data-Actors aus Claude Code, Cursor, n8n oder eigenen Agenten über Apifys MCP-Server oder "
                 "API aufrufen – Preis je Ergebnis plus Startgebühr je Lauf.",
         "h1": "Für KI-Agenten und Entwickler",
         "lead": "Jeder Perceptron-Data-Actor ist ein Werkzeug, das Ihr Agent über Apifys MCP-Server oder die Apify-API "
                 "aufruft: JSON rein, eine Zeile je Ergebnis raus, und den Preis je Ergebnis sieht der Agent vor dem Aufruf "
                 "(dazu eine kleine Startgebühr je Lauf).",
         "connect": "Verbinden",
-        "mcp_url": "MCP-Server nur mit unseren wichtigsten Werkzeugen – jeder Actor wird ein Werkzeug, benannt wie "
-                   "perceptr0n--research-agent (weitere Actors genauso, durch Komma getrennt):",
+        "direct": "Ein Agent, der bei Apify nach einem Werkzeug sucht, sieht, was Apifys Suche an diesem Tag liefert. "
+                  "Diese Adresse nennt unsere Werkzeuge stattdessen beim Namen: Sie werden geladen, was immer die Suche zeigt.",
+        "mcp_url": "MCP-Server mit unseren vier wichtigsten Werkzeugen – jeder Actor wird ein Werkzeug, benannt wie "
+                   "perceptr0n--merge-dedupe-datasets-company-leads (weitere Actors genauso, durch Komma getrennt):",
         "claude": "Claude Code – danach einmal /mcp ausführen und bei Apify anmelden:",
-        "json": "Cursor, VS Code, Claude Desktop und andere MCP-Programme:",
+        "json": "Cursor (.cursor/mcp.json), VS Code, Claude Desktop und andere MCP-Programme:",
+        "n8n": "n8n – im Knoten „AI Agent“ das Werkzeug „MCP Client Tool“ hinzufügen, als Endpoint die Adresse oben "
+               "eintragen und als Authentication „Bearer Auth“ mit Ihrem Apify-Token wählen.",
         "token": "Ohne Anmeldung im Browser schicken Sie stattdessen Ihren Apify-Token als Kopfzeile: "
                  "\"headers\": {\"Authorization\": \"Bearer <APIFY_TOKEN>\"}.",
         "api": "Reines HTTP – Lauf starten und die Zeilen in einer Anfrage erhalten:",
-        "search": "Apifys Standard-MCP-Server findet diese Actors auch über sein Werkzeug search-actors; mit tools= "
-                  "werden sie direkt geladen.",
+        "search": "Apifys Standard-MCP-Server findet Actors über sein Werkzeug search-actors; was es zeigt, folgt Apifys "
+                  "Rangfolge. Mit tools= werden Actors direkt geladen.",
+        "prompts_title": "Prompts mit mehreren Werkzeugen",
+        "prompts_intro": "Mit der Adresse oben hat ein Agent alle vier Werkzeuge zur Hand. Drei Aufgaben zum Anfangen – "
+                         "die Teile in spitzen Klammern ersetzen:",
+        "prompts": [
+            ("Claude Code", "Eine Zeile je Arbeitgeber",
+             "Hole mit perceptr0n--arbeitsagentur-jobs-scraper 100 Stellenanzeigen für „Elektriker“ im Umkreis von "
+             "25 km um Berlin. Gib das Dataset dieses Laufs an perceptr0n--merge-dedupe-datasets-company-leads mit "
+             "mode companies, damit jeder Arbeitgeber eine Zeile ist. Nenne die zehn Arbeitgeber mit dem höchsten "
+             "mergedRows und sage je Arbeitgeber, warum seine Zeilen zusammengelegt wurden (matchedBy)."),
+            ("Cursor", "Zwei Listen zusammenführen und prüfen",
+             "Führe die Apify-Datasets <DATASET_ID_1> und <DATASET_ID_2> mit "
+             "perceptr0n--merge-dedupe-datasets-company-leads im mode companies zusammen. Prüfe dann die Websites der "
+             "zehn Zeilen mit dem höchsten mergedRows mit perceptr0n--imprint-impressum-website-contact-scraper und "
+             "ergänze Firmenname, Registernummer und vatStatus in der Tabelle. Lies je Zeile erst den Status, dann die Werte."),
+            ("n8n", "Tägliche Lieferantenprüfung",
+             "Starte perceptr0n--german-insolvency-handelsregister-monitor mit watchlistId suppliers und diesen Firmen: "
+             "<GERICHT, REGISTERART UND NUMMER, je Zeile eine>. Der erste Lauf liefert jede Firma einmal, jeder weitere "
+             "nur die Firmen mit einer Änderung. Fasse jede Änderung mit Datum und Quelle zusammen. Kommt keine Zeile zurück, antworte, dass "
+             "sich nichts geändert hat."),
+        ],
         "table": "Welcher Actor für welche Aufgabe",
         "head": ["Aufgabe", "MCP-Werkzeug", "Beispiel-Eingabe", "Preis"],
         "know": "Was Ihr Agent wissen sollte",
         "notes": [
             "Erst den Status lesen, dann die Werte: Der Impressum- & USt-Check gibt jeder Zeile Status und Grund, der "
-            "Research Agent einen Status je Frage und eine Evidenzstufe je Quelle, der Werbe-Check einen Status je "
-            "Plattform, PDF to Markdown einen Status je Dokument.",
+            "Insolvenz- und Handelsregister-Monitor einen Status je Zeile und nennt eine Quelle, die nicht geantwortet "
+            "hat, der Werbe-Check einen Status je Plattform, und „Datasets zusammenführen & Firmen-Dubletten“ sagt in "
+            "matchedBy, warum Zeilen zusammengelegt wurden.",
             "Kosten begrenzen: eine Kostengrenze je Lauf mitgeben (maxTotalChargeUsd); mehr berechnet Apify für den Lauf nie.",
-            "Der Impressum- & USt-Check und der Research Agent lesen Seiten, die automatische Abrufe abweisen, über "
+            "Der Impressum- & USt-Check und „Firmen, die einstellen“ lesen Seiten, die automatische Abrufe abweisen, über "
             "Apifys Web Fetch; Apify rechnet ihn getrennt über dasselbe Konto ab (0,0015 $ je gelieferter Seite im Gratis-Tarif).",
             "Die Grenzen jedes Actors stehen in seiner README auf Apify – vor dem Verlass auf ein Feld lesen.",
         ],
         "machine": "Maschinenlesbar",
         "machine_items": [("llms.txt", "der Katalog als Text"),
                           ("catalog.json", "Namen, Preise, MCP-Werkzeugnamen, Beispiel-Eingaben"),
-                          ("index.md", "jede Seite dieser Website als Markdown: index.md an die Adresse anhängen")],
+                          ("index.md", "Startseite, diese Seite und jede Actor-Seite als Markdown: index.md an die Adresse anhängen")],
     },
 }

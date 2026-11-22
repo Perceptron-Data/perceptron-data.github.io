@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Social preview images (1200x630) per actor. Run locally after adding an actor:
-needs cairosvg, which the daily GitHub build does not — missing images fall back
-to assets/og/default.png."""
+"""Social preview images (1200x630) per actor. Run locally after adding an actor or changing a name or icon:
+needs cairosvg, which the daily GitHub build does not — missing images fall back to assets/og/default.png.
+
+    uv run --offline --no-project --with cairosvg python make_og.py
+"""
 import base64, html, sys, textwrap
 from pathlib import Path
 import cairosvg
@@ -25,8 +27,12 @@ def svg(title: str, sub: str, icon: Path) -> str:
 
 out = ROOT / "assets" / "og"
 out.mkdir(parents=True, exist_ok=True)
-cairosvg.svg2png(bytestring=svg("Data APIs for AI, sales and research", "Perceptron Data", ROOT / "assets/icons/logo-256.png").encode(),
+# the default image carries the claim (marke.json); it is the preview of the home page, /agents/ and /quality/
+cairosvg.svg2png(bytestring=svg("Check, don't guess.", "Perceptron Data · Company checks", ROOT / "assets/icons/logo-256.png").encode(),
                  write_to=str(out / "default.png"))
+for stale in out.glob("*.png"):          # an image of an actor that is no longer in content.py must not stay published
+    if stale.stem != "default" and stale.stem not in ACTORS:
+        stale.unlink()
 for slug, a in ACTORS.items():
     # the canonical product name: the page title ends with "– Perceptron Data", which the line below already says
     cairosvg.svg2png(bytestring=svg(a["en"].get("h1") or a["en"]["title"], "Perceptron Data · Apify actor", ROOT / "assets/icons" / a["icon"]).encode(),

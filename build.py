@@ -9,6 +9,7 @@ instead of publishing an empty catalogue or a site without a legal notice.
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -21,7 +22,8 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
 
-from content import ACTORS, AGENT_TASKS, AGENTS, CUSTOM, CUSTOM_EMAIL, FLAGSHIPS, HOME, SECTIONS
+from content import (ACTORS, AGENT_TASKS, AGENTS, BROWSER_ACTORS, BUILT, CUSTOM, CUSTOM_EMAIL, FLAGSHIPS, HOME,
+                     RETIRED, SECTIONS)
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "_site"
@@ -41,7 +43,7 @@ T = {
            "features": "What you get", "uses": "Use cases", "example": "Example input", "faq": "FAQ",
            "price": "Price", "free": "Free", "per": "per 1,000", "cheaper": "Billed by Apify per result plus a small start fee per run — cheaper on paid Apify plans.",
            "title": "Perceptron Data – company checks from public sources",
-           "meta": "Check, don't guess: company checks and data from public sources on Apify – who advertises on Google and Bing, who is behind a website. Built in Germany.",
+           "meta": "Check, don't guess: merge and deduplicate lead lists, see who is behind a website, watch companies for insolvency notices. On Apify, built in Germany.",
            "related": "Related actors", "legal": "Legal notice", "privacy": "Privacy", "other": "Deutsch",
            "claim": "Check, don't guess.", "descriptor": "Company checks and data from public sources.",
            "origin": "Built in Germany. Focused on DACH and the EU.",
@@ -52,7 +54,6 @@ T = {
                          "Start the run on Apify – no login or API key for the data sources needed.",
                          "Get one row per company or record. Export to Excel, CSV or JSON, schedule it, or call it via API and MCP."],
            "how_note": "Pricing: paid per company checked or per record, plus a small start fee per run; on most actors, paid Apify plans pay less. A company that does not advertise or has no imprint is an answer and is charged.",
-           "checks_note": "Every Sunday a watchdog runs the actors with inputs whose correct answers are known and publishes the result, failures included:",
            "updated": "Prices and catalogue updated daily from the Apify Store. Last update:",
            "disclaimer": "Independent provider, not affiliated with Apify or the data sources named.",
            "builtin": "Built in Germany",
@@ -60,12 +61,13 @@ T = {
            "startfee": "+ {fee} start fee per run", "startfee_unknown": "+ a small start fee per run",
            "agents_nav": "For AI agents", "updated_label": "Updated", "per_one": "per", "startfee_short": "+ {fee} per run",
            "code": "Run it from an AI agent or code", "mcp_tool": "MCP tool (Apify MCP server):", "curl": "HTTP API:",
-           "agents_more": "Setup for Claude Code, Cursor and other agents"},
+           "agents_more": "Setup for Claude Code, Cursor and other agents", "nav_label": "Main", "crumbs_label": "Breadcrumb",
+           "skip": "Skip to content", "copy": "Copy", "copied": "Copied", "contact": "Contact"},
     "de": {"lang": "de", "home": "Start", "actors": "Actors", "run": "Auf Apify starten", "details": "Details",
            "features": "Das bekommen Sie", "uses": "Anwendungsfälle", "example": "Beispiel-Eingabe", "faq": "Häufige Fragen",
            "price": "Preis", "free": "Kostenlos", "per": "pro 1.000", "cheaper": "Abrechnung über Apify pro Ergebnis plus eine kleine Startgebühr je Lauf — günstiger in bezahlten Apify-Tarifen.",
            "title": "Perceptron Data – Firmen-Checks aus öffentlichen Quellen",
-           "meta": "Prüfen statt raten: Firmen-Checks und Daten aus öffentlichen Quellen auf Apify – wer bei Google und Bing wirbt, wer hinter einer Website steht. Aus Deutschland.",
+           "meta": "Prüfen statt raten: Lead-Listen zusammenführen, sehen, wer hinter einer Website steht, Firmen auf Insolvenz beobachten. Auf Apify, aus Deutschland.",
            "related": "Ähnliche Actors", "legal": "Impressum", "privacy": "Datenschutz", "other": "English",
            "claim": "Prüfen statt raten.", "descriptor": "Firmen-Checks und Daten aus öffentlichen Quellen.",
            "origin": "Aus Deutschland. Schwerpunkt DACH und EU.",
@@ -76,7 +78,6 @@ T = {
                          "Den Lauf auf Apify starten – ohne Login oder API-Schlüssel bei den Datenquellen.",
                          "Eine Zeile je Firma oder Datensatz erhalten. Als Excel, CSV oder JSON exportieren, per Zeitplan wiederholen oder über API und MCP abrufen."],
            "how_note": "Preis: je geprüfter Firma oder je Datensatz plus einer kleinen Startgebühr je Lauf; bei den meisten Actors zahlen bezahlte Apify-Tarife weniger. Wirbt eine Firma nicht oder hat sie kein Impressum, ist das eine Antwort und wird berechnet.",
-           "checks_note": "Jeden Sonntag führt ein Wachposten die Actors mit Eingaben aus, deren richtige Antworten bekannt sind, und veröffentlicht das Ergebnis, Fehlschläge eingeschlossen:",
            "updated": "Preise und Katalog täglich aus dem Apify Store aktualisiert. Stand:",
            "disclaimer": "Unabhängiger Anbieter, nicht verbunden mit Apify oder den genannten Datenquellen.",
            "builtin": "Aus Deutschland",
@@ -84,7 +85,9 @@ T = {
            "startfee": "+ {fee} Startgebühr je Lauf", "startfee_unknown": "+ eine kleine Startgebühr je Lauf",
            "agents_nav": "Für KI-Agenten", "updated_label": "Aktualisiert", "per_one": "je", "startfee_short": "+ {fee} je Lauf",
            "code": "Aus einem KI-Agenten oder per Code starten", "mcp_tool": "MCP-Werkzeug (Apify-MCP-Server):", "curl": "HTTP-API:",
-           "agents_more": "Einrichtung für Claude Code, Cursor und andere Agenten"},
+           "agents_more": "Einrichtung für Claude Code, Cursor und andere Agenten", "nav_label": "Hauptnavigation",
+           "crumbs_label": "Brotkrümelnavigation", "skip": "Zum Inhalt springen", "copy": "Kopieren", "copied": "Kopiert",
+           "contact": "Kontakt"},
 }
 
 
@@ -96,7 +99,8 @@ def fetch_store() -> list[dict]:
         try:
             with urllib.request.urlopen(STORE_API, timeout=30) as response:
                 items = json.load(response)["data"]["items"]
-            items = [a for a in items if a["username"].lower() == APIFY_USER.lower()]
+            # RETIRED: withdrawn actors that are still public on Apify must not come back through the daily Store read.
+            items = [a for a in items if a["username"].lower() == APIFY_USER.lower() and a["name"] not in RETIRED]
             if items:
                 return items
             last = "empty result"
@@ -160,6 +164,29 @@ def esc(text) -> str:
     return html.escape(str(text), quote=True)
 
 
+# GitHub Pages sets no headers, so the policy comes as a meta tag. Styles and scripts only from this site: the one script
+# (assets/site.js – copy buttons and the category filter) is a file of its own, so an injected inline <script> or a
+# foreign stylesheet would not run. JSON-LD blocks are data, not scripts.
+CSP = "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+
+
+def asset(name: str) -> str:
+    """Address of a file in assets/ with a short content hash: a changed stylesheet or script is fetched anew instead of
+    being taken from the browser's cache next to new HTML."""
+    return f"/assets/{name}?v={hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:10]}"
+
+
+def scroll_box(label: str) -> str:
+    """Attributes for a table wrapper that scrolls sideways on phones: keyboard users can focus and scroll it, screen
+    readers announce it by name (axe scrollable-region-focusable, WCAG 2.1.1; found by the test bench 15.10.2026)."""
+    return f'tabindex="0" role="region" aria-label="{esc(label)}"'
+
+
+def json_ld(data: dict) -> str:
+    """JSON-LD for a <script> block: "<" escaped, so no text from the Store or content.py can close the block."""
+    return json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
+
+
 VERIFY = ROOT / "data" / "verification.json"   # {"google": "<content of the meta tag>", "bing": "…"} from Tom
 
 
@@ -178,7 +205,7 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
     alternates = "" if en_path == de_path else (f'<link rel="alternate" hreflang="en" href="{BASE}{en_path}">\n'
                                                 f'<link rel="alternate" hreflang="de" href="{BASE}{de_path}">\n'
                                                 f'<link rel="alternate" hreflang="x-default" href="{BASE}{en_path}">')
-    ld = "\n".join(f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False)}</script>' for d in jsonld)
+    ld = "\n".join(f'<script type="application/ld+json">{json_ld(d)}</script>' for d in jsonld)
     md = f'<link rel="alternate" type="text/markdown" href="{path}index.md">' if markdown and path.endswith("/") else ""
     updated = (f'<p class="updated-line muted">{t["updated_label"]} <time class="updated" datetime="{LASTMOD}">{LASTMOD}</time></p>'
                if dated else "")
@@ -187,6 +214,7 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="{CSP}">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 {f'<meta name="robots" content="{esc(robots)}">' if robots else ''}
@@ -203,17 +231,19 @@ def page(lang: str, path: str, alt_path: str, title: str, desc: str, body: str,
 <meta name="theme-color" content="#312E81">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="{asset('style.css')}">
+<script src="{asset('site.js')}" defer></script>
 {md}
 {verification_tags() if path in ("/", "/de/") else ""}
 {ld}
 </head>
-<body>
+<body data-copy="{esc(t['copy'])}" data-copied="{esc(t['copied'])}">
+<a class="skip" href="#main">{esc(t['skip'])}</a>
 <header class="top"><div class="wrap">
   <a class="brand" href="{'/' if lang == 'en' else '/de/'}"><img src="/assets/logo-64.png" alt="" width="32" height="32">Perceptron Data</a>
-  <nav><a href="{'/' if lang == 'en' else '/de/'}#actors">{t['actors']}</a><a href="{'/agents/' if lang == 'en' else '/de/agents/'}">{t['agents_nav']}</a><a href="{'/quality/' if lang == 'en' else '/de/quality/'}">{t['checks']}</a><a href="{alt_path}" hreflang="{'de' if lang == 'en' else 'en'}" lang="{'de' if lang == 'en' else 'en'}">{t['other']}</a></nav>
+  <nav aria-label="{esc(t['nav_label'])}"><a href="{'/' if lang == 'en' else '/de/'}#actors">{t['actors']}</a><a href="{'/agents/' if lang == 'en' else '/de/agents/'}">{t['agents_nav']}</a><a href="{'/quality/' if lang == 'en' else '/de/quality/'}">{t['checks']}</a><a href="{alt_path}" hreflang="{'de' if lang == 'en' else 'en'}" lang="{'de' if lang == 'en' else 'en'}">{t['other']}</a></nav>
 </div></header>
-<main class="wrap">
+<main id="main" class="wrap">
 {body}
 {updated}
 </main>
@@ -266,20 +296,32 @@ def run_snippets(slug: str, example: dict) -> tuple[str, str]:
 
 
 def mcp_tool(slug: str) -> str:
-    """Name of the actor's tool on Apify's MCP server (checked 13.10.2026: "perceptr0n--research-agent")."""
+    """Name of the actor's tool on Apify's MCP server: account and actor name joined by two hyphens (checked 13.10.2026)."""
     return f"{APIFY_USER}--{slug}"
 
 
+
+# Sections that hold actors are the catalogue's categories (filter bar, card label); every actor is in exactly one.
+CATEGORIES = [sec for sec in SECTIONS if sec["actors"]]
+SECTION_OF = {slug: sec for sec in CATEGORIES for slug in sec["actors"]}
+
+
 def card(slug: str, a: dict, item: dict, p: dict, lang: str) -> str:
+    """Catalogue card: icon, name and category, what it does, price badge and the way to Apify. All cards of a row are
+    equally high; the foot with price and link sits at the bottom."""
     c = a.get(lang) or {}
     t = T[lang]
     href = f"/actors/{slug}/" if lang == "en" else f"/de/actors/{slug}/"
     title = c.get("h1") or item["title"]
+    sec = SECTION_OF.get(slug)
+    tag = f'<span class="tag">{esc(sec[lang]["heading"])}</span>' if sec else ""
+    run = esc(item["url"] if "url" in item else APIFY_PROFILE + "/" + slug)
     return f"""<article class="card">
-  <img src="/assets/icons/{esc(a.get('icon', 'logo-256.png'))}" alt="" width="56" height="56" loading="lazy">
-  <div><h3><a href="{href}">{esc(title)}</a></h3>
-  <p>{esc(c.get('card') or c.get('desc') or item.get('description', ''))}</p>
-  <p class="meta">{price_html(p, a.get('unit', {}).get(lang, 'results'), lang)} · <a href="{esc(item['url'] if 'url' in item else APIFY_PROFILE + '/' + slug)}">{t['run']} →</a></p></div>
+  <div class="card-head"><img src="/assets/icons/{esc(a.get('icon', 'logo-256.png'))}" alt="" width="48" height="48" loading="lazy">
+  <div><h4><a href="{href}">{esc(title)}</a></h4>{tag}</div></div>
+  <p class="card-text">{esc(c.get('card') or c.get('desc') or item.get('description', ''))}</p>
+  <div class="card-foot"><p class="badge">{price_html(p, a.get('unit', {}).get(lang, 'results'), lang)}</p>
+  <p><a class="cta" href="{run}" aria-label="{esc(t['run'])}: {esc(title)}">{t['run']}&nbsp;<span aria-hidden="true">→</span></a></p></div>
 </article>"""
 
 
@@ -302,7 +344,7 @@ def build_actor(slug: str, a: dict, item: dict, p: dict, lang: str, all_items: d
     faq = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(ans)}</p></details>" for q, ans in c.get("faq", []))
     related = [s for s, o in ACTORS.items() if o["group"] == a["group"] and s != slug and s in all_items][:3]
     rel = "".join(f'<li><a href="{"/actors/" if lang == "en" else "/de/actors/"}{s}/">{esc(display_name(s, all_items[s], lang))}</a></li>' for s in related)
-    body = f"""<nav class="crumbs"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › {esc(h1)}</nav>
+    body = f"""<nav class="crumbs" aria-label="{esc(t['crumbs_label'])}"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › {esc(h1)}</nav>
 <section class="hero actor">
   <img src="/assets/icons/{esc(a.get('icon', 'logo-256.png'))}" alt="" width="96" height="96">
   <div><h1>{esc(h1)}</h1><p class="lead">{esc(c.get('intro') or item.get('description', ''))}</p>
@@ -366,7 +408,7 @@ Q = {
            "planned": "First public check on {date}. Until then this page lists every case that will run each Sunday and "
                       "what is checked in its result.",
            "last": "Last check on {date}: {passed} of {checked} cases passed", "notes": ", {n} of them with a note",
-           "since": "Checked weekly since {date}; every case and result is listed.", "case": "Case", "result": "Result", "time": "Time",
+           "since": "Checked weekly since {date}; each case and its result are listed on this page.", "case": "Case", "result": "Result", "time": "Time",
            "what": "What is checked", "details": "Details", "open": "Failures and notes from the last check",
            "none_open": "None — every case gave the known answer.", "history": "Earlier checks", "date": "Date",
            "passed": "Passed", "sample": "Sample against the original source",
@@ -385,7 +427,7 @@ Q = {
                                                      "an empty input like Apify's own test (does it run and return data?), "
                                                      "but their results are not checked against known answers.",
            "labels": {"ok": "✅ passed", "note": "⚠️ passed with a note", "fail": "❌ failed", None: "– not checked yet"},
-           "back": "Back to the actor", "title_suffix": "Weekly check",
+           "back": "Back to the actor", "title_suffix": "Weekly check", "title_short": "Checks",
            "meta": "Every Sunday a watchdog runs the live actors on Apify with fixed inputs whose answers are known and "
                    "checks the results – published as is, failures included."},
     "de": {"h1": "Wöchentliche Prüfung mit bekannten Antworten", "page_h1": "Wöchentliche Prüfung – {title}",
@@ -415,7 +457,7 @@ Q = {
                                                              "liefert er Daten?), ihre Ergebnisse werden aber nicht mit bekannten "
                                                              "Antworten verglichen.",
            "labels": {"ok": "✅ bestanden", "note": "⚠️ bestanden mit Hinweis", "fail": "❌ fehlgeschlagen", None: "– noch nicht geprüft"},
-           "back": "Zurück zum Actor", "title_suffix": "Wöchentliche Prüfung",
+           "back": "Zurück zum Actor", "title_suffix": "Wöchentliche Prüfung", "title_short": "Prüfnachweis",
            "meta": "Jeden Sonntag startet ein Wachposten die Live-Actors auf Apify mit festen Eingaben und bekannten "
                    "Antworten, prüft die Ergebnisse – Fehlschläge eingeschlossen."},
 }
@@ -508,7 +550,7 @@ def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | Non
             f'<td>{"–" if e.get("result") is None else str(round(e.get("seconds") or 0)) + " s"}</td>'
             f'<td>{_case_details(e, lang)}</td></tr>' for e in examples)
         sections.append(f'<section><p class="lead"><strong>{esc(quality_summary(q, lang))}</strong></p>'
-                        f'<div class="table"><table><thead><tr><th>{L["case"]}</th><th>{L["result"]}</th><th>{L["time"]}</th>'
+                        f'<div class="table" {scroll_box(L["title_suffix"])}><table><thead><tr><th>{L["case"]}</th><th>{L["result"]}</th><th>{L["time"]}</th>'
                         f'<th>{L["what"]}</th></tr></thead><tbody>{rows}</tbody></table></div></section>')
         if q.get("date"):
             problems = [e for e in examples if e.get("result") in ("fail", "note")]
@@ -524,7 +566,7 @@ def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | Non
         if len(history) > 1:
             rows = "".join(f'<tr><td>{fmt_date(h.get("date"), lang)}</td><td>{h.get("passed")} / {h.get("checked")}</td></tr>'
                            for h in history)
-            sections.append(f'<section><h2>{L["history"]}</h2><div class="table"><table><thead><tr><th>{L["date"]}</th>'
+            sections.append(f'<section><h2>{L["history"]}</h2><div class="table" {scroll_box(L["history"])}><table><thead><tr><th>{L["date"]}</th>'
                             f'<th>{L["passed"]}</th></tr></thead><tbody>{rows}</tbody></table></div></section>')
     if sample:
         misses = sample.get("misses") or []
@@ -539,19 +581,19 @@ def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | Non
                 f'<tr><td>{esc(b.get("name"))}</td><td>{b.get("matched")} / {b.get("compared")}</td>'
                 f'<td>{fmt_rate((b.get("matched") or 0) / b["compared"], lang) if b.get("compared") else "–"}</td></tr>'
                 for b in breakdown["items"])
-            body += (f'<div class="table"><table><thead><tr><th>{esc((breakdown.get("label") or {}).get(lang, ""))}</th>'
+            body += (f'<div class="table" {scroll_box(L["sample"])}><table><thead><tr><th>{esc((breakdown.get("label") or {}).get(lang, ""))}</th>'
                      f'<th>{L["matched_col"]}</th><th>{L["rate_col"]}</th></tr></thead><tbody>{rows}</tbody></table></div>')
         if misses:
             rows = "".join(f'<tr><td>{esc(m.get("row"))}</td><td>{esc(m.get("field"))}</td><td>{esc(m.get("ours") if m.get("ours") not in (None, "") else "–")}</td>'
                            f'<td>{esc(m.get("source") if m.get("source") not in (None, "") else "–")}</td><td>{esc((m.get("cause") or {}).get(lang) or "–")}</td></tr>'
                            for m in misses)
-            body += (f'<h3>{L["misses"]}</h3><div class="table"><table><thead><tr><th>{L["row"]}</th><th>{L["field"]}</th>'
+            body += (f'<h3>{L["misses"]}</h3><div class="table" {scroll_box(L["misses"])}><table><thead><tr><th>{L["row"]}</th><th>{L["field"]}</th>'
                      f'<th>{L["ours"]}</th><th>{L["source"]}</th><th>{L["cause"]}</th></tr></thead><tbody>{rows}</tbody></table></div>')
         else:
             body += f"<p>{esc(L['no_miss'])}</p>"
         sections.append(f'<section><h2>{L["sample"]}</h2>{body}</section>')
     sections.append(f'<section><p class="muted">{esc(L["limits"] + (" " + L["limits_sample"] if sample else ""))}</p></section>')
-    body = f"""<nav class="crumbs"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › <a href="{actor_path}">{esc(title)}</a> › {esc(L['title_suffix'])}</nav>
+    body = f"""<nav class="crumbs" aria-label="{esc(t['crumbs_label'])}"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › <a href="{actor_path}">{esc(title)}</a> › {esc(L['title_suffix'])}</nav>
 <section class="hero"><h1>{esc(L['page_h1'].format(title=title))}</h1><p class="lead">{esc(L['lead'])}</p></section>
 {''.join(sections)}
 <p><a class="button" href="{actor_url(slug)}">{t['run']}</a> <a href="{actor_path}">{esc(L['back'])}</a></p>"""
@@ -560,7 +602,10 @@ def build_quality_page(slug: str, item: dict, q: dict | None, sample: dict | Non
         {"@type": "ListItem", "position": 1, "name": t["home"], "item": BASE + ("/" if lang == "en" else "/de/")},
         {"@type": "ListItem", "position": 2, "name": title, "item": f"{BASE}{actor_path}"},
         {"@type": "ListItem", "position": 3, "name": L["title_suffix"], "item": f"{BASE}{path}"}]}]
-    return page(lang, path, alt, f"{L['title_suffix']} – {title}", desc, body, ld, markdown=False)
+    page_title = f"{L['title_suffix']} – {title}"
+    if len(page_title) > 60:        # search results cut longer titles (marke.json: web_titel_max); a long product name
+        page_title = f"{L['title_short']} – {title}"      # gets the short label
+    return page(lang, path, alt, page_title, desc, body, ld, markdown=False)
 
 
 def build_quality_index(lang: str, items: dict) -> str:
@@ -581,7 +626,7 @@ def build_quality_index(lang: str, items: dict) -> str:
         rows.append(f'<tr><td><a href="{quality_path(slug, lang)}">{esc(display_name(slug, items[slug], lang))}</a></td><td>{esc(last)}</td><td>{esc(rate)}</td></tr>')
     others = [display_name(s, items[s], lang) for s in items if s not in quality and s not in samples]
     body = f"""<section class="hero"><h1>{esc(L['h1'])}</h1><p class="lead">{esc(L['lead'])}</p></section>
-<section><div class="table"><table><thead><tr><th>{L['actor']}</th><th>{L['last_col']}</th><th>{L['sample']}</th></tr></thead>
+<section><div class="table" {scroll_box(L['h1'])}><table><thead><tr><th>{L['actor']}</th><th>{L['last_col']}</th><th>{L['sample']}</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table></div></section>
 {f'<section><p class="muted">{esc(L["others"].format(names=", ".join(others)))}</p></section>' if others else ''}
 <section><p class="muted">{esc(L['limits'] + (' ' + L['limits_sample'] if samples else ''))}</p></section>"""
@@ -593,91 +638,173 @@ def mcp_url(slugs: list[str]) -> str:
     return f"{MCP}?tools=" + ",".join(f"{APIFY_USER}/{s}" for s in slugs)
 
 
+
 def flagship(slug: str, item: dict, p: dict, lang: str) -> str:
     """A larger card: what the actor returns, its price and two ways in."""
     a, t = ACTORS[slug], T[lang]
     c = a.get(lang) or {}
     href = f"/actors/{slug}/" if lang == "en" else f"/de/actors/{slug}/"
+    name = display_name(slug, item, lang)
     feats = "".join(f"<li>{esc(x)}</li>" for x in (c.get("features") or [])[:3])
+    sec = SECTION_OF.get(slug)
+    tag = f'<span class="tag">{esc(sec[lang]["heading"])}</span>' if sec else ""
     return f"""<article class="flag">
   <div class="flag-head"><img src="/assets/icons/{esc(a.get('icon', 'logo-256.png'))}" alt="" width="56" height="56" loading="lazy">
-  <h3><a href="{href}">{esc(display_name(slug, item, lang))}</a></h3></div>
-  <p>{esc(c.get('card') or c.get('desc') or '')}</p>
+  <div><h3><a href="{href}">{esc(name)}</a></h3>{tag}</div></div>
+  <p class="flag-text">{esc(c.get('card') or c.get('desc') or '')}</p>
   <ul class="ticks">{feats}</ul>
-  <p class="meta">{price_html(p, a.get('unit', {}).get(lang, 'results'), lang)}</p>
-  <p><a class="button small" href="{actor_url(slug)}">{t['run']}</a> <a href="{href}">{t['details']} →</a></p>
+  <div class="flag-foot"><p class="badge">{price_html(p, a.get('unit', {}).get(lang, 'results'), lang)}</p>
+  <p class="flag-cta"><a class="button small" href="{actor_url(slug)}" aria-label="{esc(t['run'])}: {esc(name)}">{t['run']}</a>
+  <a class="more" href="{href}" aria-label="{esc(t['details'])}: {esc(name)}">{t['details']}&nbsp;<span aria-hidden="true">→</span></a></p></div>
 </article>"""
 
 
-def custom_html(lang: str) -> str:
-    """Custom actors (Tom, 19 Nov 2026): what we build, how it works, what we do not do, contact."""
-    c = CUSTOM[lang]
+def weekly_proof(lang: str) -> tuple[str, str, str, str] | None:
+    """The proof tile about the watchdog's last weekly check, counted from data/quality.json: cases passed and checked on
+    the latest date and the number of actors checked that day. Counted at build time, so it is true every week –
+    failures included."""
+    quality = {s: q for s, q in load_data(QUALITY).items() if s not in RETIRED and q.get("date")}
+    if not quality:
+        return None
+    latest = max(q["date"] for q in quality.values())
+    day = [q for q in quality.values() if q["date"] == latest]
+    passed, checked = sum(q.get("passed") or 0 for q in day), sum(q.get("checked") or 0 for q in day)
+    if not checked:
+        return None
+    w = HOME[lang]["proof_weekly"]
+    return (f"{passed} {'of' if lang == 'en' else 'von'} {checked}", w["what"].format(actors=len(day)),
+            w["src"].format(date=fmt_date(latest, lang)), "/quality/" if lang == "en" else "/de/quality/")
+
+
+def proof_items(lang: str) -> list[tuple[str, str, str, str | None]]:
+    """(figure, what it says, source, link) for the home page and the organisation profile."""
+    weekly = weekly_proof(lang)
+    return list(HOME[lang]["proof"]) + ([weekly] if weekly else [])
+
+
+def proof_html(lang: str) -> str:
+    def source(src: str, link: str | None) -> str:
+        if not link:
+            return esc(src)
+        return f'<a href="{link if link.startswith("/") else quality_path(link, lang)}">{esc(src)}</a>'
+
+    return "".join(f'<div class="tile"><strong>{esc(n)}</strong><span>{esc(what)}</span><small>{source(src, link)}</small></div>'
+                   for n, what, src, link in proof_items(lang))
+
+
+def flow_html(lang: str, items: dict) -> str:
+    """The pipeline block: four steps, each with the actors that do it."""
+    h, prefix = HOME[lang], "/actors/" if lang == "en" else "/de/actors/"
+    steps = []
+    for number, step in enumerate(h["flow"], 1):
+        chips = "".join(f'<a class="chip" href="{prefix}{s}/">{esc(display_name(s, items[s], lang))}</a>'
+                        for s in step["actors"] if s in items)
+        steps.append(f'<li class="flow-step"><span class="flow-num" aria-hidden="true">{number}</span>'
+                     f'<h3>{esc(step["title"])}</h3><p>{esc(step["text"])}</p><p class="chips">{chips}</p></li>')
+    return (f'<section id="flow"><h2>{esc(h["flow_title"])}</h2><p class="muted">{esc(h["flow_intro"])}</p>'
+            f'<ol class="flow">{"".join(steps)}</ol><p class="muted">{esc(h["flow_note"])}</p></section>')
+
+
+def flow_md(lang: str, items: dict) -> list[str]:
+    h = HOME[lang]
+    out = [f"## {h['flow_title']}", "", h["flow_intro"], ""]
+    for number, step in enumerate(h["flow"], 1):
+        names = ", ".join(display_name(s, items[s], lang) for s in step["actors"] if s in items)
+        out.append(f"{number}. **{step['title']}** – {step['text']} ({names})")
+    return out + ["", h["flow_note"], ""]
+
+
+def memory_text(mbytes: int) -> str:
+    return f"{mbytes // 1024} GB" if mbytes % 1024 == 0 else f"{mbytes} MB"
+
+
+def built_points(lang: str, items: dict) -> list[tuple[str, str]]:
+    """The four points of the "Built by" section; the figures of the first one are counted from the live catalogue."""
+    plain = [s for s in items if s not in BROWSER_ACTORS]
+    memory = sorted(m for m in (items[s].get("defaultMemoryMbytes") for s in plain) if m)
+    b = BUILT[lang]
+    mem = b["mem"].format(lo=memory_text(memory[0]), hi=memory_text(memory[-1])) if memory else ""
+    return [(title, text.format(plain=len(plain), total=len(items), mem=mem)) for title, text in b["points"]]
+
+
+def built_html(lang: str, items: dict) -> str:
+    """Who builds the actors and by which rules, then the custom-actor offer with its contact (Tom, 22 Nov 2026)."""
+    b, c, t = BUILT[lang], CUSTOM[lang], T[lang]
     mail = f'<a href="mailto:{esc(CUSTOM_EMAIL)}">{esc(CUSTOM_EMAIL)}</a>'
+    points = "".join(f'<div class="tile"><h3>{esc(title)}</h3><p>{esc(text)}</p></div>' for title, text in built_points(lang, items))
     steps = "".join(f"<li>{esc(x)}</li>" for x in c["steps"])
     nots = "".join(f"<li>{esc(x)}</li>" for x in c["not"])
     contact = esc(c["contact"]).replace(esc("{email}"), mail)
-    return (f'<section id="custom"><h2>{esc(c["title"])}</h2><p>{esc(c["intro"])}</p>'
-            f'<h3>{esc(c["build_title"])}</h3><p>{esc(c["build"])}</p>'
-            f'<h3>{esc(c["steps_title"])}</h3><ol>{steps}</ol>'
-            f'<h3>{esc(c["not_title"])}</h3><ul>{nots}</ul>'
-            f'<p><strong>{contact}</strong></p></section>')
+    return f"""<section id="built"><h2>{esc(b['title'])}</h2><p class="lead">{esc(b['intro'])}</p>
+<div class="bento points">{points}</div>
+<div id="custom" class="band custom"><h3>{esc(b['custom_title'])}</h3>
+<p>{esc(c['intro'])} {esc(c['build'])}</p>
+<div class="cols"><div><h4>{esc(c['steps_title'])}</h4><ol>{steps}</ol></div>
+<div><h4>{esc(c['not_title'])}</h4><ul>{nots}</ul>
+<h4>{esc(t['contact'])}</h4><p>{contact}</p></div></div>
+<p class="ctas"><a class="button" href="mailto:{esc(CUSTOM_EMAIL)}">{esc(b['mail'])}</a>
+<a class="button ghost" href="{APIFY_PROFILE}">{esc(b['issue'])}</a>
+<a class="more" href="{GITHUB_ORG}">{esc(b['github'])}&nbsp;<span aria-hidden="true">→</span></a></p></div></section>"""
 
 
-def custom_md(lang: str) -> list[str]:
-    c = CUSTOM[lang]
-    return ([f"## {c['title']}", "", c["intro"], "", f"### {c['build_title']}", "", c["build"], "",
-             f"### {c['steps_title']}", ""] + [f"{i}. {x}" for i, x in enumerate(c["steps"], 1)]
-            + ["", f"### {c['not_title']}", ""] + [f"- {x}" for x in c["not"]]
-            + ["", c["contact"].format(email=CUSTOM_EMAIL), ""])
+def built_md(lang: str, items: dict) -> list[str]:
+    b, c = BUILT[lang], CUSTOM[lang]
+    out = [f"## {b['title']}", "", b["intro"], ""] + [f"- **{title}** – {text}" for title, text in built_points(lang, items)]
+    return (out + ["", f"### {b['custom_title']}", "", f"{c['intro']} {c['build']}", "", f"#### {c['steps_title']}", ""]
+            + [f"{i}. {x}" for i, x in enumerate(c["steps"], 1)] + ["", f"#### {c['not_title']}", ""]
+            + [f"- {x}" for x in c["not"]] + ["", c["contact"].format(email=CUSTOM_EMAIL), ""])
 
 
 def build_index(lang: str, items: dict, prices: dict) -> str:
     t, h = T[lang], HOME[lang]
     path, alt = ("/", "/de/") if lang == "en" else ("/de/", "/")
     prefix = "/" if lang == "en" else "/de/"
-    sections = []
-    for sec in SECTIONS:
+    # Catalogue: one group per category; the filter bar (assets/site.js) shows one group or all. Without JavaScript the
+    # bar stays hidden and every group is visible.
+    groups, chips = [], []
+    for sec in CATEGORIES:
         slugs = [s for s in sec["actors"] if s in items]
-        tag = f"h{sec['level'] + 1}"
-        cards = f'<div class="grid">{"".join(card(s, ACTORS[s], items[s], prices[s], lang) for s in slugs)}</div>' if slugs else ""
-        if slugs or sec["level"] == 2:
-            sections.append(f'<section id="{sec["key"]}" class="family l{sec["level"]}"><{tag}>{esc(sec[lang]["heading"])}</{tag}>'
-                            f'<p class="muted">{esc(sec[lang]["intro"])}</p>{cards}</section>')
-    listed = {s for sec in SECTIONS for s in sec["actors"]}
-    extra = [s for s in items if s not in listed]  # published on Apify but no texts yet
+        if not slugs:
+            continue
+        cards = "".join(card(s, ACTORS[s], items[s], prices[s], lang) for s in slugs)
+        groups.append(f'<section id="{sec["key"]}" class="family" data-cat="{sec["key"]}"><h3>{esc(sec[lang]["heading"])}</h3>'
+                      f'<p class="muted">{esc(sec[lang]["intro"])}</p><div class="grid">{cards}</div></section>')
+        chips.append(f'<button type="button" class="chip" data-filter="{sec["key"]}" aria-pressed="false">'
+                     f'{esc(sec[lang]["heading"])} <span class="count">{len(slugs)}</span></button>')
+    extra = [s for s in items if s not in SECTION_OF]  # published on Apify but no texts yet
     if extra:
-        cards = "\n".join(card(s, {"icon": "logo-256.png", "group": "", "unit": {}}, items[s], prices[s], lang) for s in extra)
-        sections.append(f'<section><h3>{t["allactors"]}</h3><div class="grid">{cards}</div></section>')
+        cards = "".join(card(s, {"icon": "logo-256.png", "group": "", "unit": {}}, items[s], prices[s], lang) for s in extra)
+        groups.append(f'<section class="family" data-cat="other"><h3>{t["allactors"]}</h3><div class="grid">{cards}</div></section>')
+    filters = (f'<div class="filters" role="group" aria-label="{esc(h["filter_label"])}" hidden>'
+               f'<button type="button" class="chip is-on" data-filter="all" aria-pressed="true">{esc(h["filter_all"])} '
+               f'<span class="count">{len(items)}</span></button>{"".join(chips)}</div>'
+               f'<p class="filter-status" role="status" aria-live="polite" data-template="{esc(h["filter_status"])}"></p>')
     steps = "".join(f"<li>{esc(x)}</li>" for x in t["how_steps"])
     quality = "/quality/" if lang == "en" else "/de/quality/"
-    def source(src: str, link: str | None) -> str:
-        return f'<a href="{quality_path(link, lang)}">{esc(src)}</a>' if link else esc(src)
-
-    proof = "".join(f'<div class="proof-item"><strong>{esc(n)}</strong><span>{esc(what)}</span>'
-                    f'<small>{source(src, link)}</small></div>' for n, what, src, link in h["proof"])
     flags = "".join(flagship(s, items[s], prices[s], lang) for s in FLAGSHIPS if s in items)
     rows = "".join("<tr>" + "".join(f"<td>{esc(cell)}</td>" for cell in row) + "</tr>" for row in h["rows"])
     head = "".join(f"<th>{esc(x)}</th>" for x in h["rows_head"])
     faq = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(ans)}</p></details>" for q, ans in h["faq"])
     agents = "/agents/" if lang == "en" else "/de/agents/"
-    research = "/actors/research-agent/" if lang == "en" else "/de/actors/research-agent/"
-    body = f"""<section class="hero home"><h1>{esc(t['claim'])}</h1>
-<p class="descriptor">{esc(t['descriptor'])}</p>
+    first, second = FLAGSHIPS[0], FLAGSHIPS[1]
+    body = f"""<section class="hero home"><div class="hero-text"><p class="eyebrow">{esc(t['descriptor'])}</p>
+<h1>{esc(t['claim'])}</h1>
 <p class="lead">{esc(h['lead'])}</p>
-<p class="muted">{esc(t['origin'])}</p>
-<p class="ctas"><a class="button" href="{actor_url('imprint-impressum-website-contact-scraper')}">{esc(h['cta_primary'])}</a>
-<a class="button ghost" href="{research}">{esc(h['cta_research'])}</a> <a href="{agents}">{esc(h['cta_agents'])} →</a></p></section>
-<section id="proof"><h2>{esc(h['proof_title'])}</h2><div class="proof">{proof}</div>
-<p class="muted">{esc(h['proof_note'])} <a href="{quality}">{esc(t['checks'])} →</a></p></section>
+<p class="ctas"><a class="button" href="{actor_url(first)}">{esc(h['cta_primary'])}</a>
+<a class="button ghost" href="{prefix}actors/{second}/">{esc(h['cta_second'])}</a>
+<a class="more" href="{agents}">{esc(h['cta_agents'])}&nbsp;<span aria-hidden="true">→</span></a></p>
+<p class="muted origin">{esc(t['origin'])}</p></div>
+<div class="hero-proof" id="proof"><h2>{esc(h['proof_title'])}</h2><div class="bento proof">{proof_html(lang)}</div>
+<p class="muted">{esc(h['proof_note'])} <a href="{quality}">{esc(t['checks'])}&nbsp;<span aria-hidden="true">→</span></a></p></div></section>
 <section id="start"><h2>{esc(h['flag_title'])}</h2><p class="muted">{esc(h['flag_intro'])}</p><div class="flags">{flags}</div></section>
+{flow_html(lang, items)}
 <section id="rows"><h2>{esc(h['rows_title'])}</h2><p>{esc(h['rows_intro'])}</p>
-<div class="table"><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>
-<p class="muted">{esc(h['research_row'])}</p></section>
-<section id="agents" class="band"><h2>{esc(h['agents_title'])}</h2><p>{esc(h['agents_text'])}</p>
-<pre><code>{esc(mcp_url(FLAGSHIPS[:2]))}</code></pre><p><a href="{agents}">{esc(h['agents_link'])} →</a></p></section>
+<div class="table" {scroll_box(h['rows_title'])}><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div></section>
+<section id="agents" class="band dark"><h2>{esc(h['agents_title'])}</h2><p>{esc(h['agents_text'])}</p>
+<pre><code>{esc(mcp_url(FLAGSHIPS))}</code></pre><p><a class="more" href="{agents}">{esc(h['agents_link'])}&nbsp;<span aria-hidden="true">→</span></a></p></section>
+<section id="actors"><h2>{esc(h['all_title'])}</h2>{filters}{''.join(groups)}</section>
+{built_html(lang, items)}
 <section id="how"><h2>{esc(t['how_title'])}</h2><ol>{steps}</ol><p class="muted">{esc(t['how_note'])}</p></section>
-<section id="actors"><h2>{esc(h['all_title'])}</h2>{''.join(sections)}</section>
-{custom_html(lang)}
 <section id="faq"><h2>{esc(h['faq_title'])}</h2>{faq}</section>"""
     ld = [{"@context": "https://schema.org", "@type": "WebSite", "name": "Perceptron Data", "url": BASE + "/",
            "inLanguage": lang},
@@ -725,16 +852,25 @@ def build_agents(lang: str, items: dict, prices: dict) -> str:
     links = ["/llms.txt", "/catalog.json", path + "index.md"]
     machine = "".join(f'<li><a href="{href}">{esc(label)}</a> – {esc(text)}</li>'
                       for href, (label, text) in zip(links, g["machine_items"]))
-    body = f"""<nav class="crumbs"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › {esc(g['h1'])}</nav>
+    tools = "".join(f'<li><a href="{prefix}{s}/">{esc(display_name(s, items[s], lang))}</a> <code>{esc(mcp_tool(s))}</code></li>'
+                    for s in FLAGSHIPS if s in items)
+    prompts = "".join(f'<article class="prompt"><h3>{esc(client)} <span class="muted">· {esc(name)}</span></h3>'
+                      f'<pre><code>{esc(text)}</code></pre></article>' for client, name, text in g["prompts"])
+    body = f"""<nav class="crumbs" aria-label="{esc(t['crumbs_label'])}"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › {esc(g['h1'])}</nav>
 <section class="hero"><h1>{esc(g['h1'])}</h1><p class="lead">{esc(g['lead'])}</p></section>
-<section><h2>{esc(g['connect'])}</h2>
+<section id="connect"><h2>{esc(g['connect'])}</h2>
+<div class="band dark"><p>{esc(g['direct'])}</p>
 <p>{esc(g['mcp_url'])}</p><pre><code>{esc(sn['url'])}</code></pre>
-<p>{esc(g['claude'])}</p><pre><code>{esc(sn['claude'])}</code></pre>
-<p>{esc(g['json'])}</p><pre><code>{esc(sn['json'])}</code></pre>
+<ul class="tools">{tools}</ul></div>
+<div class="cols clients">
+<div><p>{esc(g['claude'])}</p><pre><code>{esc(sn['claude'])}</code></pre>
+<p>{esc(g['n8n'])}</p></div>
+<div><p>{esc(g['json'])}</p><pre><code>{esc(sn['json'])}</code></pre></div></div>
 <p class="muted">{esc(g['token'])}</p>
 <p>{esc(g['api'])}</p><pre><code>{esc(sn['curl'])}</code></pre>
 <p class="muted">{esc(g['search'])}</p></section>
-<section><h2>{esc(g['table'])}</h2><div class="table"><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div></section>
+<section id="prompts"><h2>{esc(g['prompts_title'])}</h2><p>{esc(g['prompts_intro'])}</p><div class="prompts">{prompts}</div></section>
+<section><h2>{esc(g['table'])}</h2><div class="table" {scroll_box(g['table'])}><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div></section>
 <section><h2>{esc(g['know'])}</h2><ul>{notes}</ul></section>
 <section><h2>{esc(g['machine'])}</h2><ul>{machine}</ul></section>"""
     ld = [{"@context": "https://schema.org", "@type": "TechArticle", "headline": g["h1"], "description": g["desc"],
@@ -808,18 +944,19 @@ def md_home(lang: str, items: dict, prices: dict) -> str:
     t, h = T[lang], HOME[lang]
     out = [f"# Perceptron Data – {t['claim']}", "", t["descriptor"], "", h["lead"], "", t["origin"], "",
            f"## {h['proof_title']}", ""]
-    out += [f"- **{n}** {what} ({src})" for n, what, src, _ in h["proof"]] + ["", f"## {h['flag_title']}", ""]
+    out += [f"- **{n}** {what} ({src})" for n, what, src, _ in proof_items(lang)] + ["", f"## {h['flag_title']}", ""]
     prefix = BASE + ("/actors/" if lang == "en" else "/de/actors/")
     for s in [s for s in FLAGSHIPS if s in items]:
         c = ACTORS[s].get(lang) or {}
         out.append(f"- [{display_name(s, items[s], lang)}]({prefix}{s}/index.md): {c.get('desc', '')} "
                    f"{t['price']}: {price_text(prices[s], ACTORS[s].get('unit', {}).get(lang, 'results'), lang)}. {actor_url(s)}")
-    out += ["", f"## {h['agents_title']}", "", h["agents_text"], "", f"`{mcp_url(FLAGSHIPS)}`", "",
+    out += [""] + flow_md(lang, items)
+    out += [f"## {h['agents_title']}", "", h["agents_text"], "", f"`{mcp_url(FLAGSHIPS)}`", "",
             f"{h['agents_link']}: {BASE}{'/agents/' if lang == 'en' else '/de/agents/'}index.md", "", f"## {h['all_title']}", ""]
     for s in items:
         c = (ACTORS.get(s) or {}).get(lang) or {}
         out.append(f"- [{display_name(s, items[s], lang)}]({prefix}{s}/index.md): {c.get('desc') or items[s].get('description', '')}")
-    out += [""] + custom_md(lang) + [f"## {h['faq_title']}", ""]
+    out += [""] + built_md(lang, items) + [f"## {h['faq_title']}", ""]
     for question, answer in h["faq"]:
         out += [f"### {question}", "", answer, ""]
     out += [f"{t['updated_label']}: {LASTMOD}", ""]
@@ -829,10 +966,13 @@ def md_home(lang: str, items: dict, prices: dict) -> str:
 def md_agents(lang: str, items: dict, prices: dict) -> str:
     g, t = AGENTS[lang], T[lang]
     sn = agents_snippets()
-    out = [f"# {g['h1']}", "", g["lead"], "", f"## {g['connect']}", "", g["mcp_url"], "", f"`{sn['url']}`", "",
-           g["claude"], "", "```sh", sn["claude"], "```", "", g["json"], "", "```json", sn["json"], "```", "", g["token"], "",
-           g["api"], "", "```sh", sn["curl"], "```", "", g["search"], "", f"## {g['table']}", "",
-           "| " + " | ".join(g["head"]) + " |", "|---|---|---|---|"]
+    out = [f"# {g['h1']}", "", g["lead"], "", f"## {g['connect']}", "", g["direct"], "", g["mcp_url"], "", f"`{sn['url']}`", "",
+           g["claude"], "", "```sh", sn["claude"], "```", "", g["json"], "", "```json", sn["json"], "```", "", g["n8n"], "",
+           g["token"], "", g["api"], "", "```sh", sn["curl"], "```", "", g["search"], "",
+           f"## {g['prompts_title']}", "", g["prompts_intro"], ""]
+    for client, name, text in g["prompts"]:
+        out += [f"### {client} · {name}", "", "```text", text, "```", ""]
+    out += [f"## {g['table']}", "", "| " + " | ".join(g["head"]) + " |", "|---|---|---|---|"]
     out += [f"| {task} | `{tool}` | `{example}` | {price} |" for _, task, tool, example, price in agent_rows(items, prices, lang)]
     out += ["", f"## {g['know']}", ""] + [f"- {x}" for x in g["notes"]] + ["", f"## {g['machine']}", ""]
     out += [f"- {BASE}/{label} – {text}" if label != "index.md" else f"- index.md – {text}" for label, text in g["machine_items"]]
@@ -857,23 +997,25 @@ def fetch_text(url: str) -> str | None:
         return None
 
 
-def live_state(paths: list[str]) -> dict[str, tuple[str | None, str | None]]:
-    """Per path the live sitemap's lastmod and the live page, to tell a real change from a rebuild."""
+def live_state(paths: list[str]) -> tuple[dict[str, tuple[str | None, str | None]], list[str]]:
+    """Per path the live sitemap's lastmod and the live page, to tell a real change from a rebuild – and the paths the
+    live sitemap lists that this build no longer writes (the pages of a withdrawn actor)."""
     sitemap = fetch_text(f"{BASE}/sitemap.xml") or ""
-    lastmods = {loc[len(BASE):]: mod for loc, mod in re.findall(r"<loc>([^<]+)</loc><lastmod>([^<]+)</lastmod>", sitemap)}
+    lastmods = {loc[len(BASE):]: mod for loc, mod in re.findall(r"<loc>([^<]+)</loc><lastmod>([^<]+)</lastmod>", sitemap)
+                if loc.startswith(BASE + "/")}
     with ThreadPoolExecutor(max_workers=8) as pool:
         pages = dict(zip(paths, pool.map(lambda path: fetch_text(BASE + path), paths)))
-    return {path: (lastmods.get(path), pages.get(path)) for path in paths}
+    return {path: (lastmods.get(path), pages.get(path)) for path in paths}, sorted(set(lastmods) - set(paths))
 
 
 def human_date(iso: str, lang: str) -> str:
     return fmt_date(iso, lang)
 
 
-def finish_dates(html_pages: dict[str, tuple[str, str]]) -> tuple[dict[str, str], list[str]]:
+def finish_dates(html_pages: dict[str, tuple[str, str]]) -> tuple[dict[str, str], list[str], list[str]]:
     """The date of each page's last real change (kept from the live site when only the build date differs);
-    returns the dates and the paths that really changed (for IndexNow)."""
-    live = live_state(list(html_pages))
+    returns the dates, the paths that really changed and the paths that are gone (both for IndexNow)."""
+    live, gone = live_state(list(html_pages))
     dates, changed = {}, []
     for path, (_, text) in html_pages.items():
         old_mod, old_text = live.get(path, (None, None))
@@ -882,7 +1024,7 @@ def finish_dates(html_pages: dict[str, tuple[str, str]]) -> tuple[dict[str, str]
         else:
             dates[path] = TODAY
             changed.append(path)
-    return dates, changed
+    return dates, changed, gone
 
 
 def stamp(text: str, iso: str, lang: str) -> str:
@@ -930,7 +1072,7 @@ def main() -> None:
         write_page(f"{prefix}/agents/", build_agents(lang, items, prices), lang, md_agents(lang, items, prices))
         urls.append((f"{prefix}/agents/", f"{'/de' if lang == 'en' else ''}/agents/"))
         for slug, item in items.items():
-            a = ACTORS.get(slug, {"icon": "logo-256.png", "group": "research", "unit": {}})
+            a = ACTORS.get(slug, {"icon": "logo-256.png", "group": "", "unit": {}})
             write_page(f"{prefix}/actors/{slug}/", build_actor(slug, a, item, prices[slug], lang, items), lang,
                        md_actor(slug, item, prices[slug], lang))
             urls.append((f"{prefix}/actors/{slug}/", f"{'/de' if lang == 'en' else ''}/actors/{slug}/"))
@@ -945,11 +1087,13 @@ def main() -> None:
     write("/impressum/", simple_page("/impressum/", "Impressum", imp))
     write("/datenschutz/", simple_page("/datenschutz/", "Datenschutz", priv))
     write("/404.html", page("en", "/404.html", "/de/", "Not found – Perceptron Data", "Page not found",
-                             '<section class="hero"><h1>Not found</h1><p><a href="/">Back to the catalogue</a></p></section>', [],
-                             markdown=False, dated=False))
+                             '<section class="hero"><h1>Not found</h1><p class="lead">This page does not exist – or the actor '
+                             'it described is no longer offered.</p><p class="ctas"><a class="button" href="/">All actors</a>'
+                             '<a class="button ghost" href="/de/" lang="de" hreflang="de">Alle Actors (Deutsch)</a></p></section>',
+                             [], markdown=False, dated=False))
 
     # honest dates: a page keeps the date of its last real change (Google uses lastmod only when it is accurate)
-    dates, changed = finish_dates(html_pages)
+    dates, changed, gone = finish_dates(html_pages)
     for rel, (lang, text) in html_pages.items():
         write(rel, stamp(text, dates[rel], lang))
     for rel, (lang, text) in md_pages.items():
@@ -968,9 +1112,11 @@ def main() -> None:
           'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(entries) + "\n</urlset>\n")
     write("/robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
     write(f"/{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
-    # Pages that really changed (for the IndexNow step after the deploy): only those in the sitemap.
+    # Pages that really changed (for the IndexNow step after the deploy): only those in the sitemap – and pages the live
+    # sitemap still lists but this build no longer writes (a withdrawn actor): the search engine finds the 404 and drops
+    # them instead of showing them for weeks.
     in_sitemap = [p for p, _ in urls if p not in noindex]
-    announce = [BASE + p for p in in_sitemap if p in changed]
+    announce = [BASE + p for p in in_sitemap if p in changed] + [BASE + p for p in gone]
     (ROOT / "indexnow-changed.txt").write_text("\n".join(announce) + ("\n" if announce else ""))
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as out:
@@ -981,19 +1127,25 @@ def main() -> None:
              "Self-service actors on Apify. Paid actors charge per result plus a small start fee per run. "
              f"Weekly checks against known answers: {BASE}/quality/", "",
              "## For AI agents", "",
-             f"- [Setup for MCP clients and the API]({BASE}/agents/index.md): Claude Code, Cursor, JSON config, curl",
+             f"- [Setup for MCP clients and the API]({BASE}/agents/index.md): Claude Code, Cursor, n8n, JSON config, curl, "
+             "prompts that use several tools",
              f"- MCP server with the flagship tools: {mcp_url(FLAGSHIPS)}",
              f"- [Machine-readable catalogue]({BASE}/catalog.json): names, prices, MCP tool names, example inputs",
-             "- Every page of the site is available as Markdown: add index.md to its address", ""]
-    for sec in SECTIONS:
+             "- The home page, the agent setup and every actor page are available as Markdown: add index.md to the address", ""]
+    def entry(s: str) -> str:
+        return (f"- [{display_name(s, items[s], 'en')}]({actor_url(s)}): {ACTORS[s]['en']['desc']} "
+                f"MCP tool: {mcp_tool(s)}. Price: {price_text(prices[s], ACTORS[s].get('unit', {}).get('en', 'results'), 'en')}.")
+
+    lines += [f"## {HOME['en']['flag_title']}", "", HOME["en"]["flag_intro"], ""]
+    lines += [entry(s) for s in FLAGSHIPS if s in items] + [""] + flow_md("en", items)
+    lines += [f"## {HOME['en']['all_title']}", ""]
+    for sec in CATEGORIES:
         slugs = [s for s in sec["actors"] if s in items]
         if slugs:
-            lines.append(f"{'#' * sec['level']} {sec['en']['heading']}")
-            for s in slugs:
-                lines.append(f"- [{display_name(s, items[s], 'en')}]({actor_url(s)}): {ACTORS[s]['en']['desc']} "
-                             f"MCP tool: {mcp_tool(s)}. Price: {price_text(prices[s], ACTORS[s].get('unit', {}).get('en', 'results'), 'en')}.")
-            lines.append("")
-    lines += [f"## {CUSTOM['en']['title']}", "", f"{CUSTOM['en']['intro']} {CUSTOM['en']['contact'].format(email=CUSTOM_EMAIL)}", ""]
+            lines += [f"### {sec['en']['heading']}", ""] + [entry(s) for s in slugs] + [""]
+    lines += [f"## {BUILT['en']['title']}", "", BUILT["en"]["intro"], ""]
+    lines += [f"- {title}: {text}" for title, text in built_points("en", items)]
+    lines += ["", f"{CUSTOM['en']['intro']} {CUSTOM['en']['contact'].format(email=CUSTOM_EMAIL)}", ""]
     write("/llms.txt", "\n".join(lines))
 
     # machine-readable catalogue
@@ -1008,7 +1160,8 @@ def main() -> None:
                   "exampleInput": (AGENT_TASKS.get(s) or {}).get("input") or ACTORS.get(s, {}).get("example"),
                   "price": price_text(prices[s], ACTORS.get(s, {}).get("unit", {}).get("en", "results"), "en")} for s in items]
     write("/catalog.json", json.dumps({"updated": TODAY, "mcpServer": mcp_url(FLAGSHIPS), "agents": f"{BASE}/agents/",
-                                       "actors": catalogue}, indent=2, ensure_ascii=False))
+                                       "flagships": [s for s in FLAGSHIPS if s in items], "actors": catalogue},
+                                      indent=2, ensure_ascii=False))
     (OUT / ".nojekyll").write_text("")
     print(f"Built {len(urls)} pages for {len(items)} actors into {OUT}")
 
