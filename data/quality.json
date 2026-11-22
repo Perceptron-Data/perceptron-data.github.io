@@ -808,6 +808,106 @@
   "passed": 4,
   "since": "2026-10-25"
  },
+ "german-energy-assets-mastr": {
+  "checked": 3,
+  "date": "2026-11-22",
+  "examples": [
+   {
+    "checks": {
+     "de": [
+      "mindestens 2 Zeilen",
+      "unitName im Format ^Weserkraftwerk Bremen Turbine [12]$",
+      "federalState = Bremen",
+      "energySource = Wasser",
+      "grossPowerKw ≥ 1000",
+      "kein mastrNumber doppelt",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "at least 2 rows",
+      "unitName matches ^Weserkraftwerk Bremen Turbine [12]$",
+      "federalState = Bremen",
+      "energySource = Wasser",
+      "grossPowerKw ≥ 1000",
+      "no duplicate mastrNumber",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "hydropower-bremen-two-turbines",
+    "title": "Hydropower units in Bremen from 1,000 kW: the two turbines of the Weserkraftwerk Bremen come back, each once, and nothing else",
+    "title_de": "Wasserkraft-Einheiten in Bremen ab 1.000 kW: die zwei Turbinen des Weserkraftwerks Bremen kommen je einmal zurück, und sonst nichts"
+   },
+   {
+    "checks": {
+     "de": [
+      "Zeile mit mastrNumber = SEE924412591423",
+      "unitName = Weserkraftwerk Bremen Turbine 1",
+      "grossPowerKw = 5000",
+      "commissionedOn = 2011-11-30",
+      "status = In Betrieb",
+      "postalCode = 28207",
+      "city = Bremen"
+     ],
+     "en": [
+      "row with mastrNumber = SEE924412591423",
+      "unitName = Weserkraftwerk Bremen Turbine 1",
+      "grossPowerKw = 5000",
+      "commissionedOn = 2011-11-30",
+      "status = In Betrieb",
+      "postalCode = 28207",
+      "city = Bremen"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "known-unit-turbine-1",
+    "title": "Known unit SEE924412591423 (Turbine 1): 5,000 kW gross, commissioned on 30 November 2011, in operation, in 28207 Bremen",
+    "title_de": "Bekannte Einheit SEE924412591423 (Turbine 1): 5.000 kW brutto, Inbetriebnahme am 30. November 2011, in Betrieb, in 28207 Bremen"
+   },
+   {
+    "checks": {
+     "de": [
+      "operatorName = Weserkraftwerk Bremen",
+      "operatorIsCompany ist wahr",
+      "gridOperator enthält „wesernetz Bremen GmbH“",
+      "gridOperatorCheck = checked",
+      "dataSource enthält „Marktstammdatenregister“",
+      "gilt für jede Zeile"
+     ],
+     "en": [
+      "operatorName = Weserkraftwerk Bremen",
+      "operatorIsCompany is true",
+      "gridOperator contains “wesernetz Bremen GmbH”",
+      "gridOperatorCheck = checked",
+      "dataSource contains “Marktstammdatenregister”",
+      "holds for every row"
+     ]
+    },
+    "link": null,
+    "reasons": null,
+    "result": "ok",
+    "seconds": 3,
+    "slug": "operator-and-grid-operator",
+    "title": "Each unit names its operator, marked as a company, and the grid operator as the register lists it",
+    "title_de": "Jede Einheit nennt ihren Betreiber, als Unternehmen gekennzeichnet, und den Netzbetreiber, wie das Register ihn führt"
+   }
+  ],
+  "history": [
+   {
+    "checked": 3,
+    "date": "2026-11-22",
+    "passed": 3
+   }
+  ],
+  "passed": 3,
+  "since": "2026-11-22"
+ },
  "german-insolvency-handelsregister-monitor": {
   "checked": 4,
   "date": "2026-11-22",
