@@ -241,7 +241,9 @@ def price_html(p: dict, unit: str, lang: str) -> str:
 
 SINGULAR = {"companies checked": "company checked", "queries": "query", "Websites": "Website", "Fragen": "Frage",
             "Seiten": "Seite", "geprüfte Firmen": "geprüfte Firma", "Datensätze": "Datensatz", "Stellen": "Stelle",
-            "Ausschreibungen": "Ausschreibung", "Anlagen": "Anlage", "Anfragen": "Anfrage", "Apps": "App"}
+            "Ausschreibungen": "Ausschreibung", "Anlagen": "Anlage", "Anfragen": "Anfrage", "Apps": "App",
+            "Firmenzeilen": "Firmenzeile", "rows in merge or dedupe mode": "row in merge or dedupe mode",
+            "Zeilen im Modus merge oder dedupe": "Zeile im Modus merge oder dedupe"}
 
 
 def price_text(p: dict, unit: str, lang: str) -> str:

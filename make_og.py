@@ -28,6 +28,7 @@ out.mkdir(parents=True, exist_ok=True)
 cairosvg.svg2png(bytestring=svg("Data APIs for AI, sales and research", "Perceptron Data", ROOT / "assets/icons/logo-256.png").encode(),
                  write_to=str(out / "default.png"))
 for slug, a in ACTORS.items():
-    cairosvg.svg2png(bytestring=svg(a["en"]["title"], "Perceptron Data · Apify actor", ROOT / "assets/icons" / a["icon"]).encode(),
+    # the canonical product name: the page title ends with "– Perceptron Data", which the line below already says
+    cairosvg.svg2png(bytestring=svg(a["en"].get("h1") or a["en"]["title"], "Perceptron Data · Apify actor", ROOT / "assets/icons" / a["icon"]).encode(),
                      write_to=str(out / f"{slug}.png"))
 print("OG-Bilder:", len(list(out.glob("*.png"))))

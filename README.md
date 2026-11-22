@@ -14,7 +14,8 @@ Source of the catalogue site **[perceptron-data.github.io](https://perceptron-da
 an overview of the Perceptron Data actors on [Apify](https://apify.com/perceptr0n): PDF and Office
 to Markdown for AI, Google Ads Transparency checks for company lists, DACH company data from the
 Impressum, kununu employer data, Arbeitsagentur and XING jobs, trade-fair exhibitor lists, App Store and
-Google Play data, EU tenders (TED), the German Marktstammdatenregister and EUDAMED.
+Google Play data, insolvency and register notices for German companies, EU tenders (TED), the German
+Marktstammdatenregister and EUDAMED, and a tool that merges datasets and removes duplicates.
 The home page also describes custom actors built to order (contact: thom.ehr@gmail.com).
 
 ## How it works
