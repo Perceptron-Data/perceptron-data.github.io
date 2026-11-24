@@ -1,0 +1,645 @@
+{
+  "name": "Job ads to company leads – Arbeitsagentur, XING, Impressum",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Job ads to company leads with legal notice data\n\n### How it works\nBuilds a lead list of companies that are hiring. **Arbeitsagentur Jobs** and **XING Jobs** search the same keyword and place. **Dataset Merge & Company Dedupe** (mode `companies`) turns both result sets into one row per employer and says in `matchedBy` why rows were merged.\n\nJob ads name the employer, not its website. The workflow takes the domain of an e-mail address in the ad text or of the application link; job boards, applicant tracking systems and free mail are left out. **Imprint & VAT Check** reads the legal notice of each website: legal name, address, register number, EU VAT ID checked against VIES, e-mail, phone. The last node returns one row per employer; `nameCheck` says whether the legal notice names the employer. Employers whose ads carry no own domain keep their row without legal notice data.\n\nEvery actor run is charged on your Apify account: per result plus a small start fee per run. The current prices are on each actor's Apify Store page, and `maxCostPerRunUsd` in **Settings** caps every single run. Sites that refuse direct requests are read through Apify's Web Fetch, which Apify bills on your account.\n\n### Setup\n1. Install the Apify community node `@apify/n8n-nodes-apify` (tested with 0.8.1; https://docs.n8n.io/integrations/community-nodes/installation-and-management/) and add an Apify credential (API token or OAuth).\n2. Select it in the six Apify nodes.\n3. Change the values in **Settings**.\n4. Click **Execute workflow**.\n\n### Customization\nReplace the manual trigger with a Schedule Trigger and add `listId` to both job inputs in **Build job search inputs** to get only new or changed jobs. Send the final rows to a sheet or CRM.\n\nIndependent provider, not affiliated with Apify or the data sources named.",
+        "height": 1000,
+        "width": 520
+      },
+      "id": "61066d6a-dde8-53b2-bdbe-66f1903fc2f1",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -620,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Search settings\nKeyword and place go to both job sources. XING needs a city name, not a postcode. `maxJobsPerSource`, `maxWebsites` and `maxCostPerRunUsd` cap what one execution can cost.",
+        "height": 340,
+        "width": 700,
+        "color": 7
+      },
+      "id": "6547f460-02cb-5f8b-9fad-83057058e14e",
+      "name": "Note: search settings",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Charged on your Apify account\n`maxCostPerRunUsd` caps every single actor run. Start with small values.",
+        "height": 260,
+        "width": 220,
+        "color": 3
+      },
+      "id": "46c20a98-10d6-558e-be40-68b2673bc971",
+      "name": "Warning: cost",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        230
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Job ads from two sources\nBoth runs must succeed; a rejected input stops here with Apify's message. Each source is charged per job plus a start fee per run.",
+        "height": 340,
+        "width": 640,
+        "color": 7
+      },
+      "id": "091054c7-2cc7-5061-8ca6-79c8b7f983ee",
+      "name": "Note: job ads",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        660,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## One row per company\nRows that share a name at the same place, a website, an e-mail domain or a phone number become one row. Charged per input row plus a start fee per run.",
+        "height": 340,
+        "width": 640,
+        "color": 7
+      },
+      "id": "663c00e0-007f-54e5-a1e5-bcdbd0bb041b",
+      "name": "Note: merge",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## A website per company\nDomain of an e-mail address in the ad, otherwise of the application link. Job boards, applicant tracking systems and free mail are left out. At most `maxWebsites` go to the next step.",
+        "height": 340,
+        "width": 700,
+        "color": 7
+      },
+      "id": "e70611fe-e288-5ea1-b7aa-ff6291d10b9f",
+      "name": "Note: website",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Legal notice data\nCharged per website plus a start fee per run. Sites read through Apify's Web Fetch are billed by Apify on your account. `nameCheck` says whether the legal notice names the employer.",
+        "height": 340,
+        "width": 900,
+        "color": 7
+      },
+      "id": "a63b8722-57ca-5ff3-9680-007941af1e12",
+      "name": "Note: legal notice",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        660,
+        640
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "362b007f-0739-58a3-9721-2887debacc08",
+      "name": "Start manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64a69a12-5a49-5d9b-b184-e78351dac4a9",
+              "name": "keyword",
+              "value": "Elektriker",
+              "type": "string"
+            },
+            {
+              "id": "ee37f197-5a0a-5cef-b20a-a410aded9684",
+              "name": "location",
+              "value": "Berlin",
+              "type": "string"
+            },
+            {
+              "id": "30e0258b-62b5-5c06-bc31-c5045270c442",
+              "name": "radiusKm",
+              "value": 25,
+              "type": "number"
+            },
+            {
+              "id": "c2e07cfc-6d04-5ad1-9e94-f5bc677b0b34",
+              "name": "publishedSince",
+              "value": 7,
+              "type": "number"
+            },
+            {
+              "id": "2a3b8fd9-0140-570d-a26b-57ea411cae23",
+              "name": "maxJobsPerSource",
+              "value": 20,
+              "type": "number"
+            },
+            {
+              "id": "51ead556-a2e0-54d7-9bdb-aa783a5ac5cc",
+              "name": "maxWebsites",
+              "value": 10,
+              "type": "number"
+            },
+            {
+              "id": "f7061ea8-e2a6-5756-8f4a-a17e766c436a",
+              "name": "maxCostPerRunUsd",
+              "value": 1,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "619deab1-b4d6-59d4-8533-e5891845d60c",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Turns the values in Settings into the inputs of both job actors and refuses values they cannot run.\nconst s = $('Settings').first().json;\nconst keyword = String(s.keyword ?? '').trim();\nconst location = String(s.location ?? '').trim();\nif (!keyword && !location) {\n  throw new Error('Settings: give a keyword, a location or both.');\n}\nif (/^\\d{4,5}$/.test(location)) {\n  throw new Error('Settings: XING Jobs does not understand postcodes. Write the city name, e.g. Berlin.');\n}\nconst common = { includeDetails: true, maxItems: Math.max(1, Math.round(Number(s.maxJobsPerSource) || 20)) };\nif (keyword) common.keyword = keyword;\nif (location) common.location = location;\nif (s.publishedSince !== '' && s.publishedSince !== null && s.publishedSince !== undefined) {\n  const days = Math.round(Number(s.publishedSince));\n  if (!Number.isNaN(days)) common.publishedSince = Math.min(100, Math.max(0, days));\n}\n// Temp agencies are left out on the Arbeitsagentur side; delete excludeTemporaryEmployment to keep them.\nconst arbeitsagentur = { ...common, excludeTemporaryEmployment: true };\nif (location) arbeitsagentur.radiusKm = Math.min(200, Math.max(0, Math.round(Number(s.radiusKm) || 25)));\n// XING always searches 20 km around the place and refuses excludeTemporaryEmployment, so neither is sent.\nconst xing = { ...common };\nreturn [{ json: { arbeitsagentur, xing } }];\n"
+      },
+      "id": "53d61583-d296-5ac3-ace3-01f26fe81458",
+      "name": "Build job search inputs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Actors",
+        "operation": "Run actor",
+        "actorId": "perceptr0n~arbeitsagentur-jobs-scraper",
+        "customBody": "={{ JSON.stringify($('Build job search inputs').first().json.arbeitsagentur) }}",
+        "waitForFinish": true,
+        "memory": 1024,
+        "maxTotalChargeUsd": "={{ $('Settings').first().json.maxCostPerRunUsd }}"
+      },
+      "id": "2549a2de-24d1-57b5-a74d-ea25270b4e65",
+      "name": "Run Arbeitsagentur Jobs",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        680,
+        320
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Actors",
+        "operation": "Run actor",
+        "actorId": "perceptr0n~xing-jobs-scraper",
+        "customBody": "={{ JSON.stringify($('Build job search inputs').first().json.xing) }}",
+        "waitForFinish": true,
+        "memory": 512,
+        "maxTotalChargeUsd": "={{ $('Settings').first().json.maxCostPerRunUsd }}"
+      },
+      "id": "93fd4c90-b187-571a-b1a6-f8706986edc3",
+      "name": "Run XING Jobs",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        900,
+        320
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Both job runs must have succeeded. Their datasets go to the merge step in this order:\n// rows from the Arbeitsagentur rank first, so their fields are the base of a merged row.\nconst runs = [\n  ['Run Arbeitsagentur Jobs', $('Run Arbeitsagentur Jobs').first().json],\n  ['Run XING Jobs', $('Run XING Jobs').first().json],\n];\nconst datasets = [];\nfor (const [node, run] of runs) {\n  const message = run.statusMessage || '';\n  if (run.status !== 'SUCCEEDED' || /^Rejected/i.test(message)) {\n    throw new Error(`${node}: run ${run.id} ended with status ${run.status}: ${message}`);\n  }\n  if (!run.defaultDatasetId) {\n    throw new Error(`${node}: run ${run.id} has no dataset.`);\n  }\n  datasets.push(run.defaultDatasetId);\n}\nreturn [{ json: { datasets } }];\n"
+      },
+      "id": "bde70e50-15bc-58bd-8cad-470662dc8203",
+      "name": "Check both job runs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Actors",
+        "operation": "Run actor",
+        "actorId": "perceptr0n~merge-dedupe-datasets-company-leads",
+        "customBody": "={{ JSON.stringify({ datasets: $json.datasets, mode: 'companies', defaultCountry: 'DE' }) }}",
+        "waitForFinish": true,
+        "memory": 512,
+        "maxTotalChargeUsd": "={{ $('Settings').first().json.maxCostPerRunUsd }}"
+      },
+      "id": "0001a336-1878-5274-aa86-c3eb47576cec",
+      "name": "Merge to one row per company",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        320
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Stops here when the run did not succeed or the actor rejected its input, with Apify's own status message.\nconst run = $input.first().json;\nconst message = run.statusMessage || '';\nif (run.status !== 'SUCCEEDED' || /^Rejected/i.test(message)) {\n  throw new Error(`Run ${run.id} ended with status ${run.status}: ${message}`);\n}\nif (!run.defaultDatasetId) {\n  throw new Error(`Run ${run.id} has no dataset.`);\n}\nreturn [{ json: { runId: run.id, datasetId: run.defaultDatasetId, statusMessage: message } }];\n"
+      },
+      "id": "a0ed7b02-667e-5aaa-bd8a-667bfa22dfe3",
+      "name": "Check merge run",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Datasets",
+        "operation": "Get items",
+        "datasetId": "={{ $json.datasetId }}",
+        "offset": 0,
+        "limit": 10000,
+        "options": {
+          "omit": "descriptionHtml"
+        }
+      },
+      "id": "052c5068-1709-56e6-a562-c9663e23847e",
+      "name": "Get company rows",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        320
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Job ads name the employer, not its website. Candidates, in this order: the domains of e-mail addresses in the\n// ad text, then the domain of the application link. Free mail, job boards and applicant tracking systems are\n// left out. Only the domain is kept, never the e-mail address itself.\nconst NOT_EMPLOYER = new Set([\"gmail.com\", \"googlemail.com\", \"web.de\", \"gmx.de\", \"gmx.net\", \"gmx.at\", \"gmx.ch\", \"t-online.de\", \"outlook.com\", \"outlook.de\", \"hotmail.com\", \"hotmail.de\", \"live.com\", \"live.de\", \"msn.com\", \"yahoo.com\", \"yahoo.de\", \"icloud.com\", \"me.com\", \"mail.de\", \"freenet.de\", \"posteo.de\", \"arcor.de\", \"aol.com\", \"aol.de\", \"online.de\", \"vodafone.de\", \"kabelmail.de\", \"email.de\", \"proton.me\", \"protonmail.com\", \"1und1.de\", \"mailbox.org\", \"bluewin.ch\", \"arbeitsagentur.de\", \"bundesagentur.de\", \"jobboerse.de\", \"stepstone.de\", \"stepstone.at\", \"stepstone.com\", \"indeed.com\", \"indeed.de\", \"xing.com\", \"linkedin.com\", \"monster.de\", \"monster.com\", \"jobware.de\", \"stellenanzeigen.de\", \"kimeta.de\", \"jobs.de\", \"meinestadt.de\", \"heyjobs.co\", \"heyjobs.de\", \"bewerbung.jobs\", \"jobvector.de\", \"europersonal.com\", \"finest-jobs.com\", \"onapply.de\", \"persy.jobs\", \"joblocal.de\", \"yourfirm.de\", \"karriere.at\", \"jobs.ch\", \"jobscout24.ch\", \"jobup.ch\", \"stellenwerk.de\", \"stellenmarkt.de\", \"jobanzeiger.de\", \"jobninja.com\", \"jooble.org\", \"adzuna.de\", \"glassdoor.de\", \"glassdoor.com\", \"kununu.com\", \"softgarden.io\", \"softgarden.de\", \"personio.de\", \"personio.com\", \"join.com\", \"recruitee.com\", \"greenhouse.io\", \"lever.co\", \"myworkdayjobs.com\", \"workday.com\", \"successfactors.com\", \"successfactors.eu\", \"sapsf.com\", \"sapsf.eu\", \"smartrecruiters.com\", \"dvinci.de\", \"dvinci-hr.com\", \"dvinci-easy.com\", \"rexx-systems.com\", \"rexx-recruitment.com\", \"concludis.de\", \"prescreen.io\", \"onlyfy.jobs\", \"umantis.com\", \"haufe.com\", \"hrworks.de\", \"talents-connect.com\", \"bite.de\", \"bite-recruiting.de\", \"coveto.de\", \"mhm-hr.com\", \"jobbase.io\", \"jobposting.io\", \"jobs2web.com\", \"icims.com\", \"taleo.net\", \"google.com\", \"google.de\", \"goo.gl\", \"bit.ly\", \"facebook.com\", \"instagram.com\", \"youtube.com\", \"tiktok.com\", \"wa.me\", \"whatsapp.com\", \"apple.com\", \"microsoft.com\", \"zoom.us\", \"calendly.com\"]);\nconst SECOND_LEVEL = new Set(['co.at', 'or.at', 'ac.at', 'gv.at', 'co.uk', 'org.uk', 'ac.uk', 'com.au']);\nconst FILE_ENDINGS = new Set(['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'pdf', 'doc', 'docx']);\nconst MAIL = /[\\w.+-]{1,64}@([\\w-]{1,63}(?:\\.[\\w-]{1,63})+)/g;\n\nfunction registrable(host) {\n  const labels = String(host).toLowerCase().replace(/^www\\./, '').split('.').filter(Boolean);\n  const tld = labels[labels.length - 1] || '';\n  if (labels.length < 2 || !/^[a-z]{2,24}$/.test(tld) || FILE_ENDINGS.has(tld)) return null;\n  if (labels.length >= 3 && SECOND_LEVEL.has(labels.slice(-2).join('.'))) return labels.slice(-3).join('.');\n  return labels.slice(-2).join('.');\n}\n// The Code node sandbox has no URL class, so the host is read with a pattern.\nfunction hostOf(url) {\n  const match = /^[a-z][a-z0-9+.-]*:\\/\\/(?:[^\\/?#@]*@)?([^\\/?#:]+)/i.exec(String(url || ''));\n  return match ? match[1] : null;\n}\n\nconst rows = $input.all().map(item => item.json).filter(row => row && Object.keys(row).length > 0);\nif (rows.length === 0) {\n  throw new Error('No company rows: the job searches found no jobs for these settings.');\n}\nreturn rows.map(row => {\n  const candidates = [];\n  for (const match of String(row.description || '').matchAll(MAIL)) {\n    candidates.push({ domain: registrable(match[1]), from: 'e-mail address in the ad' });\n  }\n  const link = hostOf(row.externalUrl);\n  if (link) candidates.push({ domain: registrable(link), from: 'application link' });\n  const pick = candidates.find(c => c.domain && !NOT_EMPLOYER.has(c.domain)) || null;\n  const places = (Array.isArray(row.locations) ? row.locations : [])\n    .map(l => [l && l.zip, l && l.city].filter(Boolean).join(' '))\n    .filter(Boolean);\n  return {\n    json: {\n      employer: row.company || row.companyLegalName || '',\n      website: pick ? pick.domain : null,\n      websiteFrom: pick ? pick.from : 'no website in the ads',\n      places: [...new Set(places)].slice(0, 3).join('; '),\n      mergedRows: row.mergedRows || 1,\n      matchedBy: row.matchedBy || [],\n      jobUrl: row.jobUrl || null,\n    },\n  };\n});\n"
+      },
+      "id": "4dcb449b-8c70-5619-84c2-fdd13908a729",
+      "name": "Pick a website per company",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One entry per distinct website; at most maxWebsites go to the paid legal notice check.\nconst max = Math.max(1, Math.round(Number($('Settings').first().json.maxWebsites) || 10));\nconst websites = [...new Set($input.all().map(item => item.json.website).filter(Boolean))];\nreturn [{ json: { websites: websites.slice(0, max), notChecked: websites.slice(max) } }];\n"
+      },
+      "id": "52c6c2f3-f008-5914-b11d-c3e408c32f6d",
+      "name": "Collect websites",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b8d3b8da-e65d-5004-8bcb-68df5b003108",
+              "leftValue": "={{ $json.websites.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "51650a60-12c2-5ce3-890d-895f44e280ec",
+      "name": "Any website to check?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Actors",
+        "operation": "Run actor",
+        "actorId": "perceptr0n~imprint-impressum-website-contact-scraper",
+        "customBody": "={{ JSON.stringify({ websites: $json.websites, validate_vat: true, include_person_names: false }) }}",
+        "waitForFinish": true,
+        "memory": 1024,
+        "maxTotalChargeUsd": "={{ $('Settings').first().json.maxCostPerRunUsd }}"
+      },
+      "id": "182ce933-cfca-5e33-97ff-1cf18aa0e8fd",
+      "name": "Run Imprint & VAT Check",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        720,
+        800
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Stops here when the run did not succeed or the actor rejected its input, with Apify's own status message.\nconst run = $input.first().json;\nconst message = run.statusMessage || '';\nif (run.status !== 'SUCCEEDED' || /^Rejected/i.test(message)) {\n  throw new Error(`Run ${run.id} ended with status ${run.status}: ${message}`);\n}\nif (!run.defaultDatasetId) {\n  throw new Error(`Run ${run.id} has no dataset.`);\n}\nreturn [{ json: { runId: run.id, datasetId: run.defaultDatasetId, statusMessage: message } }];\n"
+      },
+      "id": "4a723cb1-c123-53e9-aaff-2741feee3e9d",
+      "name": "Check imprint run",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Datasets",
+        "operation": "Get items",
+        "datasetId": "={{ $json.datasetId }}",
+        "offset": 0,
+        "limit": 10000,
+        "options": {}
+      },
+      "id": "7d003bc4-0c35-5f8d-acb1-d9ba7afba949",
+      "name": "Get legal notice rows",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        800
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// One row per employer: the company row, the website it got and the data of that website's legal notice.\n// nameCheck compares the employer with the name in the legal notice after removing legal forms and words such as\n// \"Niederlassung\": an application link or an e-mail address can belong to a group company or a service provider.\nconst STRIP = /\\b(gmbh|mbh|ag|se|kg|ohg|gbr|ug|ev|eg|kgaa|co|und|haftungsbeschraenkt|ltd|inc|llc|bv|nv|sa|sarl|niederlassung|zweigniederlassung|filiale|standort)\\b/g;\nfunction nameKey(text) {\n  return String(text || '').toLowerCase()\n    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')\n    .replace(/[^a-z0-9]+/g, ' ').replace(STRIP, ' ').replace(/\\s+/g, ' ').trim();\n}\nfunction sameName(a, b) {\n  const x = nameKey(a);\n  const y = nameKey(b);\n  return Boolean(x && y) && (x === y || x.startsWith(y + ' ') || y.startsWith(x + ' '));\n}\n\nconst companies = $('Pick a website per company').all().map(item => item.json);\nconst notChecked = new Set($('Collect websites').first().json.notChecked || []);\nconst legal = new Map();\nfor (const item of $input.all()) {\n  const row = item.json;\n  if (!row || !row.input || !row.status) continue;  // the IF node's false branch brings no legal notice rows\n  for (const key of [row.input, ...(row.duplicateInputs || [])]) legal.set(String(key).toLowerCase(), row);\n}\nreturn companies.map(c => {\n  const row = c.website ? legal.get(c.website) : null;\n  let nameCheck = 'no website in the ads';\n  if (c.website && notChecked.has(c.website)) nameCheck = 'not checked: maxWebsites reached';\n  else if (c.website && !row) nameCheck = 'no row from the Imprint & VAT Check';\n  else if (row && !row.companyName) nameCheck = `no company name in the legal notice (status ${row.status}, ${row.reason})`;\n  else if (row) nameCheck = sameName(c.employer, row.companyName) ? 'legal notice names the employer'\n    : 'legal notice names another company: check by hand';\n  return {\n    json: {\n      employer: c.employer,\n      website: c.website,\n      websiteFrom: c.websiteFrom,\n      nameCheck,\n      legalName: row ? row.companyName ?? null : null,\n      street: row ? row.street ?? null : null,\n      postalCode: row ? row.postalCode ?? null : null,\n      city: row ? row.city ?? null : null,\n      country: row ? row.country ?? null : null,\n      email: row ? row.email ?? null : null,\n      phone: row ? row.phone ?? null : null,\n      registerCourt: row ? row.registerCourt ?? null : null,\n      registerNumber: row ? row.registerNumber ?? null : null,\n      vatId: row ? row.vatId ?? null : null,\n      vatStatus: row ? row.vatStatus ?? null : null,\n      imprintStatus: row ? row.status : null,\n      imprintReason: row ? row.reason ?? null : null,\n      impressumUrl: row ? row.impressumUrl ?? null : null,\n      places: c.places,\n      mergedRows: c.mergedRows,\n      matchedBy: c.matchedBy,\n      jobUrl: c.jobUrl,\n    },\n  };\n});\n"
+      },
+      "id": "84505dac-5089-526c-bf48-741d9fb4db33",
+      "name": "One row per employer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        800
+      ]
+    }
+  ],
+  "connections": {
+    "Start manually": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Build job search inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build job search inputs": {
+      "main": [
+        [
+          {
+            "node": "Run Arbeitsagentur Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Arbeitsagentur Jobs": {
+      "main": [
+        [
+          {
+            "node": "Run XING Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run XING Jobs": {
+      "main": [
+        [
+          {
+            "node": "Check both job runs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check both job runs": {
+      "main": [
+        [
+          {
+            "node": "Merge to one row per company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge to one row per company": {
+      "main": [
+        [
+          {
+            "node": "Check merge run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check merge run": {
+      "main": [
+        [
+          {
+            "node": "Get company rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get company rows": {
+      "main": [
+        [
+          {
+            "node": "Pick a website per company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick a website per company": {
+      "main": [
+        [
+          {
+            "node": "Collect websites",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect websites": {
+      "main": [
+        [
+          {
+            "node": "Any website to check?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any website to check?": {
+      "main": [
+        [
+          {
+            "node": "Run Imprint & VAT Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "One row per employer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Imprint & VAT Check": {
+      "main": [
+        [
+          {
+            "node": "Check imprint run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check imprint run": {
+      "main": [
+        [
+          {
+            "node": "Get legal notice rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get legal notice rows": {
+      "main": [
+        [
+          {
+            "node": "One row per employer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

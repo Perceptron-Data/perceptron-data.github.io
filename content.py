@@ -992,6 +992,33 @@ AGENTS = {
              "<COURT, REGISTER TYPE AND NUMBER, one per line>. The first run returns every company once, every later run only the companies with a change. "
              "Summarise every change with its date and source. If no row comes back, answer that nothing changed."),
         ],
+        "n8n_title": "n8n workflows to import",
+        "n8n_intro": "Two workflows for n8n, built with Apify's community node @apify/n8n-nodes-apify. Both ran end to "
+                     "end against Apify on 24 November 2026 (n8n 2.43.4, node version 0.8.1). Each file carries its own "
+                     "notes on steps, limits and cost; no credentials are inside.",
+        "n8n_items": [
+            ("Job ads to company leads",
+             "{aa} and {xing} search the same keyword and place, {dedupe} makes one row per employer, and the {imprint} "
+             "adds legal notice data for the website found in an ad (e-mail domain or application link). nameCheck "
+             "says whether that legal notice names the employer.",
+             "workflow-1-jobs-to-company-leads.json"),
+            ("Daily supplier watchlist",
+             "The {imprint} reads each supplier's legal notice once; the {monitor} then checks the register entries "
+             "every day and returns a row only when something changed. A legal notice is read again only for a new "
+             "domain or after refreshLegalNoticeDays.",
+             "workflow-2-supplier-watchlist.json"),
+        ],
+        "n8n_steps": [
+            "In n8n open Settings → Community nodes and install @apify/n8n-nodes-apify; add an Apify credential with "
+            "your API token.",
+            "Create a workflow, open the ⋯ menu and choose “Import from File…”; pick the downloaded file.",
+            "Select your Apify credential in every Apify node and change the values in the node “Settings”.",
+            "Run it once by hand. For the supplier watchlist, activate the workflow afterwards: it then runs every "
+            "day at 7:00 and remembers the register entries it has read.",
+        ],
+        "n8n_note": "Every actor run is charged on your Apify account at the prices on the actor's Apify Store page – "
+                    "per result plus a small start fee per run; maxCostPerRunUsd in “Settings” caps each run.",
+        "n8n_download": "Download JSON",
         "table": "Which actor for which task",
         "head": ["Task", "MCP tool", "Example input", "Price"],
         "know": "What your agent should know",
@@ -1051,6 +1078,35 @@ AGENTS = {
              "nur die Firmen mit einer Änderung. Fasse jede Änderung mit Datum und Quelle zusammen. Kommt keine Zeile zurück, antworte, dass "
              "sich nichts geändert hat."),
         ],
+        "n8n_title": "n8n-Workflows zum Importieren",
+        "n8n_intro": "Zwei Workflows für n8n, gebaut mit Apifys Community-Knoten @apify/n8n-nodes-apify. Beide liefen am "
+                     "24. November 2026 von Anfang bis Ende gegen Apify (n8n 2.43.4, Knoten-Version 0.8.1). Jede Datei "
+                     "bringt ihre Hinweise zu Ablauf, Grenzen und Kosten mit; Zugangsdaten sind nicht enthalten.",
+        "n8n_items": [
+            ("Stellenanzeigen zu Firmenzeilen",
+             "{aa} und {xing} suchen dasselbe Stichwort am selben Ort, „{dedupe}“ macht daraus eine Zeile je "
+             "Arbeitgeber, und der {imprint} ergänzt die Impressumsdaten der Website, die in einer Anzeige steht "
+             "(E-Mail-Domain oder Bewerbungslink). nameCheck sagt, ob dieses Impressum den Arbeitgeber nennt.",
+             "workflow-1-jobs-to-company-leads.json"),
+            ("Tägliche Lieferanten-Watchlist",
+             "Der {imprint} liest das Impressum jedes Lieferanten einmal; der {monitor} prüft die Registereinträge "
+             "danach täglich und liefert nur dann eine Zeile, wenn sich etwas geändert hat. Ein Impressum wird nur für "
+             "eine neue Domain oder nach refreshLegalNoticeDays erneut gelesen.",
+             "workflow-2-supplier-watchlist.json"),
+        ],
+        "n8n_steps": [
+            "In n8n unter Settings → Community nodes den Knoten @apify/n8n-nodes-apify installieren und einen "
+            "Apify-Zugang mit Ihrem API-Token anlegen.",
+            "Einen Workflow anlegen, das Menü ⋯ öffnen und „Import from File…“ wählen; die heruntergeladene Datei "
+            "auswählen.",
+            "In jedem Apify-Knoten Ihren Apify-Zugang auswählen und die Werte im Knoten „Settings“ anpassen.",
+            "Einmal von Hand ausführen. Die Lieferanten-Watchlist danach aktivieren: Sie läuft dann täglich um "
+            "7:00 Uhr und merkt sich die gelesenen Registereinträge.",
+        ],
+        "n8n_note": "Jeder Actor-Lauf wird über Ihr Apify-Konto abgerechnet, zu den Preisen auf der Store-Seite des "
+                    "Actors – je Ergebnis plus eine kleine Startgebühr je Lauf; maxCostPerRunUsd im Knoten „Settings“ "
+                    "begrenzt jeden Lauf.",
+        "n8n_download": "JSON herunterladen",
         "table": "Welcher Actor für welche Aufgabe",
         "head": ["Aufgabe", "MCP-Werkzeug", "Beispiel-Eingabe", "Preis"],
         "know": "Was Ihr Agent wissen sollte",

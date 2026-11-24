@@ -832,6 +832,23 @@ def agent_rows(items: dict, prices: dict, lang: str) -> list[tuple[str, str, str
     return rows
 
 
+# The n8n workflows offered on /agents/ (files in assets/n8n/) and the actors their texts name.
+N8N_ACTORS = {"aa": "arbeitsagentur-jobs-scraper", "xing": "xing-jobs-scraper",
+              "dedupe": "merge-dedupe-datasets-company-leads", "imprint": "imprint-impressum-website-contact-scraper",
+              "monitor": "german-insolvency-handelsregister-monitor"}
+
+
+def n8n_workflows(lang: str, items: dict) -> list[tuple[str, str, str]]:
+    """(title, text with the product names of this language, file name) — the build stops if a file is missing."""
+    names = {key: display_name(slug, items.get(slug) or {"title": slug}, lang) for key, slug in N8N_ACTORS.items()}
+    rows = []
+    for title, text, file in AGENTS[lang]["n8n_items"]:
+        if not (ROOT / "assets" / "n8n" / file).is_file():
+            sys.exit(f"assets/n8n/{file} is missing — the agents page offers it for download.")
+        rows.append((title, text.format(**names), file))
+    return rows
+
+
 def agents_snippets() -> dict:
     url = mcp_url(FLAGSHIPS)
     config = json.dumps({"mcpServers": {"perceptron-data": {"url": url}}}, indent=2)
@@ -856,6 +873,11 @@ def build_agents(lang: str, items: dict, prices: dict) -> str:
                     for s in FLAGSHIPS if s in items)
     prompts = "".join(f'<article class="prompt"><h3>{esc(client)} <span class="muted">· {esc(name)}</span></h3>'
                       f'<pre><code>{esc(text)}</code></pre></article>' for client, name, text in g["prompts"])
+    workflows = "".join(
+        f'<article class="prompt"><h3>{esc(title)}</h3><p>{esc(text)}</p><p><a class="button small" '
+        f'href="/assets/n8n/{esc(file)}" download aria-label="{esc(g["n8n_download"])}: {esc(title)}">'
+        f'{esc(g["n8n_download"])}</a></p></article>' for title, text, file in n8n_workflows(lang, items))
+    steps = "".join(f"<li>{esc(x)}</li>" for x in g["n8n_steps"])
     body = f"""<nav class="crumbs" aria-label="{esc(t['crumbs_label'])}"><a href="{'/' if lang == 'en' else '/de/'}">{t['home']}</a> › {esc(g['h1'])}</nav>
 <section class="hero"><h1>{esc(g['h1'])}</h1><p class="lead">{esc(g['lead'])}</p></section>
 <section id="connect"><h2>{esc(g['connect'])}</h2>
@@ -870,6 +892,8 @@ def build_agents(lang: str, items: dict, prices: dict) -> str:
 <p>{esc(g['api'])}</p><pre><code>{esc(sn['curl'])}</code></pre>
 <p class="muted">{esc(g['search'])}</p></section>
 <section id="prompts"><h2>{esc(g['prompts_title'])}</h2><p>{esc(g['prompts_intro'])}</p><div class="prompts">{prompts}</div></section>
+<section id="n8n"><h2>{esc(g['n8n_title'])}</h2><p>{esc(g['n8n_intro'])}</p><div class="cols">{workflows}</div>
+<ol>{steps}</ol><p class="muted">{esc(g['n8n_note'])}</p></section>
 <section><h2>{esc(g['table'])}</h2><div class="table" {scroll_box(g['table'])}><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div></section>
 <section><h2>{esc(g['know'])}</h2><ul>{notes}</ul></section>
 <section><h2>{esc(g['machine'])}</h2><ul>{machine}</ul></section>"""
@@ -972,6 +996,9 @@ def md_agents(lang: str, items: dict, prices: dict) -> str:
            f"## {g['prompts_title']}", "", g["prompts_intro"], ""]
     for client, name, text in g["prompts"]:
         out += [f"### {client} · {name}", "", "```text", text, "```", ""]
+    out += [f"## {g['n8n_title']}", "", g["n8n_intro"], ""]
+    out += [f"- [{title}]({BASE}/assets/n8n/{file}): {text}" for title, text, file in n8n_workflows(lang, items)]
+    out += [""] + [f"{i}. {x}" for i, x in enumerate(g["n8n_steps"], 1)] + ["", g["n8n_note"], ""]
     out += [f"## {g['table']}", "", "| " + " | ".join(g["head"]) + " |", "|---|---|---|---|"]
     out += [f"| {task} | `{tool}` | `{example}` | {price} |" for _, task, tool, example, price in agent_rows(items, prices, lang)]
     out += ["", f"## {g['know']}", ""] + [f"- {x}" for x in g["notes"]] + ["", f"## {g['machine']}", ""]
@@ -1130,6 +1157,8 @@ def main() -> None:
              f"- [Setup for MCP clients and the API]({BASE}/agents/index.md): Claude Code, Cursor, n8n, JSON config, curl, "
              "prompts that use several tools",
              f"- MCP server with the flagship tools: {mcp_url(FLAGSHIPS)}",
+             f"- n8n workflows to import (JSON): {BASE}/assets/n8n/workflow-1-jobs-to-company-leads.json (job ads to "
+             f"company leads), {BASE}/assets/n8n/workflow-2-supplier-watchlist.json (daily supplier watchlist)",
              f"- [Machine-readable catalogue]({BASE}/catalog.json): names, prices, MCP tool names, example inputs",
              "- The home page, the agent setup and every actor page are available as Markdown: add index.md to the address", ""]
     def entry(s: str) -> str:

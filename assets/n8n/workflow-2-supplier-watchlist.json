@@ -1,0 +1,542 @@
+{
+  "name": "Supplier watchlist – insolvency and register notices",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Daily supplier watchlist\n\n### How it works\nWatches your suppliers daily. **Imprint & VAT Check** reads each supplier's legal notice once: legal name, register court, type and number, EU VAT ID checked against VIES. The workflow remembers the register entry, so later runs read a legal notice only for new domains and for entries older than `refreshLegalNoticeDays`. Suppliers with a German register entry (HRB, HRA, GnR, VR) go to the **Insolvency & Handelsregister Monitor** under your `watchlistId`. Its first run returns every company once; later runs return a row only where something changed: a new insolvency notice, an announced deletion, a VAT ID that VIES no longer reports as valid. **Changes to report** lists these rows and every domain that could not be checked, with the reason.\n\nLimits: German companies with a register entry only; sole traders are left out (status `excluded`). n8n saves the remembered entries only in runs of the active workflow – a manual test run reads them but adds none.\n\nCost: every run is charged on your Apify account – the legal notice step per website it reads, the monitor per company (less when unchanged on the watchlist), plus a small start fee. Current prices: each actor's Apify Store page.\n\n### Setup\n1. Install the Apify community node `@apify/n8n-nodes-apify` (tested with 0.8.1; https://docs.n8n.io/integrations/community-nodes/installation-and-management/), add an Apify credential and select it in the four Apify nodes.\n2. Replace the example domains in **Settings** and choose a `watchlistId`.\n3. Click **Test run**, then activate the workflow for the daily schedule.\n4. Connect a notification (e-mail, Slack) after **Changes to report**.\n\n### Customization\n`alertOn`: `insolvency,register` reports only court and register notices; add `hiring` to hear when open positions drop. `refreshLegalNoticeDays` 0 reads every legal notice on every run.\n\nIndependent provider, not affiliated with Apify or the data sources named.",
+        "height": 1040,
+        "width": 520
+      },
+      "id": "742fe4e6-17f3-5f83-8c28-2ce428af69cc",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Suppliers and watchlist\nOne domain per supplier. Keep `watchlistId` the same on every run: it makes later runs return only changes. Do not run one watchlist in two executions at the same time.",
+        "height": 380,
+        "width": 700,
+        "color": 7
+      },
+      "id": "2ec4f06e-1522-5932-9bad-bf7c2afe20b7",
+      "name": "Note: suppliers",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Replace the example domains\nA new domain costs one legal notice check; every supplier costs one monitor check per run. Check the list before you activate the schedule.",
+        "height": 260,
+        "width": 240,
+        "color": 3
+      },
+      "id": "5277e8fd-c054-567b-a550-235f6d8f8987",
+      "name": "Warning: example domains",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Legal notice, only when needed\nRuns for domains that are new or whose entry is older than `refreshLegalNoticeDays`. Charged per website plus a start fee. Sites read through Apify's Web Fetch are billed by Apify on your account.",
+        "height": 380,
+        "width": 900,
+        "color": 7
+      },
+      "id": "7de2cb9d-26af-5c50-81a6-901289cb3695",
+      "name": "Note: legal notice",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        680,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## German register entries\nSuppliers without HRB, HRA, GnR or VR number and court go to the report as not checked. A supplier whose site gave no answer keeps the entry it had.",
+        "height": 380,
+        "width": 260,
+        "color": 7
+      },
+      "id": "4b79a487-87aa-526b-bbe9-f3aa90091bdf",
+      "name": "Note: register entries",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Daily check\nA company row (first check or change) costs more than an unchanged company on the watchlist; each run adds a small start fee. On a new watchlist every supplier is a first check: set `maxCostPerRunUsd` high enough for that.",
+        "height": 380,
+        "width": 620,
+        "color": 7
+      },
+      "id": "bc7c3ce3-ae1f-5b70-9308-7965e0bf9cc1",
+      "name": "Note: monitor",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Changes to report\n`rowType` is `change` or `not_checked`. Nothing changed: no item, so a notification stays quiet.",
+        "height": 380,
+        "width": 260,
+        "color": 7
+      },
+      "id": "adacfedc-c466-5339-8a7c-76928741d585",
+      "name": "Note: report",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2600,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "370568b6-aacd-521a-a287-be18daffc8ef",
+      "name": "Every day at 7:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        260
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "38eacc2a-144e-51eb-a188-3929423c985d",
+      "name": "Test run",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5823c34a-ccd4-549e-9066-cd572fe751a7",
+              "name": "supplierDomains",
+              "value": "haribo.com, ritter-sport.de",
+              "type": "string"
+            },
+            {
+              "id": "ab670fdb-d747-5f0c-a4a3-2c63b0464f5e",
+              "name": "watchlistId",
+              "value": "key-suppliers",
+              "type": "string"
+            },
+            {
+              "id": "a5d5ad97-f529-56ba-8635-fc1acf37ed8d",
+              "name": "alertOn",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "7e258e7e-7c15-5a29-b186-77382893b681",
+              "name": "refreshLegalNoticeDays",
+              "value": 30,
+              "type": "number"
+            },
+            {
+              "id": "8632d140-d519-53e6-9e55-694c56d39880",
+              "name": "maxCostPerRunUsd",
+              "value": 2,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "286a6d9e-7ee4-55df-90b5-391fddf70219",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One entry per distinct domain; full addresses are cut down to the domain. The register entry of a supplier is\n// kept in the workflow's static data, so the paid legal notice step runs only for domains that are new on the\n// list or whose entry is older than refreshLegalNoticeDays.\nconst s = $('Settings').first().json;\nconst raw = String(s.supplierDomains ?? '');\nconst websites = [...new Set(raw.split(/[\\s,;]+/)\n  .map(d => d.trim().toLowerCase().replace(/^https?:\\/\\//, '').replace(/^www\\./, '').split(/[/?#]/)[0])\n  .filter(d => d.includes('.')))];\nif (websites.length === 0) {\n  throw new Error('Settings: add at least one supplier domain to supplierDomains.');\n}\nconst given = s.refreshLegalNoticeDays;\nconst refreshDays = given === '' || given === null || given === undefined ? NaN : Number(given);\nif (!Number.isFinite(refreshDays) || refreshDays < 0) {\n  throw new Error('Settings: refreshLegalNoticeDays must be a number, 0 or more (0 reads every legal notice on every run).');\n}\nconst known = $getWorkflowStaticData('global').suppliers || {};\nconst today = new Date().toISOString().slice(0, 10);\nconst toResolve = websites.filter(domain => {\n  const record = known[domain];\n  const age = record && record.resolvedOn ? (Date.parse(today) - Date.parse(record.resolvedOn)) / 86400000 : NaN;\n  return !(age < refreshDays);  // not known, without a date or old: read the legal notice\n});\nreturn [{ json: { websites, toResolve, remembered: websites.length - toResolve.length, today } }];\n"
+      },
+      "id": "1484adfd-38d3-5838-b67a-e61ab20ba852",
+      "name": "Split known and new suppliers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "df510bdb-6fb6-5e5e-9716-399cf3383ee2",
+              "leftValue": "={{ $json.toResolve.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "aefc0028-9a4f-509b-aa8d-64f457d5114a",
+      "name": "Any legal notice to read?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Actors",
+        "operation": "Run actor",
+        "actorId": "perceptr0n~imprint-impressum-website-contact-scraper",
+        "customBody": "={{ JSON.stringify({ websites: $json.toResolve, validate_vat: true, include_person_names: false }) }}",
+        "waitForFinish": true,
+        "memory": 1024,
+        "maxTotalChargeUsd": "={{ $('Settings').first().json.maxCostPerRunUsd }}"
+      },
+      "id": "33426f63-ebac-5d18-97bf-a743ca45e219",
+      "name": "Run Imprint & VAT Check",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        1020,
+        360
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// A legal notice run that failed must not stop the daily check: suppliers that were read before keep their\n// entry, the others are listed as not checked with Apify's own status message.\nconst run = $input.first().json;\nconst message = run.statusMessage || '';\nconst problem = run.status !== 'SUCCEEDED' || /^Rejected/i.test(message)\n  ? `Imprint & VAT Check run ${run.id} ended with status ${run.status}: ${message}` : null;\nif (!run.defaultDatasetId) {\n  throw new Error(`Run ${run.id} has no dataset.`);\n}\nreturn [{ json: { runId: run.id, datasetId: run.defaultDatasetId, problem } }];\n"
+      },
+      "id": "d10952f2-311a-5d19-a35e-8e3848bd3c31",
+      "name": "Check legal notice run",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Datasets",
+        "operation": "Get items",
+        "datasetId": "={{ $json.datasetId }}",
+        "offset": 0,
+        "limit": 10000,
+        "options": {}
+      },
+      "id": "61992ba5-7c7b-523e-b575-1636c8a8fa43",
+      "name": "Get legal notice rows",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        1460,
+        360
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Suppliers whose legal notice names a German register entry become monitor entries: court, type and number\n// identify the company exactly. Each supplier's entry is kept in the workflow's static data; a supplier whose\n// legal notice could not be read this time keeps the entry it had. Everything else goes to the report as not\n// checked, with the reason.\nconst s = $('Settings').first().json;\nconst watchlistId = String(s.watchlistId ?? '').trim();\nif (!watchlistId) {\n  throw new Error('Settings: watchlistId is empty. Without it every run returns and charges every company.');\n}\nconst SIGNALS = ['insolvency', 'register', 'vat', 'hiring'];\nconst alertOn = String(s.alertOn ?? '').split(',').map(x => x.trim()).filter(Boolean);\nconst unknown = alertOn.filter(x => !SIGNALS.includes(x));\nif (unknown.length > 0) {\n  throw new Error(`Settings: alertOn knows only ${SIGNALS.join(', ')} (got ${unknown.join(', ')}).`);\n}\nconst plan = $('Split known and new suppliers').first().json;\nlet lookup = null;  // the legal notice run of this execution, when there was one\ntry { lookup = $('Check legal notice run').first().json; } catch (error) { lookup = null; }\nconst memory = $getWorkflowStaticData('global');\nconst known = { ...(memory.suppliers || {}) };\nconst TYPES = new Set(['HRB', 'HRA', 'GnR', 'VR']);\nconst fresh = new Set();\nconst failed = new Map();\nfor (const item of $input.all()) {\n  const row = item.json;\n  if (!row || !row.input || !row.status) continue;  // the IF node's false branch brings no legal notice rows\n  const domains = [row.input, ...(row.duplicateInputs || [])].map(d => String(d).toLowerCase());\n  if (row.status !== 'found') {\n    // Not remembered: the next run reads this legal notice again.\n    for (const d of domains) failed.set(d, `legal notice not read (status ${row.status}, ${row.reason})`);\n    continue;\n  }\n  const german = !row.country || row.country === 'DE';\n  const numbered = TYPES.has(row.registerType) && row.registerNumber && german;\n  let record;\n  if (numbered && row.registerCourt) {\n    // The Impressum gives the number with its type (\"HRB 12345\"); the monitor takes court, type and number apart.\n    const entry = { registerCourt: row.registerCourt, registerType: row.registerType,\n      registerNumber: String(row.registerNumber).replace(/^(HRB|HRA|GnR|VR)\\s*/i, '') };\n    if (row.companyName) entry.name = row.companyName;\n    if (row.vatId) entry.vatId = row.vatId;\n    record = { resolvedOn: plan.today, entry };\n  } else {\n    // The monitor needs court, type and number together; a number without its court is not passed on.\n    const abroad = row.country && row.country !== 'DE' ? ` (country ${row.country})` : '';\n    const reason = numbered ? `the legal notice gives ${row.registerNumber} without its register court`\n      : `the legal notice names no German register entry${abroad}`;\n    record = { resolvedOn: plan.today, entry: null, reason };\n  }\n  for (const d of domains) {\n    known[d] = record;\n    fresh.add(d);\n  }\n}\nfor (const d of plan.toResolve) {\n  if (!fresh.has(d) && !failed.has(d)) {\n    failed.set(d, lookup && lookup.problem ? lookup.problem\n      : 'no row from the Imprint & VAT Check (see the record OUTPUT of its run)');\n  }\n}\nconst companies = [];\nconst notChecked = [];\nconst notRefreshed = [];\nconst seenRegister = new Map();\nconst suppliers = {};  // what is remembered from here on: only domains that are still on the list\nfor (const domain of plan.websites) {\n  const record = known[domain];\n  if (!record) {\n    notChecked.push({ domain, reason: failed.get(domain) || 'legal notice not read yet' });\n    continue;\n  }\n  suppliers[domain] = record;\n  if (failed.has(domain)) notRefreshed.push({ domain, reason: failed.get(domain), entryFrom: record.resolvedOn });\n  if (!record.entry) {\n    notChecked.push({ domain, reason: record.reason });\n    continue;\n  }\n  const key = `${record.entry.registerCourt}|${record.entry.registerType}|${record.entry.registerNumber}`.toLowerCase();\n  if (seenRegister.has(key)) {\n    notChecked.push({ domain, reason: `same register entry as ${seenRegister.get(key)}` });\n    continue;\n  }\n  seenRegister.set(key, domain);\n  companies.push({ ...record.entry, ref: domain });\n}\nmemory.suppliers = suppliers;\nif (companies.length === 0) {\n  throw new Error('No supplier with a German register entry: ' + JSON.stringify(notChecked));\n}\nconst monitorInput = { companies, watchlistId, maxCompanies: Math.min(10000, companies.length) };\nif (alertOn.length > 0) monitorInput.alertOn = alertOn;\nreturn [{ json: { monitorInput, notChecked, notRefreshed, legalNoticesRead: fresh.size,\n  entriesRemembered: Object.keys(suppliers).length } }];\n"
+      },
+      "id": "8366ee0c-6520-5e51-99d7-5186fef6fa07",
+      "name": "Build monitor entries",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Actors",
+        "operation": "Run actor",
+        "actorId": "perceptr0n~german-insolvency-handelsregister-monitor",
+        "customBody": "={{ JSON.stringify($json.monitorInput) }}",
+        "waitForFinish": true,
+        "memory": 512,
+        "maxTotalChargeUsd": "={{ $('Settings').first().json.maxCostPerRunUsd }}"
+      },
+      "id": "447186b1-18ea-56a0-be81-4a0d2c16ea5c",
+      "name": "Run Insolvency & Handelsregister Monitor",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        1980,
+        360
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Stops here when the run did not succeed or the actor rejected its input, with Apify's own status message.\nconst run = $input.first().json;\nconst message = run.statusMessage || '';\nif (run.status !== 'SUCCEEDED' || /^Rejected/i.test(message)) {\n  throw new Error(`Run ${run.id} ended with status ${run.status}: ${message}`);\n}\nif (!run.defaultDatasetId) {\n  throw new Error(`Run ${run.id} has no dataset.`);\n}\nreturn [{ json: { runId: run.id, datasetId: run.defaultDatasetId, statusMessage: message } }];\n"
+      },
+      "id": "ff04f7be-7cd0-5eb5-8034-25bec658b788",
+      "name": "Check monitor run",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "Datasets",
+        "operation": "Get items",
+        "datasetId": "={{ $json.datasetId }}",
+        "offset": 0,
+        "limit": 10000,
+        "options": {}
+      },
+      "id": "0031b5c9-8e81-57fc-a892-4f4e835daa12",
+      "name": "Get change rows",
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 2,
+      "position": [
+        2420,
+        360
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "REPLACE_WITH_YOUR_APIFY_CREDENTIAL",
+          "name": "Apify account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per row of the monitor (with a watchlist: only companies where something changed) and one item per\n// domain that could not be checked. No change and nothing left out: no item, so a notification stays quiet.\nconst changes = $input.all().map(item => item.json).filter(row => row && row.status)\n  .map(row => ({\n    json: {\n      rowType: 'change',\n      supplier: row.ref ?? null,\n      companyName: row.companyName ?? null,\n      register: [row.registerCourt, row.registerType, row.registerNumber].filter(Boolean).join(' '),\n      change: row.change ?? null,\n      changes: row.changes ?? [],\n      riskLevel: row.riskLevel ?? null,\n      riskReasons: row.riskReasons ?? [],\n      insolvencyStatus: row.insolvency ? row.insolvency.status ?? null : null,\n      deletionAnnounced: row.register ? row.register.deletionAnnounced ?? null : null,\n      vatValid: row.vat ? row.vat.valid ?? null : null,\n      openPositions: row.hiring ? row.hiring.openPositions ?? null : null,\n      status: row.status,\n      sourceErrors: row.sourceErrors ?? [],\n      checkedAt: row.checkedAt ?? null,\n    },\n  }));\nconst skipped = ($('Build monitor entries').first().json.notChecked || [])\n  .map(x => ({ json: { rowType: 'not_checked', supplier: x.domain, reason: x.reason } }));\nreturn [...changes, ...skipped];\n"
+      },
+      "id": "f114be32-d025-565d-a57d-4bf702b5de3e",
+      "name": "Changes to report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2680,
+        360
+      ]
+    }
+  ],
+  "connections": {
+    "Every day at 7:00": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test run": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Split known and new suppliers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split known and new suppliers": {
+      "main": [
+        [
+          {
+            "node": "Any legal notice to read?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any legal notice to read?": {
+      "main": [
+        [
+          {
+            "node": "Run Imprint & VAT Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build monitor entries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Imprint & VAT Check": {
+      "main": [
+        [
+          {
+            "node": "Check legal notice run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check legal notice run": {
+      "main": [
+        [
+          {
+            "node": "Get legal notice rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get legal notice rows": {
+      "main": [
+        [
+          {
+            "node": "Build monitor entries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build monitor entries": {
+      "main": [
+        [
+          {
+            "node": "Run Insolvency & Handelsregister Monitor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Insolvency & Handelsregister Monitor": {
+      "main": [
+        [
+          {
+            "node": "Check monitor run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check monitor run": {
+      "main": [
+        [
+          {
+            "node": "Get change rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get change rows": {
+      "main": [
+        [
+          {
+            "node": "Changes to report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
